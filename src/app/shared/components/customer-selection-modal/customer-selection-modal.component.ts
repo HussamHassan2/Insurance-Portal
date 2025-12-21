@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../../core/services/customer.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { extractBirthDateFromNationalId } from '../../utils/national-id.utils';
+import { NotificationService } from '../../../core/services/notification.service';
 
 type ModalView = 'type-selection' | 'new-customer' | 'select-customer';
 
@@ -41,13 +42,14 @@ export class CustomerSelectionModalComponent implements OnInit {
   selectedCustomer: Customer | null = null;
   loading: boolean = false;
   hasSearched: boolean = false;
-  error: string = '';
+  // error: string = ''; // Removed as we use toasts
   searchQuery: string = '';
 
   constructor(
     private fb: FormBuilder,
     private customerService: CustomerService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -120,7 +122,7 @@ export class CustomerSelectionModalComponent implements OnInit {
   onBack(): void {
     if (this.currentView === 'new-customer') {
       this.currentView = 'select-customer';
-      this.error = '';
+      // this.error = '';
     } else {
       // If back is clicked on select-customer, close the modal
       this.onClose();
@@ -133,7 +135,7 @@ export class CustomerSelectionModalComponent implements OnInit {
     }
 
     this.loading = true;
-    this.error = '';
+    // this.error = '';
 
     try {
       const formValue = this.newCustomerForm.value;
@@ -181,7 +183,7 @@ export class CustomerSelectionModalComponent implements OnInit {
       this.onClose();
     } catch (err: any) {
       console.error('Failed to create customer', err);
-      this.error = err?.error?.result?.error || err?.error?.message || err?.message || 'Failed to create customer';
+      // Error handled by global interceptor
     } finally {
       this.loading = false;
     }
@@ -189,12 +191,12 @@ export class CustomerSelectionModalComponent implements OnInit {
 
   async onSearch(): Promise<void> {
     if (!this.searchQuery.trim()) {
-      this.error = 'Please enter a search term';
+      this.notificationService.warning('Please enter a search term');
       return;
     }
 
     this.loading = true;
-    this.error = '';
+    // this.error = '';
     this.searchResults = [];
     this.hasSearched = true;
 
@@ -225,7 +227,7 @@ export class CustomerSelectionModalComponent implements OnInit {
       // to show the "Create New" card instead.
     } catch (err: any) {
       console.error('Failed to search customers', err);
-      this.error = err?.error?.error || err?.error?.result?.error || err?.error?.message || err?.message || 'Failed to search customers';
+      // Error handled by global interceptor
     } finally {
       this.loading = false;
     }
@@ -237,7 +239,7 @@ export class CustomerSelectionModalComponent implements OnInit {
 
   onConfirmSelection(): void {
     if (!this.selectedCustomer) {
-      this.error = 'Please select a customer';
+      this.notificationService.warning('Please select a customer');
       return;
     }
 
@@ -265,7 +267,7 @@ export class CustomerSelectionModalComponent implements OnInit {
   onClose(): void {
     this.isOpen = false;
     this.currentView = 'select-customer';
-    this.error = '';
+    // this.error = '';
     this.searchResults = [];
     this.selectedCustomer = null;
     this.searchQuery = '';

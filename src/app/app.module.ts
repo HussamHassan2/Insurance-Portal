@@ -10,6 +10,7 @@ import { ToastComponent } from './shared/components/toast/toast.component';
 
 // Core Services
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 
 // Translation
 import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
@@ -51,6 +52,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
             multi: true
         }
     ],

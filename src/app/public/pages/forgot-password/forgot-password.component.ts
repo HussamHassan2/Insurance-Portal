@@ -10,7 +10,7 @@ import { NotificationService } from '../../../core/services/notification.service
 export class ForgotPasswordComponent {
     email: string = '';
     loading: boolean = false;
-    error: string = '';
+    // error: string = ''; // Removed as we use toasts
 
     constructor(
         private authService: AuthService,
@@ -20,17 +20,17 @@ export class ForgotPasswordComponent {
 
     handleSubmit(): void {
         if (!this.email) {
-            this.error = 'Email is required';
+            this.notificationService.warning('Email is required');
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(this.email)) {
-            this.error = 'Please enter a valid email address';
+            this.notificationService.warning('Please enter a valid email address');
             return;
         }
 
         this.loading = true;
-        this.error = '';
+        // this.error = '';
 
         this.authService.requestOtp(this.email).subscribe({
             next: () => {
@@ -42,25 +42,7 @@ export class ForgotPasswordComponent {
                 this.loading = false;
                 console.error(err);
 
-                // Handle specific error cases
-                const errorResponse = err.error || err;
-                let errorMessage = 'Failed to send verification code. Please try again.';
-
-                if (errorResponse.result?.status === 'error') {
-                    errorMessage = errorResponse.result.message || errorMessage;
-                } else if (errorResponse.message) {
-                    errorMessage = errorResponse.message;
-                }
-
-                // Check for rate limiting
-                if (errorMessage.toLowerCase().includes('too many attempts')) {
-                    errorMessage = 'Too many attempts. Please wait a few minutes before trying again.';
-                    this.notificationService.warning(errorMessage, 7000);
-                } else {
-                    this.notificationService.error(errorMessage);
-                }
-
-                this.error = errorMessage;
+                // Error handled by global interceptor
             }
         });
     }

@@ -11,7 +11,6 @@ export class VerifyOtpComponent implements OnInit {
     email: string = '';
     otp: string[] = ['', '', '', '', '', ''];
     loading: boolean = false;
-    error: string = '';
     countdown: number = 60;
     canResend: boolean = false;
     private timer: any;
@@ -53,7 +52,7 @@ export class VerifyOtpComponent implements OnInit {
         if (!/^\d*$/.test(value)) return;
 
         this.otp[index] = value;
-        this.error = '';
+
 
         // Auto-focus next input
         if (value && index < 5) {
@@ -83,7 +82,6 @@ export class VerifyOtpComponent implements OnInit {
     handleResend(): void {
         if (!this.canResend) return;
 
-        this.error = '';
         this.otp = ['', '', '', '', '', ''];
 
         this.authService.requestOtp(this.email).subscribe({
@@ -109,10 +107,9 @@ export class VerifyOtpComponent implements OnInit {
                     errorMessage = 'Too many attempts. Please wait before requesting another code.';
                     this.notificationService.warning(errorMessage, 7000);
                 } else {
-                    this.notificationService.error(errorMessage);
+                    // Handled by global interceptor
                 }
 
-                this.error = errorMessage;
                 this.canResend = true;
             }
         });
@@ -121,12 +118,12 @@ export class VerifyOtpComponent implements OnInit {
     handleSubmit(): void {
         const otpValue = this.otp.join('');
         if (otpValue.length !== 6) {
-            this.error = 'Please enter the complete 6-digit code';
+            this.notificationService.warning('Please enter the complete 6-digit code');
             return;
         }
 
         this.loading = true;
-        this.error = '';
+
 
         this.authService.verifyOtp(this.email, otpValue).subscribe({
             next: (response: any) => {
@@ -155,10 +152,10 @@ export class VerifyOtpComponent implements OnInit {
                     errorMessage = 'Too many verification attempts. Please request a new code.';
                     this.notificationService.warning(errorMessage, 7000);
                 } else {
-                    this.notificationService.error(errorMessage);
+                    // Handled by global interceptor
                 }
 
-                this.error = errorMessage;
+                // this.error = errorMessage;
             }
         });
     }

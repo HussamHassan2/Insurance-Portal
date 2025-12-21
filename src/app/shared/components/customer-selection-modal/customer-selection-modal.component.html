@@ -18,8 +18,7 @@
             <!-- New Customer Form View -->
             <form *ngIf="currentView === 'new-customer'" [formGroup]="newCustomerForm"
                 (ngSubmit)="onSubmitNewCustomer()" class="space-y-6">
-                <div *ngIf="error" class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{{ error
-                    }}</div>
+                <!-- Error Alert Removed - Using Toasts -->
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -101,8 +100,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="error" class="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">{{ error
-                    }}</div>
+                <!-- Error Alert Removed - Using Toasts -->
 
                 <!-- Search Results -->
                 <div *ngIf="searchResults.length > 0" class="space-y-3 max-h-60 overflow-y-auto">

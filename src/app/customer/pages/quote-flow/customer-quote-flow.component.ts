@@ -7,6 +7,7 @@ import { QuoteService } from '../../../core/services/quote.service';
 import { CrmService } from '../../../core/services/crm.service';
 import { CustomerService } from '../../../core/services/customer.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { ProgramSelectorComponent } from '../../../components/program-selector/program-selector.component';
 
 declare var lucide: any;
@@ -104,7 +105,8 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
         private quoteService: QuoteService,
         private crmService: CrmService,
         private customerService: CustomerService,
-        private authService: AuthService
+        private authService: AuthService,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -141,6 +143,7 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
             this.roadSidePrograms = this.mapList(roadRes);
         } catch (err) {
             console.error('Failed to load LOV data', err);
+            this.notificationService.error('Failed to load options data');
         }
     }
 
@@ -297,7 +300,7 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
 
             // Check for errors
             if (quotationResponse?.result?.error) {
-                this.error = quotationResponse.result.error;
+                this.notificationService.error(quotationResponse.result.error);
                 this.loading = false;
                 return;
             }
@@ -328,10 +331,11 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
             this.currentStep++;
         } catch (err: any) {
             console.error('Failed to request quotation', err);
-            this.error = err?.response?.data?.result?.error ||
+            const errorMessage = err?.response?.data?.result?.error ||
                 err?.response?.data?.error ||
                 err?.message ||
                 'Failed to request quotation. Please try again.';
+            this.notificationService.error(errorMessage);
             this.loading = false;
         }
     }
@@ -441,7 +445,7 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
 
             // Check for errors in the response
             if (response?.result?.error || response?.error) {
-                this.error = response?.result?.error || response?.error;
+                this.notificationService.error(response?.result?.error || response?.error);
                 this.loading = false;
                 return;
             }
@@ -464,13 +468,14 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
             this.loading = false;
         } catch (err: any) {
             console.error('Failed to issue policy', err);
-            this.error = err?.error?.result?.error ||
+            const errorMessage = err?.error?.result?.error ||
                 err?.error?.error ||
                 err?.result?.error ||
                 err?.response?.data?.result?.error ||
                 err?.response?.data?.error ||
                 err?.message ||
                 'Failed to issue policy. Please try again.';
+            this.notificationService.error(errorMessage);
             this.loading = false;
         }
     }
@@ -479,7 +484,7 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
         if (this.currentStep === 0 && this.isVehicleFormValid()) {
             this.submitVehicleDetails();
         } else if (this.currentStep === 1 && !this.selectedProposal) {
-            this.error = 'Please select a coverage plan';
+            this.notificationService.warning('Please select a coverage plan');
         } else if (this.currentStep === 1) {
             // Moving from Coverage to Documents
             this.loadRequiredDocuments();
@@ -492,7 +497,7 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
     previousStep(): void {
         if (this.currentStep > 0) {
             this.currentStep--;
-            this.error = null;
+            // Error clearing is not needed as we use toasts
         }
     }
 

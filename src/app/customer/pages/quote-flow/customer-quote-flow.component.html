@@ -12,10 +12,7 @@
         <!-- Step 1: Vehicle Details -->
         <div *ngIf="currentStep === 0" class="space-y-4">
             <!-- Error Message -->
-            <div *ngIf="error"
-                class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg mb-4">
-                {{ error }}
-            </div>
+            <!-- Error Message Removed - Using Toasts -->
 
             <!-- Vehicle Selection Section -->
             <app-collapsible-section title="Vehicle Selection" icon="car" [expanded]="isSectionOpen('selection')"

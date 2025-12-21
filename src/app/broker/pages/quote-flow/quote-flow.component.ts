@@ -529,7 +529,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
 
             // Check for errors
             if (quotationResponse?.result?.error) {
-                this.error = quotationResponse.result.error;
+                this.notificationService.error(quotationResponse.result.error);
                 this.loading = false;
                 return;
             }
@@ -561,11 +561,11 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             this.currentStep++;
         } catch (err: any) {
             console.error('Failed to request quotation', err);
-            this.error = err?.response?.data?.result?.error ||
+            const errorMessage = err?.response?.data?.result?.error ||
                 err?.response?.data?.error ||
                 err?.message ||
                 'Failed to request quotation. Please try again.';
-            this.notificationService.error(this.error || 'Request failed');
+            this.notificationService.error(errorMessage || 'Request failed');
             this.loading = false;
         }
     }
@@ -677,8 +677,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             const response = await this.quoteService.requestIssuance(payload).toPromise();
 
             if (response?.result?.error) {
-                this.error = response.result.error;
-                this.notificationService.error(this.error || 'Issuance failed');
+                this.notificationService.error(response.result.error || 'Issuance failed');
                 this.loading = false;
                 return;
             }
@@ -695,11 +694,11 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             }
         } catch (err: any) {
             console.error('Failed to issue policy', err);
-            this.error = err?.response?.data?.result?.error ||
+            const errorMessage = err?.response?.data?.result?.error ||
                 err?.response?.data?.error ||
                 err?.message ||
                 'Failed to issue policy. Please try again.';
-            this.notificationService.error(this.error || 'Issuance failed');
+            this.notificationService.error(errorMessage || 'Issuance failed');
             this.loading = false;
         }
     }
@@ -708,7 +707,6 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
         if (this.currentStep === 0 && this.isVehicleFormValid()) {
             this.submitVehicleDetails();
         } else if (this.currentStep === 1 && !this.selectedProposal) {
-            this.error = 'Please select a coverage plan';
             this.notificationService.warning('Please select a coverage plan');
         } else if (this.currentStep === 1) {
             // Moving from Coverage to Documents
@@ -722,7 +720,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     previousStep(): void {
         if (this.currentStep > 0) {
             this.currentStep--;
-            this.error = null;
+            // No need to clear error as we use toasts
         }
     }
 
