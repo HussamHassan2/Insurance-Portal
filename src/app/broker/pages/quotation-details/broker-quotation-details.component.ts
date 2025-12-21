@@ -93,9 +93,47 @@ export class BrokerQuotationDetailsComponent implements OnInit {
         }
     }
 
+    downloading = false;
+
     async downloadQuotation(): Promise<void> {
-        // Implement PDF download if API available, currently placeholder
-        console.log('Downloading quotation PDF...');
+        if (!this.quotation?.opportunity_proposal?.length) {
+            this.notificationService.warning('No proposal documents available to download.');
+            return;
+        }
+
+        const proposal = this.quotation.opportunity_proposal[0];
+        const proposalId = proposal.id || proposal.proposal_id;
+
+        if (!proposalId) {
+            this.notificationService.error('Analysis failed: Proposal ID is missing.');
+            return;
+        }
+
+        try {
+            this.downloading = true;
+            const blob = await this.quoteService.downloadProposalPdf(Number(proposalId)).toPromise();
+
+            // Create blob and download
+            if (blob) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Quotation_${this.displayData?.header?.opportunityNumber || this.quotationId}.pdf`;
+                link.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error: any) {
+            console.error('Error downloading quotation PDF:', error);
+            console.error('Error Details:', {
+                status: error.status,
+                statusText: error.statusText,
+                url: error.url,
+                headers: error.headers ? error.headers.keys() : 'N/A'
+            });
+            this.notificationService.error('Failed to download quotation PDF. Please try again.');
+        } finally {
+            this.downloading = false;
+        }
     }
 
     goBack(): void {

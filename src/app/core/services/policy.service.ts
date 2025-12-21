@@ -57,11 +57,7 @@ export class PolicyService {
      * Download Policy PDF - Matches React app's downloadPolicyPdf method
      */
     downloadPolicyPdf(policyId: number): Observable<Blob> {
-        const token = localStorage.getItem('authToken');
         return this.api.get<Blob>(`/v1/crm/download-policy-pdf?policy_id=${policyId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
             responseType: 'blob' as 'json'
         });
     }

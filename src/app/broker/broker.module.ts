@@ -23,7 +23,7 @@ import {
     DollarSign, CreditCard, Phone, Mail, MapPin, Car, Award, TrendingUp,
     History, Clock, AlertCircle, ChevronLeft, Plus, Search, Filter,
     ArrowRight, Trash2, Edit, Eye, X, UploadCloud, File, RefreshCw,
-    Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip
+    Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Loader2
 } from 'lucide-angular';
 
 import { BrokerQuotationDetailsComponent } from './pages/quotation-details/broker-quotation-details.component';
@@ -56,7 +56,7 @@ import { BrokerEndorsementComponent } from './pages/endorsement/broker-endorseme
             DollarSign, CreditCard, Phone, Mail, MapPin, Car, Award, TrendingUp,
             History, Clock, AlertCircle, ChevronLeft, Plus, Search, Filter,
             ArrowRight, Trash2, Edit, Eye, X, UploadCloud, File, RefreshCw,
-            Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip
+            Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Loader2
         })
     ]
 })

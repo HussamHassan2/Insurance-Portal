@@ -40,10 +40,11 @@
                         <i-lucide name="edit" class="w-4 h-4"></i-lucide>
                         {{ 'DETAILS.QUOTATION.EDIT_QUOTE' | translate }}
                     </button>
-                    <button (click)="downloadQuotation()"
-                        class="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition-colors">
-                        <i-lucide name="download" class="w-4 h-4"></i-lucide>
-                        {{ 'DETAILS.QUOTATION.DOWNLOAD_PDF' | translate }}
+                    <button (click)="downloadQuotation()" [disabled]="downloading"
+                        class="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i-lucide *ngIf="!downloading" name="download" class="w-4 h-4"></i-lucide>
+                        <i-lucide *ngIf="downloading" name="loader-2" class="w-4 h-4 animate-spin"></i-lucide>
+                        {{ (downloading ? 'DETAILS.QUOTATION.DOWNLOADING' : 'DETAILS.QUOTATION.DOWNLOAD_PDF') | translate }}
                     </button>
                 </div>
             </div>

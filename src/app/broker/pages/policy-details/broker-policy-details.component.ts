@@ -227,11 +227,10 @@ export class BrokerPolicyDetailsComponent implements OnInit {
     async handleDownloadPdf(): Promise<void> {
         try {
             this.downloading = true;
-            const data = await this.policyService.downloadPolicyPdf(Number(this.policyId)).toPromise();
+            const blob = await this.policyService.downloadPolicyPdf(Number(this.policyId)).toPromise();
 
             // Create blob and download
-            if (data) {
-                const blob = this.base64ToBlob(data as unknown as string, 'application/pdf');
+            if (blob) {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
@@ -245,16 +244,6 @@ export class BrokerPolicyDetailsComponent implements OnInit {
         } finally {
             this.downloading = false;
         }
-    }
-
-    private base64ToBlob(base64: string, contentType: string): Blob {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        return new Blob([byteArray], { type: contentType });
     }
 
     async handleRenewPolicy(): Promise<void> {

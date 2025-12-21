@@ -96,6 +96,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     selectedLostReason: any = null;
     lostFeedback = '';
     lostLoading = false;
+    downloadingProposalId: number | null = null;
 
     constructor(
         private router: Router,
@@ -753,15 +754,33 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    downloadProposalPdf(proposal: any): void {
-        if (proposal.proposal_pdf_url) {
-            const token = localStorage.getItem('authToken');
-            // Check if URL already has query params to decide delimiter
-            const separator = proposal.proposal_pdf_url.includes('?') ? '&' : '?';
-            const urlWithAuth = `${proposal.proposal_pdf_url}${separator}token=${token}`;
-            window.open(urlWithAuth, '_blank');
-        } else {
-            console.log('Downloading proposal PDF for ID:', proposal.id);
+    async downloadProposalPdf(proposal: any): Promise<void> {
+        const proposalId = proposal.id || proposal.proposal_id;
+
+        if (!proposalId) {
+            console.error('Analysis failed: Proposal ID is missing.');
+            return;
+        }
+
+        try {
+            this.downloadingProposalId = proposalId;
+            // Use the same service method as in BrokerQuotationDetailsComponent
+            const blob = await this.quoteService.downloadProposalPdf(Number(proposalId)).toPromise();
+
+            // Create blob and download
+            if (blob) {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Proposal_${proposal.proposal_reference || proposalId}.pdf`;
+                link.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error: any) {
+            console.error('Error downloading proposal PDF:', error);
+            this.notificationService.error('Failed to download proposal PDF. Please try again.');
+        } finally {
+            this.downloadingProposalId = null;
         }
     }
 }

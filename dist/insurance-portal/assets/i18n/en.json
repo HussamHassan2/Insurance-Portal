@@ -219,6 +219,7 @@
         "QUOTATION": {
             "BREADCRUMB": "Quotations",
             "EDIT_QUOTE": "Edit Quote",
+            "DOWNLOADING": "Downloading...",
             "DOWNLOAD_PDF": "Download PDF",
             "CUSTOMER_INFO": "Customer Information",
             "FULL_NAME": "Full Name",

@@ -241,9 +241,13 @@
                         </div>
 
                         <app-button variant="outline" class="w-full"
-                            (click)="$event.stopPropagation(); downloadProposalPdf(proposal)">
-                            <i data-lucide="download" class="w-4 h-4 mr-2"></i>
-                            Download PDF
+                            (click)="$event.stopPropagation(); downloadProposalPdf(proposal)"
+                            [disabled]="downloadingProposalId === proposal.id">
+                            <i-lucide *ngIf="downloadingProposalId !== proposal.id" name="download"
+                                class="w-4 h-4 mr-2"></i-lucide>
+                            <i-lucide *ngIf="downloadingProposalId === proposal.id" name="loader-2"
+                                class="w-4 h-4 mr-2 animate-spin"></i-lucide>
+                            {{ downloadingProposalId === proposal.id ? 'Downloading...' : 'Download PDF' }}
                         </app-button>
                     </div>
                 </div>

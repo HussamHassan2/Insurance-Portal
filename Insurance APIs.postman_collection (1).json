@@ -215,7 +215,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"params\": {\r\n        \"name\": \"Ahmed Hassan\",\r\n        \"email\": \"ahmed12.hassan@example.com\",\r\n        \"password\": \"StrongPass123!\",\r\n        \"mobile\": \"01001234567\",\r\n        \"address\": \"12 Street 45, Nasr City, Cairo\",\r\n        \"gender\": \"male\",\r\n        \"date_of_birth\": \"1995-08-14\",\r\n        \"national_id\": \"29908140123456\",\r\n        \"passport\": true,\r\n        \"passport_id\": \"A12345678\",\r\n        \"is_customer\": true,\r\n        \"is_broker\": false,\r\n        \"is_surveyor\": false,\r\n        \"is_business_source\": false\r\n    }\r\n}",
+									"raw": "{\r\n    \"params\": {\r\n        \"name\": \"Ahmed Hassan\",\r\n        \"email\": \"broker-user@demo.com\",\r\n        \"password\": \"123\",\r\n        \"mobile\": \"01001234567\",\r\n        \"address\": \"12 Street 45, Nasr City, Cairo\",\r\n        \"gender\": \"male\",\r\n        \"date_of_birth\": \"1995-08-14\",\r\n        \"national_id\": \"29908140123416\",\r\n        \"passport\": true,\r\n        \"passport_id\": \"A12345678\",\r\n        \"country_id\": 65,\r\n        \"state_id\": 273,\r\n        \"is_customer\": true,\r\n        \"is_broker\": false,\r\n        \"is_surveyor\": false,\r\n        \"is_business_source\": false\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -232,6 +232,45 @@
 										"v1",
 										"partner",
 										"register-portal-user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{authToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"params\": {\r\n        \"old_password\": \"ziad15000458\",\r\n        \"new_password\": \"zizo15000458\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{LOCAL_DOMAIN}}/api/v1/auth/change-password",
+									"host": [
+										"{{LOCAL_DOMAIN}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"change-password"
 									]
 								}
 							},
@@ -261,7 +300,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{LOCAL_DOMAIN}}/api/v1/crm/get-opportunity?opportunity_id=3811",
+											"raw": "{{LOCAL_DOMAIN}}/api/v1/crm/get-opportunity?opportunity_id=3778",
 											"host": [
 												"{{LOCAL_DOMAIN}}"
 											],
@@ -274,7 +313,7 @@
 											"query": [
 												{
 													"key": "opportunity_id",
-													"value": "3811"
+													"value": "3778"
 												}
 											]
 										}
@@ -676,7 +715,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"params\": {\r\n        \"opportunity_id\": 3778\r\n    }\r\n}",
+											"raw": "{\r\n    \"params\": {\r\n        \"opportunity_id\": 3932\r\n    }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -715,7 +754,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"params\": {\r\n        \"data\": {\r\n            \"opportunity_id\": 3805,\r\n            \"selected_proposal_id\": 6353,\r\n            \"payment_info\": {\r\n                \"payment_method\": \"Payment Method/0001\",\r\n                \"payment_reference\": \"12312312\",\r\n                \"payment_reference_file_content\": \"JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovUmVzb3VyY2VzIDw8Pj4KL01lZGlhQm94IFswIDAgMjAwIDIwMF0KL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9MZW5ndGggNDQKPj4Kc3RyZWFtCkJUIAoxMDAgMTAwIFRECi9GIDEyIFRmCihIZWxsbyBQREYpIFRqCkVUCmdyCkVUCmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4gCjAwMDAwMDAwNTYgMDAwMDAgbiAKMDAwMDAwMDE1OSAwMDAwMCBuIAowMDAwMDAwMjYyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1Jvb3QgMSAwIFIKPj4Kc3RhcnR4cmVmCjM3MgolJUVPRgo=\"\r\n            },\r\n            \"crm_documents\": [{\r\n                \"document_name\": \"CRM Document/0001\", // refer to `CRM Documents` endpoint to get the list of values for this key\r\n                \"files\": [\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==\"]\r\n            }],\r\n            \"risk_info\": {\r\n                \"vehicle_state\": \"new\", // exist\r\n                \"vehicle_manufacturing_year\": \"2007\", // exist\r\n                \"vehicle_make\": \"MAKER/0001\", //exist\r\n                \"vehicle_model\": \"CAR MODEL/0001\", //exist\r\n                \"vehicle_category\": \"CAR CATEGORY/0001\",//done\r\n                \"vehicle_color\": \"CAR COLOR/0001\",//done\r\n                \"vehicle_body_type\": \"BODY TYPE/0003\",//done\r\n                \"vehicle_fuel_type\": \"FUEL TYPE/0001\", //done\r\n                \"vehicle_usage\": \"USAGE/0010\", //done\r\n                \"vehicle_cc\": \"CC/0001\", //done\r\n                \"vehicle_number_of_seats\": 4,// done\r\n                \"vehicle_sum_insured\": 1000000.0, //exist\r\n                \"vehicle_chassis_number\": \"111111111112\", //exist\r\n                \"vehicle_plate_number\": \"تحت الترخيص\",//done\r\n                \"vehicle_engine_number\": \"5x488251\",//exist\r\n                \"vehicle_has_road_side\": true, //exist\r\n                \"vehicle_road_side_program\": \"ROAD SIDE PROGRAM/0001\" //exist\r\n            }\r\n        }\r\n    }\r\n}",
+											"raw": "{\r\n    \"params\": {\r\n        \"data\": {\r\n            \"opportunity_id\": 3805,\r\n            \"selected_proposal_id\": 6353,\r\n            \"payment_info\": {\r\n                \"payment_method\": \"Payment Method/0001\",\r\n                \"payment_reference\": \"12312312\",\r\n                \"payment_reference_file_content\": \"JVBERi0xLjQKJeLjz9MKMSAwIG9iago8PAovVHlwZSAvQ2F0YWxvZwovUGFnZXMgMiAwIFIKPj4KZW5kb2JqCjIgMCBvYmoKPDwKL1R5cGUgL1BhZ2VzCi9LaWRzIFszIDAgUl0KL0NvdW50IDEKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovUmVzb3VyY2VzIDw8Pj4KL01lZGlhQm94IFswIDAgMjAwIDIwMF0KL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iago0IDAgb2JqCjw8Ci9MZW5ndGggNDQKPj4Kc3RyZWFtCkJUIAoxMDAgMTAwIFRECi9GIDEyIFRmCihIZWxsbyBQREYpIFRqCkVUCmdyCkVUCmVuZHN0cmVhbQplbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4gCjAwMDAwMDAwNTYgMDAwMDAgbiAKMDAwMDAwMDE1OSAwMDAwMCBuIAowMDAwMDAwMjYyIDAwMDAwIG4gCnRyYWlsZXIKPDwKL1Jvb3QgMSAwIFIKPj4Kc3RhcnR4cmVmCjM3MgolJUVPRgo=\"\r\n            },\r\n            \"crm_documents\": [{\r\n                \"document_name\": \"CRM Document/0001\", // refer to `CRM Documents` endpoint to get the list of values for this key\r\n                \"files\": [\"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==\"]\r\n            }],\r\n            \"risk_info\": {\r\n                \"vehicle_state\": \"new\", // exist\r\n                \"vehicle_manufacturing_year\": \"2007\", // exist\r\n                \"vehicle_make\": \"MAKER/0001\", //exist\r\n                \"vehicle_model\": \"CAR MODEL/0001\", //exist\r\n                \"vehicle_category\": \"CAR CATEGORY/0001\",//done\r\n                \"vehicle_color\": \"CAR COLOR/0001\",//done\r\n                \"vehicle_body_type\": \"BODY TYPE/0003\",//done\r\n                \"vehicle_fuel_type\": \"FUEL TYPE/0001\", //done\r\n                \"vehicle_usage\": \"USAGE/0010\", //done\r\n                \"vehicle_cc\": \"CC/0001\", //done\r\n                \"vehicle_number_of_seats\": 4,// done\r\n                \"vehicle_sum_insured\": 1000000.0, //exist\r\n                \"vehicle_chassis_number\": \"1111118111112\", //exist\r\n                \"vehicle_plate_number\": \"تحت الترخيص\",//done\r\n                \"vehicle_engine_number\": \"5x488251\",//exist\r\n                \"vehicle_has_road_side\": true, //exist\r\n                \"vehicle_road_side_program\": \"ROAD SIDE PROGRAM/0001\" //exist\r\n            }\r\n        }\r\n    }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -754,7 +793,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"params\": {\r\n        \"data\": {\r\n            \"user_type\": \"broker\",\r\n            \"user_id\": 2,\r\n            \"product_code\": \"40020\",\r\n            \"lead_source\": \"Web Portal\", //STATIC VALUE: options [\"Mobile App\", \"Web Portal\"] (default is Mobile App)\r\n            \"customer_info\": {\r\n                \"national_id\": \"29408121401051\",\r\n                \"is_foreign_customer\": false,\r\n                \"passport_id\": \"\",\r\n                \"customer_name\": \"customer\",\r\n                \"customer_date_of_birth\": \"1999-04-22\",\r\n                \"gender\": \"male\",\r\n                \"street\": \"fdaf\",\r\n                \"city\": \"Giza test etest\",\r\n                \"phone\": \"+201096799112\",\r\n                \"email\": \"customer@gmail.com\",\r\n                \"country_name\": \"Egypt\",\r\n                \"state_name\": \"Cairo\",\r\n                \"customer_branch_codes\": [\"100\"],\r\n                \"customer_activity_code\": \"ACTIVITY/0001\",\r\n                \"national_card_factory_number\": \"000000\", //optional\r\n                \"national_card_expiration_date\": \"2030-04-22\", //optional\r\n                \"identification_card_file\": \"SGVsbG8gV29ybGQgZnJvbSBCYXNlNjQ=\", // optional\r\n                \"kyc_file\": \"SGVsbG8gV29ybGQgZnJvbSBCYXNlNjQ=\" //optional\r\n\r\n            },\r\n            \"risk_info\": {\r\n                \"vehicle_state\": \"new\", // ['new', 'used']\r\n                \"vehicle_manufacturing_year\": \"2025\",\r\n                \"vehicle_make\": \"MAKER/0044\",\r\n                \"vehicle_model\": \"CAR MODEL/0081\",\r\n                \"vehicle_sum_insured\": 1000000,\r\n                \"vehicle_chassis_number\": \"1111231321113111112122\",\r\n                \"vehicle_engine_number\": \"5x488251\",\r\n                \"vehicle_number_of_kilometers\": 0,\r\n                \"vehicle_road_side_program\": \"ROAD SIDE PROGRAM/0001\"\r\n            }\r\n        }\r\n    }\r\n}",
+											"raw": "{\r\n    \"params\": {\r\n        \"data\": {\r\n            \"user_type\": \"broker\",\r\n            \"user_id\": 2,\r\n            \"product_code\": \"40020\",\r\n            \"lead_source\": \"Web Portal\", //STATIC VALUE: options [\"Mobile App\", \"Web Portal\"] (default is Mobile App)\r\n            \"customer_info\": {\r\n                \"national_id\": \"29408121401051\",\r\n                \"is_foreign_customer\": false,\r\n                \"passport_id\": \"\",\r\n                \"customer_name\": \"customer\",\r\n                \"customer_date_of_birth\": \"1999-04-22\",\r\n                \"gender\": \"male\",\r\n                \"street\": \"fdaf\",\r\n                \"city\": \"Giza test etest\",\r\n                \"phone\": \"+201096799112\",\r\n                \"email\": \"customer@gmail.com\",\r\n                \"country_name\": \"Egypt\",\r\n                \"state_name\": \"Cairo\",\r\n                \"customer_branch_codes\": [\"100\"],\r\n                \"customer_activity_code\": \"ACTIVITY/0001\",\r\n                \"national_card_factory_number\": \"000000\", //optional\r\n                \"national_card_expiration_date\": \"2030-04-22\", //optional\r\n                \"identification_card_file\": \"SGVsbG8gV29ybGQgZnJvbSBCYXNlNjQ=\", // optional\r\n                \"kyc_file\": \"SGVsbG8gV29ybGQgZnJvbSBCYXNlNjQ=\" //optional\r\n\r\n            },\r\n            \"risk_info\": {\r\n                \"vehicle_state\": \"new\", // ['new', 'used']\r\n                \"vehicle_manufacturing_year\": \"2025\",\r\n                \"vehicle_make\": \"MAKER/0001\",\r\n                \"vehicle_model\": \"CAR MODEL/0081\",\r\n                \"vehicle_sum_insured\": 1000000,\r\n                \"vehicle_chassis_number\": \"1111213213121113111112122\",\r\n                \"vehicle_engine_number\": \"5x488251\",\r\n                \"vehicle_number_of_kilometers\": 0,\r\n                \"vehicle_road_side_program\": \"ROAD SIDE PROGRAM/0001\"\r\n            }\r\n        }\r\n    }\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1053,7 +1092,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{LOCAL_DOMAIN}}/api/v1/crm/download-policy-pdf?policy_id=65940",
+											"raw": "{{LOCAL_DOMAIN}}/api/v1/crm/download-policy-pdf?policy_id=65923",
 											"host": [
 												"{{LOCAL_DOMAIN}}"
 											],
@@ -1066,7 +1105,7 @@
 											"query": [
 												{
 													"key": "policy_id",
-													"value": "65940"
+													"value": "65923"
 												}
 											]
 										}
@@ -1514,15 +1553,33 @@
 											}
 										},
 										"url": {
-											"raw": "{{LOCAL_DOMAIN}}/api/v1/policy/surveys",
+											"raw": "{{LOCAL_DOMAIN}}/api/v1/survey/list-surveys?survey_type=issuance&limit=10&offset=0&domain=[]",
 											"host": [
 												"{{LOCAL_DOMAIN}}"
 											],
 											"path": [
 												"api",
 												"v1",
-												"policy",
-												"surveys"
+												"survey",
+												"list-surveys"
+											],
+											"query": [
+												{
+													"key": "survey_type",
+													"value": "issuance"
+												},
+												{
+													"key": "limit",
+													"value": "10"
+												},
+												{
+													"key": "offset",
+													"value": "0"
+												},
+												{
+													"key": "domain",
+													"value": "[]"
+												}
 											]
 										}
 									},
@@ -1866,7 +1923,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{LOCAL_DOMAIN}}/api/v1/survey/list-surveys?survey_type=claim&limit=10&offset=0&domain=[]&identification_codes=[\"016000000106\"]",
+									"raw": "{{LOCAL_DOMAIN}}/api/v1/survey/list-surveys?survey_type=issuance&limit=10&offset=0&domain=[]",
 									"host": [
 										"{{LOCAL_DOMAIN}}"
 									],
@@ -1879,7 +1936,7 @@
 									"query": [
 										{
 											"key": "survey_type",
-											"value": "claim",
+											"value": "issuance",
 											"description": "it can be `issuance` to get crm surveys or `claim` to get claim surveys."
 										},
 										{
@@ -1896,8 +1953,9 @@
 										},
 										{
 											"key": "identification_codes",
-											"value": "[\"016000000106\"]",
-											"description": "surveyor code"
+											"value": "[\"016000000097\"]",
+											"description": "surveyor code",
+											"disabled": true
 										}
 									]
 								}
@@ -3511,7 +3569,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{LOCAL_DOMAIN}}/api/v1/partner/get-customers?user_type=broker&user_id=2",
+									"raw": "{{LOCAL_DOMAIN}}/api/v1/partner/get-customers?user_type=broker&user_id=2&limit=10&offset=0",
 									"host": [
 										"{{LOCAL_DOMAIN}}"
 									],
@@ -3530,6 +3588,14 @@
 										{
 											"key": "user_id",
 											"value": "2"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "offset",
+											"value": "0"
 										}
 									]
 								}

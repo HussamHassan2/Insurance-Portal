@@ -23,12 +23,17 @@ export class AuthInterceptor implements HttpInterceptor {
         // Add auth token to request headers - matches React app's api.js interceptor
         const token = this.authService.getToken();
 
+        console.log(`[AuthInterceptor] Intercepting request to: ${request.url}`);
+
         if (token) {
+            console.log('[AuthInterceptor] Token found, adding Authorization header');
             request = request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${token}`
                 }
             });
+        } else {
+            console.warn('[AuthInterceptor] No token found in AuthService');
         }
 
         // Handle response errors - matches React app's error handling

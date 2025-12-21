@@ -151,11 +151,7 @@ export class QuoteService {
      * Download Proposal PDF - Matches React app's downloadProposalPdf method
      */
     downloadProposalPdf(proposalId: number): Observable<Blob> {
-        const token = localStorage.getItem('authToken');
         return this.api.get<Blob>(`/v1/crm/download-proposal-pdf?proposal_id=${proposalId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
             responseType: 'blob' as 'json'
         });
     }
