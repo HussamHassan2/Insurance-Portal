@@ -1,0 +1,544 @@
+<app-dashboard-layout>
+    <div class="space-y-6" *ngIf="!loading && policy">
+        <!-- Header -->
+        <div class="mb-8 animate-fadeIn">
+            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <button (click)="goBack()" class="hover:text-primary transition-all duration-300">{{
+                    'DETAILS.POLICY.BREADCRUMB' | translate }}</button>
+                <i-lucide name="chevron-right" class="w-4 h-4"></i-lucide>
+                <!-- Breadcrumb uses Policy Number -->
+                <span class="text-navy dark:text-white font-medium">{{ policy.policyNumber }}</span>
+            </div>
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <i-lucide name="user" class="w-7 h-7"></i-lucide>
+                    </div>
+                    <div>
+                        <!-- Primary Header: Customer Name and Policy Number -->
+                        <h1 class="text-3xl font-bold text-navy dark:text-white mb-1">{{ policy.policyHolder.name }}
+                        </h1>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 font-medium mb-2">Policy #{{
+                            policy.policyNumber }}</p>
+
+                        <!-- Secondary Info -->
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                            <span
+                                class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-xs font-semibold uppercase">
+                                {{ policy.transactionType }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="package" class="w-3.5 h-3.5"></i-lucide> {{ policy.productName }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="map-pin" class="w-3.5 h-3.5"></i-lucide> {{ policy.branchName }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="calendar" class="w-3.5 h-3.5"></i-lucide> Effective: {{
+                                policy.effectiveDate }} - {{ policy.expiryDate }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <span
+                        class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold capitalize flex items-center gap-2 animate-slideIn">
+                        <i-lucide name="check-circle" class="w-4 h-4"></i-lucide> {{ policy.status }}
+                    </span>
+                    <app-button variant="outline" class="hover:scale-105 transition-transform"
+                        (click)="handleDownloadPdf()" [disabled]="downloading">
+                        <i-lucide name="download" class="w-4 h-4 mr-2"></i-lucide>
+                        {{ downloading ? ('DETAILS.POLICY.DOWNLOADING' | translate) : ('DETAILS.POLICY.DOWNLOAD_PDF' |
+                        translate) }}
+                    </app-button>
+                    <app-button variant="primary" (click)="endorsePolicy()">
+                        {{ 'DETAILS.POLICY.CREATE_ENDORSEMENT' | translate }}
+                    </app-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-gray-200 mb-6 animate-fadeIn" style="animation-delay: 100ms">
+            <nav class="flex gap-8 overflow-x-auto">
+                <button (click)="setActiveTab('overview')"
+                    [ngClass]="activeTab === 'overview' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                    <i-lucide name="file-text" class="w-4 h-4"></i-lucide>
+                    {{ 'DETAILS.POLICY.TABS.OVERVIEW' | translate }}
+                    <div *ngIf="activeTab === 'overview'"
+                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
+                    </div>
+                </button>
+                <button (click)="setActiveTab('coverage')"
+                    [ngClass]="activeTab === 'coverage' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                    <i-lucide name="shield" class="w-4 h-4"></i-lucide>
+                    {{ 'DETAILS.POLICY.TABS.COVERAGE' | translate }}
+                    <div *ngIf="activeTab === 'coverage'"
+                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
+                    </div>
+                </button>
+                <button (click)="setActiveTab('premium')"
+                    [ngClass]="activeTab === 'premium' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                    <i-lucide name="dollar-sign" class="w-4 h-4"></i-lucide>
+                    {{ 'DETAILS.POLICY.TABS.PREMIUM' | translate }}
+                    <div *ngIf="activeTab === 'premium'"
+                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
+                    </div>
+                </button>
+                <!-- 
+                <button (click)="setActiveTab('payments')"
+                    [ngClass]="activeTab === 'payments' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                    <i-lucide name="credit-card" class="w-4 h-4"></i-lucide>
+                    Payments
+                    <div *ngIf="activeTab === 'payments'"
+                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
+                    </div>
+                </button>
+                -->
+            </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-8">
+            <!-- Main Content -->
+            <div class="space-y-6">
+                <!-- Overview Tab -->
+                <div *ngIf="activeTab === 'overview'" class="space-y-6 animate-fadeIn">
+
+                    <!-- Top Section: Highlights (Collapsed by Default) -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <details class="group" [open]="false">
+                            <summary
+                                class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600">
+                                        <i-lucide name="info" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white">{{
+                                            'DETAILS.POLICY.HIGHLIGHTS.TITLE' | translate }}</h3>
+                                        <p class="text-sm text-gray-500">{{ 'DETAILS.POLICY.HIGHLIGHTS.SUBTITLE' |
+                                            translate }}</p>
+                                    </div>
+                                </div>
+                                <i-lucide name="chevron-down"
+                                    class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"></i-lucide>
+                            </summary>
+
+                            <div class="px-6 pb-6 pt-0 border-t border-gray-100 dark:border-gray-700">
+                                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <!-- Renewal Card Content -->
+                                    <div class="space-y-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                            'DETAILS.POLICY.HIGHLIGHTS.RENEWAL' | translate }}
+                                        </h4>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-gray-600 dark:text-gray-300 text-xs">{{
+                                                'DETAILS.POLICY.HIGHLIGHTS.STATUS' | translate }}</span>
+                                            <span [ngClass]="{
+                                                'bg-green-100 text-green-800': policy.daysToRenew > 30,
+                                                'bg-yellow-100 text-yellow-800': policy.daysToRenew <= 30 && policy.daysToRenew > 0,
+                                                'bg-red-100 text-red-800': policy.daysToRenew <= 0
+                                            }" class="px-2 py-0.5 rounded-full text-xs font-semibold">
+                                                {{ policy.daysToRenew > 0 ? (policy.daysToRenew + ' ' +
+                                                ('DETAILS.POLICY.HIGHLIGHTS.DAYS_LEFT' | translate)) :
+                                                ('DETAILS.POLICY.HIGHLIGHTS.EXPIRED' | translate) }}
+                                            </span>
+                                        </div>
+                                        <div *ngIf="policy?.daysToRenew !== null" class="relative pt-1">
+                                            <div class="overflow-hidden h-1.5 mb-1 text-xs flex rounded bg-blue-200">
+                                                <div [style.width.%]="100 - (policy.daysToRenew / 365 * 100)"
+                                                    class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <app-button *ngIf="canRenew()" variant="primary" size="sm" class="w-full"
+                                            (click)="handleRenewPolicy()" [disabled]="renewalLoading">
+                                            {{ getRenewalButtonText() }}
+                                        </app-button>
+                                    </div>
+
+                                    <!-- Important Dates Content -->
+                                    <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                            'DETAILS.POLICY.HIGHLIGHTS.IMPORTANT_DATES' | translate }}
+                                        </h4>
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-gray-600 dark:text-gray-300">{{
+                                                'DETAILS.POLICY.HIGHLIGHTS.START_DATE' | translate }}</span>
+                                            <span class="font-medium">{{ policy.coverage.startDate }}</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-gray-600 dark:text-gray-300">{{
+                                                'DETAILS.POLICY.HIGHLIGHTS.END_DATE' | translate }}</span>
+                                            <span class="font-medium text-primary">{{ policy.coverage.endDate }}</span>
+                                        </div>
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-gray-600 dark:text-gray-300">{{
+                                                'DETAILS.POLICY.HIGHLIGHTS.ISSUE_DATE' | translate }}</span>
+                                            <span class="font-medium">{{ policy.issueDate }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment Status Content -->
+                                    <div
+                                        class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg text-center flex flex-col justify-center items-center">
+                                        <div
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600 mb-2">
+                                            <i-lucide name="check-circle" class="w-4 h-4"></i-lucide>
+                                        </div>
+                                        <h4 class="font-bold text-sm text-gray-900 dark:text-white">{{
+                                            'DETAILS.POLICY.HIGHLIGHTS.FULLY_PAID' | translate }}</h4>
+                                        <p class="text-xs text-gray-500">{{ 'DETAILS.POLICY.HIGHLIGHTS.ALL_SETTLED' |
+                                            translate }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Policy Holder Information -->
+                    <div
+                        class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                        <h3
+                            class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
+                            <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.POLICY.HOLDER.TITLE' | translate }}
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+                            <div class="space-y-1 min-w-0">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'DETAILS.POLICY.HOLDER.FULL_NAME' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white truncate"
+                                    title="{{ policy.policyHolder.name }}">{{ policy.policyHolder.name }}</p>
+                            </div>
+                            <div class="space-y-1 min-w-0">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'DETAILS.POLICY.HOLDER.NATIONAL_ID' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ policy.policyHolder.nationalId
+                                    }}
+                                </p>
+                            </div>
+                            <div class="space-y-1 min-w-0">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'DETAILS.POLICY.HOLDER.GROUP' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ policy.policyHolder.group }}</p>
+                            </div>
+                            <div class="space-y-1 min-w-0">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'DETAILS.POLICY.HOLDER.ACTIVITY' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ policy.policyHolder.activity }}
+                                </p>
+                            </div>
+                            <!-- Full width address on mobile, spanned on desktop if needed -->
+                            <div class="space-y-1 md:col-span-2 lg:col-span-4 min-w-0">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                                    <i-lucide name="map-pin" class="w-3 h-3"></i-lucide> {{
+                                    'DETAILS.POLICY.HOLDER.ADDRESS' | translate }}
+                                </p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ policy.policyHolder.address }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Information -->
+                    <div
+                        class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                        <h3
+                            class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
+                            <i-lucide name="car" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.POLICY.VEHICLE.TITLE' | translate }}
+                        </h3>
+
+                        <div class="space-y-8">
+                            <!-- Primary Vehicle Details -->
+                            <div>
+                                <h4
+                                    class="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-1 opacity-80">
+                                    <i-lucide name="info" class="w-3 h-3"></i-lucide> {{
+                                    'DETAILS.POLICY.VEHICLE.GENERAL' | translate }}
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 text-sm">
+                                    <!-- Row 1 -->
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Make</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.make }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Model</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.model
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Year</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.year }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Color</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.color
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Plate Number</p>
+                                        <p
+                                            class="font-bold text-gray-900 dark:text-white bg-gray-50 px-2 py-0.5 rounded inline-block border border-gray-200">
+                                            {{ policy.vehicle.plateNumber }}</p>
+                                    </div>
+
+                                    <!-- Row 2 -->
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Category</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{
+                                            policy.vehicle.category }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Body Type</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{
+                                            policy.vehicle.bodyType }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Seats</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.seats
+                                            }}
+                                            Persons</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fuel Type</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{
+                                            policy.vehicle.fuelType }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Engine CC</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.cc }}
+                                            CC
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Technical & Value -->
+                            <div>
+                                <h4
+                                    class="text-xs font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-1 opacity-80">
+                                    <i-lucide name="settings" class="w-3 h-3"></i-lucide> Technical & Coverage Info
+                                </h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 text-sm">
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Chassis Number</p>
+                                        <p
+                                            class="font-mono font-medium text-gray-900 dark:text-white text-xs select-all bg-gray-50 p-1.5 rounded border border-gray-100">
+                                            {{ policy.vehicle.chassisNumber }}</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Engine Number</p>
+                                        <p
+                                            class="font-mono font-medium text-gray-900 dark:text-white text-xs select-all bg-gray-50 p-1.5 rounded border border-gray-100">
+                                            {{ policy.vehicle.engineNumber }}</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Usage</p>
+                                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.vehicle.usage
+                                            }}
+                                        </p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Sum Insured</p>
+                                        <p class="font-bold text-green-600 dark:text-green-400">{{ policy.currency }} {{
+                                            policy.vehicle.estimatedValue | number }}</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Roadside Assistance</p>
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                [ngClass]="policy.vehicle.roadSide === 'Included' ? 'text-green-600 bg-green-50 border-green-200' : 'text-gray-500 bg-gray-50 border-gray-200'"
+                                                class="px-2 py-0.5 rounded text-xs font-semibold border">
+                                                {{ policy.vehicle.roadSide }}
+                                            </span>
+                                            <span *ngIf="policy.vehicle.roadSide === 'Included'"
+                                                class="text-xs text-gray-500">({{ policy.vehicle.roadSideProgram
+                                                }})</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coverage Tab -->
+                <div *ngIf="activeTab === 'coverage'" class="space-y-6 animate-fadeIn">
+                    <!-- Risks List -->
+                    <div *ngFor="let risk of policy.coverage.risks; let i = index"
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <details class="group" [open]="false">
+                            <summary
+                                class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-primary">
+                                        <i-lucide name="shield" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-navy dark:text-white">Risk #{{ i + 1 }} Coverage</h3>
+                                        <p class="text-sm text-gray-500">{{ risk.vehicle_make_name }} {{
+                                            risk.vehicle_model_name }}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-right mr-2 hidden sm:block">
+                                        <p class="text-xs text-gray-500 uppercase font-semibold">Cover Amount</p>
+                                        <p class="font-bold text-primary">{{ policy.currency }} {{
+                                            getRiskCoverAmount(risk) | number }}</p>
+                                    </div>
+                                    <i-lucide name="chevron-down"
+                                        class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"></i-lucide>
+                                </div>
+                            </summary>
+
+                            <div class="px-6 pb-6 pt-0 border-t border-gray-100 dark:border-gray-700">
+                                <div class="mt-4 grid gap-3">
+                                    <div *ngFor="let cover of risk.risk_covers"
+                                        class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                        <span class="text-sm font-medium text-navy dark:text-white">{{ cover.cover_name
+                                            }}</span>
+                                        <div class="text-right">
+                                            <p class="text-sm font-bold text-navy dark:text-white">{{ policy.currency }}
+                                                {{ cover.net_premium | number }}</p>
+                                            <p *ngIf="cover.si_now > 0" class="text-xs text-gray-500">SI: {{
+                                                policy.currency }} {{ cover.si_now | number }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Policy Conditions -->
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                        <details class="group" [open]="false">
+                            <summary
+                                class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center text-indigo-600">
+                                        <i-lucide name="file-text" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-navy dark:text-white">Policy Conditions</h3>
+                                        <p class="text-sm text-gray-500">Terms and clauses applicable to this policy</p>
+                                    </div>
+                                </div>
+                                <i-lucide name="chevron-down"
+                                    class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"></i-lucide>
+                            </summary>
+
+                            <div class="px-6 pb-6 pt-0 border-t border-gray-100 dark:border-gray-700">
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div *ngFor="let condition of policy.coverage.conditions"
+                                        class="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                        <i-lucide name="check-circle"
+                                            class="w-4 h-4 text-indigo-500 mt-0.5 flex-shrink-0"></i-lucide>
+                                        <span class="text-sm text-gray-700 dark:text-gray-300">{{
+                                            condition.condition_name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Premium Tab -->
+                <div *ngIf="activeTab === 'premium'"
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 animate-fadeIn group overflow-hidden">
+
+                    <details class="group" [open]="false">
+                        <!-- Summary: Total Premium (Always Visible) -->
+                        <summary
+                            class="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600">
+                                    <i-lucide name="dollar-sign" class="w-5 h-5"></i-lucide>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-navy dark:text-white">Gross Premium</h3>
+                                    <p class="text-sm text-gray-500">Total payable amount</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="text-2xl font-bold text-primary">{{ policy.currency }} {{
+                                    policy.premium.total | number }}</span>
+                                <i-lucide name="chevron-down"
+                                    class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"></i-lucide>
+                            </div>
+                        </summary>
+
+                        <!-- Content: Detailed Breakdown (Collapsed by default) -->
+                        <div class="px-6 pb-6 pt-0 border-t border-gray-100 dark:border-gray-700">
+                            <div class="mt-4 space-y-4">
+                                <!-- Dynamic Charges List -->
+                                <div *ngFor="let charge of policy.premium.breakdown"
+                                    class="flex justify-between items-center py-2 text-sm border-b border-gray-50 last:border-0 hover:bg-gray-50 px-2 rounded transition-colors"
+                                    [ngClass]="{'font-semibold bg-gray-50': charge.charge_code === '10001' || charge.charge_code === '10002'}">
+                                    <span class="text-gray-600 dark:text-gray-300">{{ charge.charge_name }}</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ policy.currency }} {{
+                                        charge.charge_value | number }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Documents (Hidden as requested) -->
+                <!-- 
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    ...
+                </div>
+                -->
+            </div>
+
+            <!-- End of Overview Tab content -->
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex items-center justify-center h-96">
+        <app-loading-spinner [loading]="true" [message]="'DETAILS.POLICY.LOADING' | translate"></app-loading-spinner>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="flex items-center justify-center h-96">
+        <div class="text-center">
+            <i-lucide name="alert-circle" class="h-12 w-12 text-red-500 mx-auto mb-4"></i-lucide>
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">{{ 'DETAILS.POLICY.ERROR_LOADING' | translate
+                }}</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">{{ error }}</p>
+            <app-button (click)="goBack()">
+                <i-lucide name="chevron-left" class="w-4 h-4 mr-2"></i-lucide>
+                {{ 'DETAILS.POLICY.BACK_TO_POLICIES' | translate }}
+            </app-button>
+        </div>
+    </div>
+</app-dashboard-layout>

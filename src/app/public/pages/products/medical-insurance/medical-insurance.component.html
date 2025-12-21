@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="bg-gradient-to-r from-green-600 to-green-800 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ 'PRODUCTS.MEDICAL.TITLE' | translate }}</h1>
+            <p class="text-xl mb-8">{{ 'PRODUCTS.MEDICAL.SUBTITLE' | translate }}</p>
+            <a routerLink="/login"
+                class="inline-block bg-white text-green-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors">
+                {{ 'PRODUCTS.COMMON.GET_QUOTE' | translate }}
+            </a>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">{{
+            'PRODUCTS.COMMON.COVERAGE_BENEFITS' | translate }}</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let feature of features" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-start gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-6 w-6 text-green-600 flex-shrink-0 mt-1">
+                        <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+                    <p class="text-gray-900 dark:text-white">{{ feature | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

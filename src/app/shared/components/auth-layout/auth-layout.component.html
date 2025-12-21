@@ -1,0 +1,57 @@
+<div class="min-h-screen flex bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Left Side - Branding (Hidden on mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 bg-navy dark:bg-gray-950 relative overflow-hidden">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-navy via-primary to-primary-light dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 opacity-90">
+        </div>
+        <div
+            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay">
+        </div>
+
+        <div class="relative z-10 w-full flex flex-col justify-between p-12 text-white">
+            <a routerLink="/" class="flex items-center gap-2">
+                <img src="assets/logo.png" alt="Orient Insurance" class="h-12 object-contain brightness-0 invert" />
+            </a>
+
+            <div class="space-y-6 max-w-lg">
+                <h1 class="text-4xl font-bold leading-tight text-white">
+                    Protecting What Matters Most Since 1980
+                </h1>
+                <p class="text-lg text-blue-100 dark:text-gray-300">
+                    Join thousands of satisfied customers who trust Orient Insurance for their protection needs.
+                    Experience seamless claims and comprehensive coverage.
+                </p>
+            </div>
+
+            <div class="flex gap-4 text-sm text-blue-200 dark:text-gray-400">
+                <span>© 2025 Orient Insurance</span>
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side - Form -->
+    <div
+        class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 bg-white dark:bg-gray-900 relative">
+        <div class="absolute top-4 right-4">
+            <app-language-switcher></app-language-switcher>
+        </div>
+        <div class="mx-auto w-full max-w-sm lg:w-96">
+            <div class="lg:hidden mb-8">
+                <a routerLink="/" class="flex items-center gap-2">
+                    <img src="assets/logo.png" alt="Orient Insurance" class="h-10 object-contain" />
+                </a>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-navy dark:text-white">{{ title }}</h2>
+                <div *ngIf="subtitle" class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    {{ subtitle }}
+                </div>
+            </div>
+
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

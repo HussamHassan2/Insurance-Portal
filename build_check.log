@@ -1,0 +1,16 @@
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
+
+Error: src/app/broker/pages/quotation-details/broker-quotation-details.component.html:14:54 - error TS1117: An object literal cannot have multiple properties with the same name.
+
+14                         'bg-gray-100 text-gray-800': quotation.status === 'expired'
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/broker/pages/quotation-details/broker-quotation-details.component.ts:9:18
+    9     templateUrl: './broker-quotation-details.component.html',
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component BrokerQuotationDetailsComponent.
+
+
+

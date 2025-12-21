@@ -1,0 +1,47 @@
+<div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-navy dark:text-white mb-6">{{ title }}</h1>
+
+        <!-- Progress Bar -->
+        <div class="relative">
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200 dark:bg-gray-700">
+                <div [style.width.%]="getProgressPercentage()"
+                    class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary transition-all duration-500">
+                </div>
+            </div>
+
+            <!-- Step Indicators -->
+            <div class="flex justify-between">
+                <div *ngFor="let step of steps; let i = index" class="flex flex-col items-center">
+                    <div [ngClass]="{
+              'bg-green-500 text-white': isCompleted(i),
+              'bg-primary text-white ring-4 ring-blue-100': isCurrent(i),
+              'bg-gray-200 text-gray-500 dark:bg-gray-700 dark:text-gray-400': !isCompleted(i) && !isCurrent(i)
+            }" class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors duration-300">
+                        <svg *ngIf="isCompleted(i)" class="w-5 h-5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        <span *ngIf="!isCompleted(i)">{{ i + 1 }}</span>
+                    </div>
+                    <span [ngClass]="{
+              'text-primary': isCurrent(i),
+              'text-gray-500 dark:text-gray-400': !isCurrent(i)
+            }" class="mt-2 text-xs font-medium hidden sm:block">
+                        {{ step.title }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <h2 class="text-xl font-bold text-navy dark:text-white mb-6">{{ currentStepData.title }}</h2>
+
+        <!-- Dynamic component will be inserted here by parent -->
+        <ng-content></ng-content>
+    </div>
+</div>

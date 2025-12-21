@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12 text-center md:text-left">
+            <h1 class="text-4xl font-bold text-navy dark:text-white mb-2">{{ 'SUPPORT.TITLE' | translate }}</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300">{{ 'SUPPORT.SUBTITLE' | translate }}</p>
+        </div>
+
+        <!-- Quick Actions Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <a *ngFor="let option of supportOptions" [routerLink]="option.link"
+                class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" [ngClass]="option.color">
+                    <i-lucide [name]="option.icon" class="w-7 h-7"></i-lucide>
+                </div>
+                <h3 class="text-xl font-bold text-navy dark:text-white mb-3 group-hover:text-primary transition-colors">
+                    {{ option.title | translate }}</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">{{ option.description | translate }}
+                </p>
+                <div class="flex items-center text-sm font-semibold text-primary">
+                    {{ 'SUPPORT.VIEW_DETAILS' | translate }}
+                    <i-lucide name="chevron-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform">
+                    </i-lucide>
+                </div>
+            </a>
+        </div>
+
+        <!-- Contact Banner -->
+        <div class="bg-navy rounded-3xl p-8 md:p-12 text-white relative overflow-hidden mb-16">
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+                <div class="text-center lg:text-left">
+                    <h2 class="text-3xl font-bold mb-4">{{ 'SUPPORT.STILL_NEED_HELP' | translate }}</h2>
+                    <p class="text-blue-200 text-lg max-w-xl opacity-90">{{ 'SUPPORT.HELP_DESC' | translate }}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button
+                        class="px-8 py-4 bg-white text-navy rounded-xl hover:bg-blue-50 transition-all font-bold flex items-center justify-center gap-3 shadow-lg shadow-black/10">
+                        <i-lucide name="phone" class="w-5 h-5"></i-lucide>
+                        {{ 'SUPPORT.CALL_SUPPORT' | translate }}
+                    </button>
+                    <button
+                        class="px-8 py-4 border-2 border-white/30 text-white rounded-xl hover:bg-white/10 transition-all font-bold flex items-center justify-center gap-3">
+                        <i-lucide name="mail" class="w-5 h-5"></i-lucide>
+                        {{ 'SUPPORT.EMAIL_US' | translate }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-primary/20 rounded-full blur-3xl -ml-20 -mb-20"></div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div>
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl font-bold text-navy dark:text-white">{{ 'SUPPORT.FAQ_TITLE' | translate }}</h2>
+                <a routerLink="/support/faq" class="text-primary font-semibold hover:underline">{{
+                    'SUPPORT.VIEW_ALL_FAQ' | translate }}</a>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div *ngFor="let faq of faqs; let i = index"
+                    class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300">
+                    <button (click)="toggleFaq(i)" class="w-full px-8 py-6 flex items-center justify-between text-left">
+                        <span class="text-lg font-semibold text-navy dark:text-white">{{ faq.question }}</span>
+                        <div class="w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center transition-all duration-300"
+                            [ngClass]="faq.open ? 'rotate-180 bg-primary/10 text-primary' : 'text-gray-400'">
+                            <i-lucide [name]="'chevron-down'" class="w-5 h-5"></i-lucide>
+                        </div>
+                    </button>
+                    <div *ngIf="faq.open" class="px-8 pb-8 animate-fadeIn">
+                        <div class="h-px bg-gray-100 dark:bg-gray-700 mb-6"></div>
+                        <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                            {{ faq.answer }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

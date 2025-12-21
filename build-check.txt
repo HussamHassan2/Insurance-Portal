@@ -1,0 +1,777 @@
+﻿node.exe : - 
+Generating browser 
+application bundles 
+(phase: setup)...
+At C:\Users\lenovo\Ap
+pData\Roaming\npm\ng.
+ps1:24 char:5
++     & "node$exe"  "
+$basedir/node_modules
+/@angular/cli/bin/ng.
+js" $arg ...
++     ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (- Gener   
+ ating br...hase:    
+ setup)...:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Γ£ö Browser 
+application bundle 
+generation complete.
+Γ£ö Browser 
+application bundle 
+generation complete.
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:25:96 - 
+error NG2011: The 
+component 'SelectionM
+odalComponent' 
+appears in 
+'imports', but is 
+not standalone and 
+cannot be imported 
+directly. It must be 
+imported via an 
+NgModule.
+
+25     imports: 
+[CommonModule, 
+FormsModule, 
+SharedModule, 
+RouterModule, Program
+SelectorComponent, Se
+lectionModalComponent
+, CollapsibleSectionC
+omponent],
+                     
+                     
+                     
+                     
+              ~~~~~~~
+~~~~~~~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:25:121 - 
+error NG2011: The 
+component 'Collapsibl
+eSectionComponent' 
+appears in 
+'imports', but is 
+not standalone and 
+cannot be imported 
+directly.
+
+25     imports: 
+[CommonModule, 
+FormsModule, 
+SharedModule, 
+RouterModule, Program
+SelectorComponent, Se
+lectionModalComponent
+, CollapsibleSectionC
+omponent],
+                     
+                     
+                     
+                     
+                     
+                  ~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~
+
+  src/app/shared/shar
+ed.module.ts:83:14
+    83 export class 
+SharedModule { }
+                    
+~~~~~~~~~~~~
+    It can be 
+imported using its 
+'SharedModule' 
+NgModule instead.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:266:40 - 
+error TS2339: 
+Property 
+'national_id' does 
+not exist on type 
+'User'.
+
+266                  
+   national_id: 
+user?.national_id,
+                     
+                     
+ ~~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:267:51 - 
+error TS2339: 
+Property 
+'date_of_birth' does 
+not exist on type 
+'User'.
+
+267                  
+   customer_date_of_b
+irth: 
+user?.date_of_birth 
+|| '',
+                     
+                     
+            
+~~~~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:268:35 - 
+error TS2339: 
+Property 'gender' 
+does not exist on 
+type 'User'.
+
+268                  
+   gender: 
+user?.gender || 
+'male',
+                     
+                 
+~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:269:48 - 
+error TS2339: 
+Property 
+'is_foreign' does 
+not exist on type 
+'User'.
+
+269                  
+   
+is_foreign_customer: 
+user?.is_foreign || 
+false,
+                     
+                     
+         ~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:270:40 - 
+error TS2339: 
+Property 
+'passport_id' does 
+not exist on type 
+'User'.
+
+270                  
+   passport_id: 
+user?.passport_id || 
+'',
+                     
+                     
+ ~~~~~~~~~~~
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:48:
+45 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'select'.
+
+48                   
+                  
+<select [(ngModel)]="
+columnFilters[col.key
+]"
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:49:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+49                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:63:
+41 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'input'.
+
+63                   
+                     
+ [(ngModel)]="columnF
+ilters[col.key]"
+                     
+                     
+ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:64:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+64                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:9:9 
+- error NG8002: 
+Can't bind to 
+'ngClass' since it 
+isn't a known 
+property of 'button'.
+
+  9         
+[ngClass]="{
+            
+~~~~~~~~~~~~
+ 10         
+'bg-gray-50 
+dark:bg-gray-800 
+text-gray-400 
+border-gray-200 
+dark:border-gray-700 
+cursor-not-allowed': 
+disabled,
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+... 
+ 12         
+'focus:ring-2 
+focus:ring-primary fo
+cus:border-primary': 
+!disabled
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+ 13       }">
+    ~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:20:1
+3 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+20             
+<i-lucide 
+name="chevron-down"
+               ~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~
+21                 
+class="h-4 w-4 
+text-gray-400 group-h
+over:text-blue-500 tr
+ansition-colors"></i-
+lucide>
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:45:2
+1 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+45                   
+  <i-lucide name="x" 
+class="h-5 
+w-5"></i-lucide>
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:53:2
+5 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+53                   
+      <i-lucide 
+name="search" 
+class="h-4 w-4 text-g
+ray-400"></i-lucide>
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:55:5
+3 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'input'.
+
+55                   
+  <input 
+#searchInput 
+type="text" [ngModel]
+="searchQuery" (ngMod
+elChange)="onSearch($
+event)"
+                     
+                     
+             ~~~~~~~~
+~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:55:1
+03 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+55                   
+  <input 
+#searchInput 
+type="text" [ngModel]
+="searchQuery" (ngMod
+elChange)="onSearch($
+event)"
+                     
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:70:2
+1 - error NG8002: 
+Can't bind to 
+'ngClass' since it 
+isn't a known 
+property of 'button'.
+
+70                   
+  [ngClass]="{
+                     
+  ~~~~~~~~~~~~
+71               
+'bg-blue-50 
+dark:bg-blue-900/20 
+text-blue-700 
+dark:text-blue-300 
+font-medium': 
+option.code === 
+value,
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+72               
+'text-gray-700 
+dark:text-gray-300 
+hover:bg-gray-50 dark
+:hover:bg-gray-700': 
+option.code !== value
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+73             }">
+   ~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:76:2
+1 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+76                   
+  <i-lucide 
+*ngIf="option.code 
+=== value" 
+name="check"
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+77                   
+      class="h-4 w-4 
+text-blue-600 
+dark:text-blue-400">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+

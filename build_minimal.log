@@ -1,0 +1,41 @@
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
+- Copying assets...
+✔ Copying assets complete.
+- Generating index html...
+✔ Index html generation complete.
+
+Initial chunk files           | Names                      |  Raw size | Estimated transfer size
+main.45cbef4211705a58.js      | main                       | 404.01 kB |               104.39 kB
+styles.e5e2a53fad309bd4.css   | styles                     |  53.31 kB |                 6.89 kB
+polyfills.9dd8c62bdd8e762d.js | polyfills                  |  34.00 kB |                11.07 kB
+runtime.cdd7b74162945d7a.js   | runtime                    |   2.90 kB |                 1.39 kB
+
+                              | Initial total              | 494.23 kB |               123.74 kB
+
+Lazy chunk files              | Names                      |  Raw size | Estimated transfer size
+435.b34adc359e3ee605.js       | analytics-analytics-module | 230.66 kB |                68.22 kB
+179.f5e6e7bac2760a59.js       | broker-broker-module       | 178.43 kB |                30.60 kB
+402.b53b37452819a8f5.js       | customer-customer-module   |  64.62 kB |                12.21 kB
+466.2739a7a602ce6327.js       | public-public-module       |  55.35 kB |                 9.95 kB
+53.1d50b31ac3756ff5.js        | customer-customer-module   |  23.64 kB |                 5.68 kB
+736.2d1658a0fefec851.js       | customer-customer-module   |  19.48 kB |                 3.91 kB
+38.484e42cbc9d132ff.js        | surveyor-surveyor-module   |  14.04 kB |                 3.53 kB
+169.1556aa6c7d213a8b.js       | quote-quote-module         |  12.09 kB |                 3.02 kB
+679.755017e9cfc1208a.js       | customer-customer-module   |  11.65 kB |                 3.13 kB
+602.4f434df054a71c4e.js       | admin-admin-module         |  11.35 kB |                 2.77 kB
+common.5d60727de8cb2a89.js    | common                     |   4.72 kB |                 1.66 kB
+
+Build at: 2025-12-16T11:28:19.061Z - Hash: 47428139776531ec - Time: 194240ms
+
+Warning: C:/Users/lenovo/Portal Versions/New folder/insurance-portal/src/app/core/services/endorsement.service.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/lenovo/Portal Versions/New folder/insurance-portal/src/app/shared/utils/file.utils.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+Warning: C:/Users/lenovo/Portal Versions/New folder/insurance-portal/src/environments/environment.prod.ts is part of the TypeScript compilation but it's unused.
+Add only entry points to the 'files' or 'include' properties in your tsconfig.
+
+

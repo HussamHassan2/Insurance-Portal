@@ -1,0 +1,4 @@
+﻿    getUserAvatar(): string {
+        const userName = encodeURIComponent(this.user?.name || 'User');
+        return 'https://ui-avatars.com/api/?name=' + userName + '&background=0D1B2A&color=fff';
+    }

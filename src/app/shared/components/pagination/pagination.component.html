@@ -1,0 +1,53 @@
+<div
+    class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 sm:px-6">
+    <!-- Left side: Records info -->
+    <div class="flex items-center gap-4">
+        <div class="text-sm text-gray-700 dark:text-gray-300">
+            Showing <span class="font-medium">{{ startRecord }}</span> to <span class="font-medium">{{ endRecord
+                }}</span> of
+            <span class="font-medium">{{ totalRecords }}</span> results
+        </div>
+
+        <!-- Page size selector -->
+        <div class="flex items-center gap-2">
+            <label for="pageSize" class="text-sm text-gray-700 dark:text-gray-300">Per page:</label>
+            <select id="pageSize" (change)="onPageSizeChange(+$any($event.target).value)"
+                class="block rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm focus:border-primary focus:ring-primary">
+                <option *ngFor="let size of pageSizeOptions" [value]="size" [selected]="size === pageSize">{{ size }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Right side: Navigation buttons -->
+    <div class="flex items-center gap-2">
+        <button (click)="goToFirstPage()" [disabled]="!canGoPrevious"
+            class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="First page">
+            <i data-lucide="chevrons-left" class="w-4 h-4"></i>
+        </button>
+
+        <button (click)="goToPreviousPage()" [disabled]="!canGoPrevious"
+            class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Previous page">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        </button>
+
+        <span class="text-sm text-gray-700 dark:text-gray-300">
+            Page <span class="font-medium">{{ currentPage }}</span> of <span class="font-medium">{{ totalPages || 1
+                }}</span>
+        </span>
+
+        <button (click)="goToNextPage()" [disabled]="!canGoNext"
+            class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Next page">
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+
+        <button (click)="goToLastPage()" [disabled]="!canGoNext"
+            class="relative inline-flex items-center px-2 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Last page">
+            <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,282 @@
+<app-dashboard-layout>
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Profile Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-navy dark:text-white">{{ 'PROFILE.TITLE' | translate }}</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">{{ 'PROFILE.SUBTITLE' | translate }}</p>
+            </div>
+            <button *ngIf="false" (click)="toggleEdit()"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark flex items-center gap-2 transition-all">
+                <i-lucide name="edit" class="w-4 h-4"></i-lucide>
+                {{ 'PROFILE.EDIT_PROFILE' | translate }}
+            </button>
+        </div>
+
+        <div *ngIf="loading"
+            class="flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm transition-all duration-300">
+            <i-lucide name="loader-2" class="w-8 h-8 text-primary animate-spin mb-4"></i-lucide>
+            <p class="text-gray-500 dark:text-gray-400">{{ 'PROFILE.LOADING' | translate }}</p>
+        </div>
+
+        <div *ngIf="!loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fadeIn">
+            <!-- Profile Card -->
+            <div class="lg:col-span-1 space-y-6">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div class="h-32 bg-gradient-to-r from-navy to-primary"></div>
+                    <div class="px-6 pb-6">
+                        <div class="relative flex justify-center -mt-16 mb-4">
+                            <div class="p-1 bg-white dark:bg-gray-800 rounded-full shadow-lg">
+                                <div
+                                    class="h-24 w-24 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-4 border-white dark:border-gray-800 overflow-hidden">
+                                    <i-lucide name="user" class="h-12 w-12 text-gray-400"></i-lucide>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <h2 class="text-xl font-bold text-navy dark:text-white">{{ formData.name_en ||
+                                formData.name_ar }}</h2>
+                            <p class="text-gray-500 dark:text-gray-400 capitalize">{{ user?.role || 'Customer' }}</p>
+                        </div>
+
+                        <div class="mt-6 space-y-4 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                                <i-lucide name="mail" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ formData.email }}
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                                <i-lucide name="phone" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ formData.phone || ('PROFILE.NO_PHONE' | translate) }}
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                                <i-lucide name="map-pin" class="w-4 h-4 text-primary"></i-lucide>
+                                <span *ngIf="formData.city || formData.state || formData.country">
+                                    {{ formData.city }}{{ formData.city && formData.state ? ', ' : '' }}{{
+                                    formData.state }}{{ (formData.city || formData.state) && formData.country ? ', ' :
+                                    '' }}{{ formData.country }}
+                                </span>
+                                <span *ngIf="!formData.city && !formData.state && !formData.country">{{
+                                    'PROFILE.NO_LOCATION' | translate }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i-lucide name="file-text" class="w-5 h-5 text-primary"></i-lucide>
+                        {{ 'PROFILE.BIO' | translate }}
+                    </h3>
+                    <div *ngIf="!isEditing" class="text-sm text-gray-600 dark:text-gray-400 italic">
+                        {{ formData.bio || ('PROFILE.NO_BIO' | translate) }}
+                    </div>
+                    <textarea *ngIf="isEditing" [(ngModel)]="formData.bio" name="bio"
+                        class="w-full px-4 py-2 border border-test-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
+                        rows="4" [placeholder]="'PROFILE.BIO_PLACEHOLDER' | translate"></textarea>
+                </div>
+
+                <!-- Password & Security Section -->
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                        <i-lucide name="shield" class="w-5 h-5 text-primary"></i-lucide>
+                        Password & Security
+                    </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        Manage your account password and security settings
+                    </p>
+                    <button (click)="openChangePassword()"
+                        class="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+                        <i-lucide name="lock" class="w-4 h-4"></i-lucide>
+                        Change Password
+                    </button>
+                </div>
+            </div>
+
+            <!-- Personal Info Form -->
+            <div class="lg:col-span-2">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 sm:p-8">
+                    <h3
+                        class="text-lg font-bold text-navy dark:text-white mb-8 border-b border-gray-100 dark:border-gray-700 pb-4">
+                        {{ 'PROFILE.PERSONAL_INFO' | translate }}
+                    </h3>
+
+                    <form (ngSubmit)="onSubmit()" class="space-y-8">
+                        <!-- Basic Information Section -->
+                        <div>
+                            <h4 class="text-md font-semibold text-navy dark:text-white mb-4 flex items-center gap-2">
+                                <i-lucide name="user" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ 'PROFILE.BASIC_INFO' | translate }}
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.NAME_EN' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.name_en" name="name_en"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.NAME_AR' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.name_ar" name="name_ar"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors"
+                                        dir="rtl" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.EMAIL' | translate }}</label>
+                                    <input type="email" [(ngModel)]="formData.email" name="email"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.PHONE' | translate }}</label>
+                                    <input type="tel" [(ngModel)]="formData.phone" name="phone" [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Details Section -->
+                        <div class="pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <h4 class="text-md font-semibold text-navy dark:text-white mb-4 flex items-center gap-2">
+                                <i-lucide name="info" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ 'PROFILE.PERSONAL_DETAILS' | translate }}
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.GENDER' | translate }}</label>
+                                    <select [(ngModel)]="formData.gender" name="gender" [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors">
+                                        <option value="">{{ 'PROFILE.SELECT_GENDER' | translate }}</option>
+                                        <option value="male">{{ 'PROFILE.MALE' | translate }}</option>
+                                        <option value="female">{{ 'PROFILE.FEMALE' | translate }}</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.BIRTH_DATE' | translate }}</label>
+                                    <input type="date" [(ngModel)]="formData.birth_date" name="birth_date"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" [(ngModel)]="formData.is_foreign_customer"
+                                            name="is_foreign_customer" [disabled]="!isEditing"
+                                            class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary disabled:opacity-50" />
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{
+                                            'PROFILE.IS_FOREIGN_CUSTOMER' | translate }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location Section -->
+                        <div class="pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <h4 class="text-md font-semibold text-navy dark:text-white mb-4 flex items-center gap-2">
+                                <i-lucide name="map-pin" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ 'PROFILE.LOCATION' | translate }}
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="sm:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.ADDRESS' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.address" name="address"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.CITY' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.city" name="city" [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.STATE' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.state" name="state" [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.COUNTRY' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.country" name="country"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Identification Section -->
+                        <div class="pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <h4 class="text-md font-semibold text-navy dark:text-white mb-4 flex items-center gap-2">
+                                <i-lucide name="credit-card" class="w-4 h-4 text-primary"></i-lucide>
+                                {{ 'PROFILE.IDENTIFICATION' | translate }}
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <!-- National ID - Show only if NOT foreign customer -->
+                                <div *ngIf="!formData.is_foreign_customer">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.NATIONAL_ID' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.national_id" name="national_id"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <!-- Passport ID - Show only if IS foreign customer -->
+                                <div *ngIf="formData.is_foreign_customer">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.PASSPORT_ID' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.passport_id" name="passport_id"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+
+                                <!-- Tax ID - Always shown -->
+                                <div class="sm:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'PROFILE.TAX_ID' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.tax_id" name="tax_id"
+                                        [disabled]="!isEditing"
+                                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white disabled:bg-gray-50 dark:disabled:bg-gray-900 transition-colors" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="isEditing"
+                            class="flex justify-end gap-3 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <button type="button" (click)="cancel()"
+                                class="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium">
+                                {{ 'PROFILE.CANCEL' | translate }}
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark shadow-lg hover:shadow-primary/30 transition-all font-medium">
+                                {{ 'PROFILE.SAVE_CHANGES' | translate }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password Component -->
+        <app-change-password></app-change-password>
+    </div>
+</app-dashboard-layout>

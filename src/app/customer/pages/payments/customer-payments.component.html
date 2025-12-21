@@ -1,0 +1,41 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ 'CUSTOMER.PAYMENTS.TITLE' | translate }}
+                </h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">{{ 'CUSTOMER.PAYMENTS.SUBTITLE' | translate }}</p>
+            </div>
+            <app-button variant="primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="h-4 w-4 mr-2">
+                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                    <path d="M2 10h20"></path>
+                </svg>
+                {{ 'CUSTOMER.PAYMENTS.MAKE_PAYMENT' | translate }}
+            </app-button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div *ngIf="error" class="p-8 text-center text-red-500">
+                {{ error }}
+            </div>
+
+            <div *ngIf="isLoading" class="p-12 flex justify-center">
+                <app-loading-spinner></app-loading-spinner>
+            </div>
+
+            <app-dynamic-table-with-filters *ngIf="!isLoading && !error" [data]="data" [columns]="columns"
+                [showExport]="true" [maxSelectOptions]="10" (filteredDataChange)="onFilteredDataChange($event)"
+                (exportData)="onExport()" (action)="handleTableAction($event)">
+            </app-dynamic-table-with-filters>
+
+            <!-- Pagination -->
+            <app-pagination *ngIf="!isLoading && !error && totalRecords > 0" [currentPage]="currentPage"
+                [pageSize]="pageSize" [totalRecords]="totalRecords" (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</app-dashboard-layout>

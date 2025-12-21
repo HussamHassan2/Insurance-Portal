@@ -1,0 +1,54 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ProgramSelectorComponent } from './program-selector.component';
+
+
+describe('ProgramSelectorComponent', () => {
+    let component: ProgramSelectorComponent;
+    let fixture: ComponentFixture<ProgramSelectorComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [ProgramSelectorComponent]
+        })
+            .compileComponents();
+
+        fixture = TestBed.createComponent(ProgramSelectorComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should initialize with default values', () => {
+        expect(component.includeRoadside).toBeFalse();
+        expect(component.selectedProgram).toBe('egy');
+        expect(component.programs.length).toBeGreaterThan(0);
+    });
+
+    it('should toggle roadside assistance', () => {
+        spyOn(component.roadsideToggled, 'emit');
+
+        component.includeRoadside = true;
+        component.onToggleChange();
+
+        expect(component.roadsideToggled.emit).toHaveBeenCalledWith(true);
+    });
+
+    it('should select program', () => {
+        spyOn(component.programSelected, 'emit');
+
+        component.selectProgram('euro-vip');
+
+        expect(component.selectedProgram).toBe('euro-vip');
+        expect(component.programSelected.emit).toHaveBeenCalledWith('euro-vip');
+    });
+
+    it('should automatically include roadside when a program is selected', () => {
+        component.includeRoadside = false;
+        component.selectProgram('egy-vip');
+
+        expect(component.includeRoadside).toBeTrue();
+    });
+});

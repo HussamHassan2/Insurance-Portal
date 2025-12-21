@@ -1,0 +1,148 @@
+<!-- Input Trigger -->
+<div>
+    <label *ngIf="label" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {{ label }} <span *ngIf="required" class="text-red-500">*</span>
+    </label>
+
+    <button type="button" (click)="openModal()" [disabled]="disabled"
+        class="relative w-full h-11 px-4 text-left border rounded-lg transition-colors flex items-center justify-between group"
+        [ngClass]="{
+        'bg-gray-50 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed': disabled,
+        'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 text-navy dark:text-white': !disabled,
+        'focus:ring-2 focus:ring-primary focus:border-primary': !disabled
+      }">
+
+        <span class="block truncate" [class.text-gray-500]="!value">
+            {{ displayValue || placeholder }}
+        </span>
+
+        <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <i-lucide name="chevron-down"
+                class="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors"></i-lucide>
+        </span>
+    </button>
+</div>
+
+<!-- Modal Overlay -->
+<div *ngIf="isOpen" class="fixed inset-0 z-50 overflow-y-auto" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" (click)="closeModal()">
+    </div>
+
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <!-- Modal Panel -->
+        <div
+            class="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-2xl transition-all">
+
+            <!-- Header -->
+            <div
+                class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-white dark:bg-gray-800 sticky top-0 z-10">
+                <div>
+                    <h3 class="text-lg font-bold text-navy dark:text-white">
+                        {{ title }}
+                    </h3>
+                    <p *ngIf="subtitle" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        {{ subtitle }}
+                    </p>
+                </div>
+                <button type="button" (click)="closeModal()"
+                    class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i-lucide name="x" class="h-5 w-5"></i-lucide>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div *ngIf="enableSearch"
+                class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i-lucide name="search" class="h-4 w-4 text-gray-400"></i-lucide>
+                    </div>
+                    <input #searchInput type="text" [ngModel]="searchQuery" (ngModelChange)="onSearch($event)"
+                        class="block w-full pl-10 pr-4 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                        placeholder="Search...">
+                </div>
+            </div>
+
+            <!-- Options Container -->
+            <div
+                class="max-h-[60vh] overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-600">
+
+                <!-- Grid Layout -->
+                <div *ngIf="effectiveLayout === 'grid'"
+                    [ngClass]="'grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-' + gridCols">
+                    <button *ngFor="let option of filteredOptions" type="button" (click)="selectOption(option)"
+                        class="relative flex flex-col items-center justify-center p-6 rounded-xl border-2 hover:shadow-lg transition-all duration-200 text-center min-h-[120px]"
+                        [ngClass]="{
+                            'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500': isSelected(option),
+                            'border-gray-200 dark:border-gray-600 hover:border-blue-300 hover:bg-gray-50 dark:hover:bg-gray-700': !isSelected(option)
+                        }">
+
+                        <!-- Selected Checkmark Badge -->
+                        <div *ngIf="isSelected(option)"
+                            class="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-md">
+                            <i-lucide name="check" class="h-4 w-4 text-white"></i-lucide>
+                        </div>
+
+                        <!-- Icon -->
+                        <span *ngIf="showIcons && option.icon" class="text-4xl mb-3">
+                            {{ option.icon }}
+                        </span>
+
+                        <!-- Name -->
+                        <div class="font-semibold text-gray-800 dark:text-gray-200 text-sm">
+                            {{ option.name }}
+                        </div>
+
+                        <!-- Description -->
+                        <div *ngIf="option.description" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            {{ option.description }}
+                        </div>
+                    </button>
+                </div>
+
+                <!-- List Layout -->
+                <div *ngIf="effectiveLayout === 'list'" class="space-y-2">
+                    <button *ngFor="let option of filteredOptions" type="button" (click)="selectOption(option)"
+                        class="w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group transition-all duration-200"
+                        [ngClass]="{
+                            'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium border-2 border-blue-500': isSelected(option),
+                            'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 border-2 border-transparent': !isSelected(option)
+                        }">
+
+                        <div class="flex items-center gap-3">
+                            <span *ngIf="showIcons && option.icon" class="text-2xl">
+                                {{ option.icon }}
+                            </span>
+                            <div>
+                                <div class="font-medium">{{ option.name }}</div>
+                                <div *ngIf="option.description" class="text-sm text-gray-500 dark:text-gray-400">
+                                    {{ option.description }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <i-lucide *ngIf="isSelected(option)" name="check"
+                            class="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0">
+                        </i-lucide>
+                    </button>
+                </div>
+
+                <!-- No Results -->
+                <div *ngIf="filteredOptions.length === 0" class="text-center py-12 text-gray-500 dark:text-gray-400">
+                    <i-lucide name="search-x" class="h-12 w-12 mx-auto mb-3 opacity-50"></i-lucide>
+                    <p>No options found matching "{{ searchQuery }}"</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div
+                class="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
+                <button type="button" (click)="closeModal()"
+                    class="px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-sm">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+    <!-- Header & Toggle -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">Roadside Assistance</h2>
+            <p class="text-gray-500 dark:text-gray-400">Select a protection plan for your journey</p>
+        </div>
+
+        <label class="relative inline-flex items-center cursor-pointer group">
+            <input type="checkbox" [(ngModel)]="includeRoadside" (change)="onToggleChange()" class="sr-only peer">
+            <div
+                class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/30 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+            </div>
+            <div class="ml-3 flex items-center gap-2">
+                <lucide-icon [img]="Shield"
+                    class="w-5 h-5 text-gray-500 group-hover:text-primary transition-colors"></lucide-icon>
+                <span
+                    class="text-sm font-medium text-gray-900 dark:text-gray-300 group-hover:text-primary transition-colors">Include
+                    Roadside</span>
+            </div>
+        </label>
+    </div>
+
+    <!-- Plans Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" [class.opacity-50]="!includeRoadside"
+        [class.pointer-events-none]="!includeRoadside">
+        <div *ngFor="let program of programs" (click)="selectProgram(program.id)"
+            class="relative rounded-xl border-2 p-5 transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-xl flex flex-col group"
+            [ngClass]="{
+           'ring-1': selectedProgram === program.id && includeRoadside,
+           'border-blue-500 bg-blue-50 ring-blue-500': selectedProgram === program.id && includeRoadside && program.colorClass === 'blue',
+           'border-purple-500 bg-purple-50 ring-purple-500': selectedProgram === program.id && includeRoadside && program.colorClass === 'purple',
+           'border-indigo-500 bg-indigo-50 ring-indigo-500': selectedProgram === program.id && includeRoadside && program.colorClass === 'indigo',
+           'border-rose-500 bg-rose-50 ring-rose-500': selectedProgram === program.id && includeRoadside && program.colorClass === 'rose',
+           'border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800': selectedProgram !== program.id || !includeRoadside,
+           'hover:border-blue-200': program.colorClass === 'blue' && (selectedProgram !== program.id || !includeRoadside),
+           'hover:border-purple-200': program.colorClass === 'purple' && (selectedProgram !== program.id || !includeRoadside),
+           'hover:border-indigo-200': program.colorClass === 'indigo' && (selectedProgram !== program.id || !includeRoadside),
+           'hover:border-rose-200': program.colorClass === 'rose' && (selectedProgram !== program.id || !includeRoadside)
+         }">
+
+            <!-- Popular Badge -->
+            <div *ngIf="program.popular"
+                class="absolute -top-3 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md whitespace-nowrap z-10"
+                [ngClass]="{
+               'bg-blue-500': program.colorClass === 'blue',
+               'bg-purple-500': program.colorClass === 'purple',
+               'bg-indigo-500': program.colorClass === 'indigo',
+               'bg-rose-500': program.colorClass === 'rose'
+           }">
+                <lucide-icon [img]="Star" class="w-3 h-3 fill-current"></lucide-icon>
+                MOST POPULAR
+            </div>
+
+            <!-- Icon & Title -->
+            <div class="mb-4 mt-2">
+                <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-3 transition-colors duration-300"
+                    [ngClass]="{
+                 'bg-blue-100 text-blue-600': program.colorClass === 'blue' && (selectedProgram !== program.id || !includeRoadside),
+                 'bg-purple-100 text-purple-600': program.colorClass === 'purple' && (selectedProgram !== program.id || !includeRoadside),
+                 'bg-indigo-100 text-indigo-600': program.colorClass === 'indigo' && (selectedProgram !== program.id || !includeRoadside),
+                 'bg-rose-100 text-rose-600': program.colorClass === 'rose' && (selectedProgram !== program.id || !includeRoadside),
+                 'bg-blue-500 text-white shadow-lg shadow-blue-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'blue',
+                 'bg-purple-500 text-white shadow-lg shadow-purple-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'purple',
+                 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'indigo',
+                 'bg-rose-500 text-white shadow-lg shadow-rose-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'rose'
+             }">
+                    <lucide-icon [img]="program.icon" class="w-6 h-6"></lucide-icon>
+                </div>
+                <h3 class="text-lg font-bold text-navy dark:text-white">{{ program.name }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 min-h-[40px]">{{ program.description }}</p>
+            </div>
+
+            <!-- Features -->
+            <ul class="space-y-3 mb-6 flex-grow">
+                <li *ngFor="let feature of program.features"
+                    class="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                    <lucide-icon [img]="Check" class="w-4 h-4 mt-0.5 shrink-0" [ngClass]="{
+                  'text-blue-500': program.colorClass === 'blue',
+                  'text-purple-500': program.colorClass === 'purple',
+                  'text-indigo-500': program.colorClass === 'indigo',
+                  'text-rose-500': program.colorClass === 'rose'
+              }"></lucide-icon>
+                    <span>{{ feature }}</span>
+                </li>
+            </ul>
+
+            <!-- Select Button -->
+            <button
+                class="w-full py-2.5 px-4 rounded-lg font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2"
+                [ngClass]="{
+                  'bg-blue-500 text-white shadow-lg shadow-blue-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'blue',
+                  'bg-purple-500 text-white shadow-lg shadow-purple-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'purple',
+                  'bg-indigo-500 text-white shadow-lg shadow-indigo-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'indigo',
+                  'bg-rose-500 text-white shadow-lg shadow-rose-500/25': selectedProgram === program.id && includeRoadside && program.colorClass === 'rose',
+                  'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600': selectedProgram !== program.id || !includeRoadside
+              }">
+                <span *ngIf="selectedProgram === program.id && includeRoadside">Selected</span>
+                <span *ngIf="!(selectedProgram === program.id && includeRoadside)">Select Plan</span>
+                <lucide-icon *ngIf="selectedProgram === program.id && includeRoadside" [img]="Check"
+                    class="w-4 h-4"></lucide-icon>
+            </button>
+        </div>
+    </div>
+</div>

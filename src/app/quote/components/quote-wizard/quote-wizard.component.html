@@ -1,0 +1,53 @@
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Stepper Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div class="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div class="relative flex justify-between">
+                            <!-- Step 1: Vehicle -->
+                            <div class="group flex flex-col items-center">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2"
+                                    [routerLink]="['vehicle']" routerLinkActive="border-primary bg-primary text-white"
+                                    [routerLinkActiveOptions]="{exact: true}"
+                                    class="border-gray-300 text-gray-500 hover:border-gray-400">
+                                    <span class="h-5 w-5" data-lucide="car">🚗</span>
+                                </span>
+                                <span class="mt-2 text-sm font-medium text-gray-900">Vehicle</span>
+                            </div>
+
+                            <!-- Step 2: Driver -->
+                            <div class="group flex flex-col items-center">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2"
+                                    [routerLink]="['driver']" routerLinkActive="border-primary bg-primary text-white"
+                                    class="border-gray-300 text-gray-500 hover:border-gray-400">
+                                    <span class="h-5 w-5" data-lucide="user">👤</span>
+                                </span>
+                                <span class="mt-2 text-sm font-medium text-gray-500">Driver</span>
+                            </div>
+
+                            <!-- Step 3: Coverage -->
+                            <div class="group flex flex-col items-center">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2"
+                                    [routerLink]="['coverage']" routerLinkActive="border-primary bg-primary text-white"
+                                    class="border-gray-300 text-gray-500 hover:border-gray-400">
+                                    <span class="h-5 w-5" data-lucide="shield">🛡️</span>
+                                </span>
+                                <span class="mt-2 text-sm font-medium text-gray-500">Coverage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,201 @@
+﻿node.exe : - 
+Generating browser 
+application bundles 
+(phase: setup)...
+At C:\Users\lenovo\Ap
+pData\Roaming\npm\ng.
+ps1:24 char:5
++     & "node$exe"  "
+$basedir/node_modules
+/@angular/cli/bin/ng.
+js" $arg ...
++     ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (- Gener   
+ ating br...hase:    
+ setup)...:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Γ£ö Browser 
+application bundle 
+generation complete.
+Γ£ö Browser 
+application bundle 
+generation complete.
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:48:
+45 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'select'.
+
+48                   
+                  
+<select [(ngModel)]="
+columnFilters[col.key
+]"
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:49:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+49                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:63:
+41 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'input'.
+
+63                   
+                     
+ [(ngModel)]="columnF
+ilters[col.key]"
+                     
+                     
+ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:64:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+64                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+

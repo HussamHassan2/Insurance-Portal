@@ -1,0 +1,64 @@
+<div class="max-w-2xl mx-auto">
+    <h2 class="text-2xl font-semibold text-gray-900 mb-6">Vehicle Details</h2>
+
+    <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Maker -->
+        <div>
+            <app-selection-modal label="Vehicle Maker" [options]="makers" [value]="vehicleForm.get('maker_code')?.value"
+                (valueChange)="vehicleForm.get('maker_code')?.setValue($event)" title="Select Vehicle Maker"
+                subtitle="Choose the manufacturer" placeholder="Select Maker" [required]="true" valueKey="code"
+                displayKey="name" layout="grid" [gridCols]="4">
+            </app-selection-modal>
+        </div>
+
+        <!-- Model -->
+        <div>
+            <app-selection-modal label="Vehicle Model" [options]="models" [value]="vehicleForm.get('model_code')?.value"
+                (valueChange)="vehicleForm.get('model_code')?.setValue($event)" title="Select Vehicle Model"
+                subtitle="Choose the model" placeholder="Select Model" [required]="true"
+                [disabled]="!vehicleForm.get('maker_code')?.value" valueKey="code" displayKey="name" layout="grid"
+                [gridCols]="4">
+            </app-selection-modal>
+        </div>
+
+        <!-- Category (Optional based on data availability) -->
+        <div *ngIf="categories.length > 0">
+            <app-selection-modal label="Model Category" [options]="categories"
+                [value]="vehicleForm.get('model_category_code')?.value"
+                (valueChange)="vehicleForm.get('model_category_code')?.setValue($event)" title="Select Category"
+                subtitle="Choose the category" placeholder="Select Category" valueKey="code" displayKey="name">
+            </app-selection-modal>
+        </div>
+
+        <!-- Year -->
+        <div>
+            <app-selection-modal label="Model Year" [options]="years" [value]="vehicleForm.get('model_year_id')?.value"
+                (valueChange)="vehicleForm.get('model_year_id')?.setValue($event)" title="Select Model Year"
+                subtitle="Choose the year" placeholder="Select Year" [required]="true"
+                [disabled]="!vehicleForm.get('model_code')?.value" valueKey="id" displayKey="year" layout="grid"
+                [gridCols]="5">
+            </app-selection-modal>
+        </div>
+
+        <!-- Vehicle Value -->
+        <div>
+            <label for="value" class="block text-sm font-medium text-gray-700">Vehicle Value (Sum Insured)</label>
+            <div class="mt-1 relative rounded-md shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span class="text-gray-500 sm:text-sm">SAR</span>
+                </div>
+                <input type="number" id="value" formControlName="vehicle_value"
+                    class="block w-full rounded-md border-gray-300 pl-12 focus:border-primary focus:ring-primary sm:text-sm"
+                    placeholder="0.00">
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end pt-5">
+            <button type="submit" [disabled]="vehicleForm.invalid || loading"
+                class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50">
+                Next: Driver Details
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,54 @@
+<div class="mb-12 px-4 w-full">
+    <div class="max-w-4xl mx-auto">
+        <div class="relative flex items-center justify-between w-full" style="min-height: 80px;">
+            <!-- Background Line -->
+            <div class="absolute left-0 top-10 w-full h-1 bg-gray-200 dark:bg-gray-700 z-0">
+            </div>
+
+            <!-- Active Progress Line -->
+            <div class="absolute left-0 top-10 h-1 bg-blue-600 z-0 transition-all duration-700 ease-in-out"
+                [style.width.%]="progressPercentage"></div>
+
+            <!-- Steps -->
+            <div *ngFor="let step of steps; let i = index"
+                class="relative flex flex-col items-center cursor-default group">
+
+                <!-- Step Circle Container -->
+                <div class="relative flex items-center justify-center transition-all duration-300 z-10 bg-white dark:bg-gray-900"
+                    [ngClass]="{
+                        'w-16 h-16 rounded-2xl shadow-[0_0_25px_rgba(59,130,246,0.6)] bg-gradient-to-br from-blue-500 to-blue-700 text-white': i === currentStep,
+                        'w-12 h-12 rounded-full bg-green-500 text-white': i < currentStep,
+                        'w-12 h-12 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-400': i > currentStep
+                    }" [style.margin-top]="i === currentStep ? '0' : '2px'">
+
+                    <!-- Completed: Check Icon -->
+                    <i *ngIf="i < currentStep" data-lucide="check" class="w-6 h-6"></i>
+
+                    <!-- Active/Future: Number -->
+                    <span *ngIf="i >= currentStep"
+                        [ngClass]="i === currentStep ? 'text-xl font-bold' : 'text-lg font-bold'">
+                        {{ i + 1 }}
+                    </span>
+
+                    <!-- Glow effect for active step -->
+                    <div *ngIf="i === currentStep"
+                        class="absolute inset-0 rounded-2xl bg-blue-400 opacity-30 blur-xl -z-10"></div>
+                </div>
+
+                <!-- Step Title -->
+                <div class="mt-4 text-center w-32">
+                    <span class="text-sm font-bold block mb-1" [ngClass]="{
+                            'text-blue-600 dark:text-blue-400': i === currentStep,
+                            'text-green-500 dark:text-green-400': i < currentStep,
+                            'text-gray-400 dark:text-gray-500': i > currentStep
+                        }">
+                        {{ step.title }}
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 block" *ngIf="step.description">
+                        {{ step.description }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

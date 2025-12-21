@@ -1,0 +1,165 @@
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <!-- Header with Search and Export -->
+    <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div class="flex-1 max-w-md flex gap-3" *ngIf="config.showSearch !== false">
+            <div class="relative flex-1">
+                <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)"
+                    [placeholder]="config.searchPlaceholder || 'Search...'"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <button (click)="toggleFilters()"
+                [ngClass]="showFilters ? 'bg-primary/10 border-primary text-primary' : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300'"
+                class="px-4 py-2 border rounded-lg flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="h-4 w-4">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                Filters
+                <span *ngIf="(activeFilters | keyvalue).length > 0"
+                    class="ml-1 bg-primary text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                    {{ (activeFilters | keyvalue).length }}
+                </span>
+            </button>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <button *ngIf="hasActiveFilters()" (click)="clearFilters()"
+                class="px-4 py-2 text-gray-500 hover:text-red-500 flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="h-4 w-4">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                Clear
+            </button>
+
+            <button *ngIf="config.showExport !== false" (click)="onExport()"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="h-4 w-4">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" x2="12" y1="15" y2="3"></line>
+                </svg>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Expanded Filters -->
+    <div *ngIf="showFilters"
+        class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fadeIn">
+        <ng-container *ngFor="let col of config.columns">
+            <div *ngIf="col.filterable" class="space-y-1.5">
+                <label class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                    {{ col.label }}
+                </label>
+
+                <div *ngIf="col.filterType === 'select'" class="relative">
+                    <select [ngModel]="activeFilters[col.key] || ''" (ngModelChange)="onFilterChange(col.key, $event)"
+                        class="w-full pl-3 pr-8 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary text-sm appearance-none cursor-pointer dark:text-white">
+                        <option value="">All {{ col.label }}s</option>
+                        <option *ngFor="let opt of filterOptions[col.key]" [value]="opt">{{ opt }}</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+
+                <input *ngIf="col.filterType !== 'select'" type="text" [placeholder]="'Filter ' + col.label + '...'"
+                    [ngModel]="activeFilters[col.key] || ''" (ngModelChange)="onFilterChange(col.key, $event)"
+                    class="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary text-sm dark:text-white" />
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="config.loading" class="p-8">
+        <app-loading-spinner [loading]="true" message="Loading data..." size="md"></app-loading-spinner>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!config.loading" class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th *ngFor="let column of config.columns" (click)="onSort(column)"
+                        [ngClass]="column.sortable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        <div class="flex items-center gap-2">
+                            {{ column.label }}
+                            <span *ngIf="column.sortable && sortColumn === column.key">
+                                <svg *ngIf="sortDirection === 'asc'" xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                                    <path d="m18 15-6-6-6 6"></path>
+                                </svg>
+                                <svg *ngIf="sortDirection === 'desc'" xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                                    <path d="m6 9 6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tr *ngFor="let row of paginatedData" (click)="onRowClick(row)"
+                    class="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors">
+                    <td *ngFor="let column of config.columns"
+                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                        {{ getCellValue(row, column) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div *ngIf="paginatedData.length === 0" class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <p class="mt-4 text-gray-500 dark:text-gray-400">No data found</p>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="!config.loading && paginatedData.length > 0"
+        class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div class="text-sm text-gray-700 dark:text-gray-300">
+            Showing <span class="font-medium">{{ showingFrom }}</span> to <span class="font-medium">{{ showingTo
+                }}</span> of <span class="font-medium">{{ totalRecords }}</span> results
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1"
+                class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+
+            <button *ngFor="let page of pages" (click)="onPageChange(page)"
+                [ngClass]="page === currentPage ? 'bg-primary text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'"
+                class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium">
+                {{ page }}
+            </button>
+
+            <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages"
+                class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                Next
+            </button>
+        </div>
+    </div>
+</div>

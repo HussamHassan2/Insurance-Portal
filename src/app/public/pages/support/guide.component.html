@@ -1,0 +1,60 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-navy dark:text-white mb-4 text-center">{{ 'SUPPORT.GUIDE.TITLE' |
+                translate }}</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 text-center">{{ 'SUPPORT.GUIDE.SUBTITLE' | translate }}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div *ngFor="let guide of guides"
+                class="bg-white dark:bg-gray-800 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                <div class="flex items-start gap-6">
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
+                        [ngClass]="guide.color">
+                        <i-lucide [name]="guide.icon" class="w-8 h-8"></i-lucide>
+                    </div>
+                    <div>
+                        <h3
+                            class="text-2xl font-bold text-navy dark:text-white mb-3 group-hover:text-primary transition-colors">
+                            {{ guide.title | translate }}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-6">{{ guide.description |
+                            translate }}
+                        </p>
+                        <button class="flex items-center text-primary font-bold hover:gap-2 transition-all">
+                            {{ 'SUPPORT.GUIDE.READ_FULL' | translate }}
+                            <i-lucide name="chevron-right" class="w-5 h-5 ml-1"></i-lucide>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Guide -->
+        <div class="mt-12 bg-navy rounded-3xl p-10 text-white relative overflow-hidden">
+            <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                <div class="flex-1">
+                    <span
+                        class="inline-block px-4 py-1 bg-primary text-xs font-bold uppercase tracking-wider rounded-full mb-4">{{
+                        'SUPPORT.GUIDE.FEATURED.BADGE' | translate }}</span>
+                    <h2 class="text-3xl font-bold mb-4">{{ 'SUPPORT.GUIDE.FEATURED.TITLE' | translate }}</h2>
+                    <p class="text-blue-100 text-lg opacity-90 mb-8">{{ 'SUPPORT.GUIDE.FEATURED.DESC' | translate }}</p>
+                    <button
+                        class="px-8 py-4 bg-white text-navy font-bold rounded-xl hover:bg-blue-50 transition-all shadow-xl shadow-black/10 flex items-center gap-3">
+                        <i-lucide name="play-circle" class="w-5 h-5"></i-lucide>
+                        {{ 'SUPPORT.GUIDE.FEATURED.BUTTON' | translate }}
+                    </button>
+                </div>
+                <div
+                    class="w-full md:w-1/3 aspect-video bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                    <i-lucide name="image" class="w-12 h-12 text-white/30"></i-lucide>
+                </div>
+            </div>
+            <!-- Decorative Element -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        </div>
+    </div>
+</div>

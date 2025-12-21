@@ -1,0 +1,434 @@
+﻿<app-dashboard-layout>
+    <div class="space-y-6" *ngIf="displayData">
+        <!-- Header -->
+        <div class="mb-8 animate-fadeIn">
+            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <button (click)="goBack()" class="hover:text-primary transition-all duration-300">{{
+                    'DETAILS.QUOTATION.BREADCRUMB' | translate }}</button>
+                <i-lucide name="chevron-right" class="w-4 h-4"></i-lucide>
+                <span class="text-navy dark:text-white font-medium">{{ displayData.header.opportunityNumber }}</span>
+            </div>
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div class="flex items-start gap-4">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <i-lucide name="file-text" class="w-7 h-7"></i-lucide>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-navy dark:text-white mb-1">{{
+                            displayData.header.opportunityNumber }}</h1>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="user" class="w-3.5 h-3.5"></i-lucide> {{ displayData.customer.name }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="shield" class="w-3.5 h-3.5"></i-lucide> {{ displayData.header.product }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i-lucide name="calendar" class="w-3.5 h-3.5"></i-lucide> {{ displayData.header.date }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <span
+                        class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold capitalize flex items-center gap-2 animate-slideIn">
+                        <i-lucide name="check-circle" class="w-4 h-4"></i-lucide> {{ displayData.header.stage }}
+                    </span>
+                    <button *ngIf="isStageNew()" (click)="editQuotation()"
+                        class="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2 hover:bg-primary/90 transition-colors">
+                        <i-lucide name="edit" class="w-4 h-4"></i-lucide>
+                        {{ 'DETAILS.QUOTATION.EDIT_QUOTE' | translate }}
+                    </button>
+                    <button (click)="downloadQuotation()"
+                        class="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-50 transition-colors">
+                        <i-lucide name="download" class="w-4 h-4"></i-lucide>
+                        {{ 'DETAILS.QUOTATION.DOWNLOAD_PDF' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Customer Information -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
+                        {{ 'DETAILS.QUOTATION.CUSTOMER_INFO' | translate }}
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">{{ 'DETAILS.QUOTATION.FULL_NAME' | translate }}
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ displayData.customer.name }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i-lucide name="mail" class="w-3.5 h-3.5"></i-lucide> {{ 'DETAILS.QUOTATION.EMAIL' |
+                                translate }}
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ displayData.customer.email }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i-lucide name="phone" class="w-3.5 h-3.5"></i-lucide> {{ 'DETAILS.QUOTATION.PHONE' |
+                                translate }}
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ displayData.customer.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i-lucide name="car" class="w-5 h-5 text-primary"></i-lucide>
+                        {{ 'DETAILS.QUOTATION.VEHICLE_INFO' | translate }}
+                    </h3>
+
+                    <!-- Basic Information -->
+                    <div class="mb-6">
+                        <h4
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                            {{ 'DETAILS.QUOTATION.BASIC_INFO' | translate }}</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Make</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.make }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Model</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.model }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Year</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.year }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Color</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.color }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Body Type</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.bodyType }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Category</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Identification -->
+                    <div class="mb-6">
+                        <h4
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                            {{ 'DETAILS.QUOTATION.IDENTIFICATION' | translate }}</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Plate Number</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.plateNumber }}
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Chassis Number</p>
+                                <p class="font-medium text-navy dark:text-white font-mono text-xs">{{
+                                    displayData.vehicle.chassisNumber }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Engine Number</p>
+                                <p class="font-medium text-navy dark:text-white font-mono text-xs">{{
+                                    displayData.vehicle.engineNumber }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Specifications -->
+                    <div>
+                        <h4
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                            {{ 'DETAILS.QUOTATION.SPECIFICATIONS' | translate }}</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Usage</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.usage }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Seats</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.seats }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Fuel Type</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.fuelType }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Condition</p>
+                                <p class="font-medium text-navy dark:text-white">{{ displayData.vehicle.condition }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-gray-500 dark:text-gray-400">Sum Insured</p>
+                                <p class="font-medium text-primary">{{ displayData.vehicle.sumInsured }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proposals (List View) -->
+                <div *ngIf="proposals && proposals.length > 0"
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                    <button (click)="isProposalsCollapsed = !isProposalsCollapsed"
+                        class="w-full flex items-center justify-between text-left mb-4">
+                        <h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="award" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.QUOTATION.PROPOSALS' | translate }} ({{ proposals.length }})
+                        </h3>
+                        <i-lucide [name]="isProposalsCollapsed ? 'chevron-down' : 'chevron-down'"
+                            class="w-5 h-5 text-gray-400 transition-transform"
+                            [class.rotate-180]="!isProposalsCollapsed"></i-lucide>
+                    </button>
+                    <div *ngIf="!isProposalsCollapsed" class="space-y-3">
+                        <div *ngFor="let proposal of proposals; let i = index"
+                            class="border border-gray-200 dark:border-gray-600 rounded-lg p-4 hover:border-primary transition-all duration-300">
+                            <div class="flex items-center gap-3 mb-3">
+                                <h4 class="font-semibold text-navy dark:text-white">{{ proposal.company }}</h4>
+                                <span [class]="getProposalStateClass(proposal.state)"
+                                    class="px-2 py-1 rounded text-xs font-medium">
+                                    {{ proposal.state || 'Pending' }}
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Premium</span>
+                                    <span class="font-semibold text-primary">{{ proposal.premium }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Net Premium</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.netPremium }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Coverage</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.coverage }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Deductible</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.deductible }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Taxes</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.taxes }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-500 dark:text-gray-400 block mb-1">Fees</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.fees }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Policy Conditions (Collapsible) -->
+                <div *ngIf="displayData.conditions.length > 0"
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                    <button (click)="isPolicyConditionsCollapsed = !isPolicyConditionsCollapsed"
+                        class="w-full flex items-center justify-between text-left">
+                        <h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="file-text" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.QUOTATION.CONDITIONS' | translate }}
+                        </h3>
+                        <i-lucide [name]="isPolicyConditionsCollapsed ? 'chevron-down' : 'chevron-down'"
+                            class="w-5 h-5 text-gray-400 transition-transform"
+                            [class.rotate-180]="!isPolicyConditionsCollapsed"></i-lucide>
+                    </button>
+                    <div *ngIf="!isPolicyConditionsCollapsed" class="space-y-2 mt-4">
+                        <div *ngFor="let condition of displayData.conditions"
+                            class="flex items-start gap-2 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-100 dark:border-green-700">
+                            <i-lucide name="check-circle"
+                                class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i-lucide>
+                            <span class="text-sm text-gray-700 dark:text-gray-300">{{ condition }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Required Documents (Collapsible) -->
+                <div *ngIf="displayData.documents.length > 0"
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
+                    <button (click)="isRequiredDocumentsCollapsed = !isRequiredDocumentsCollapsed"
+                        class="w-full flex items-center justify-between text-left">
+                        <h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="paperclip" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.QUOTATION.DOCUMENTS' | translate }} ({{ getUploadedCount() }} of {{
+                            displayData.documents.length }} uploaded)
+                        </h3>
+                        <i-lucide [name]="isRequiredDocumentsCollapsed ? 'chevron-down' : 'chevron-down'"
+                            class="w-5 h-5 text-gray-400 transition-transform"
+                            [class.rotate-180]="!isRequiredDocumentsCollapsed"></i-lucide>
+                    </button>
+                    <div *ngIf="!isRequiredDocumentsCollapsed" class="space-y-2 mt-4">
+                        <div *ngFor="let doc of displayData.documents"
+                            class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ doc.name }}</span>
+                            <span *ngIf="doc.status === 'Uploaded'"
+                                class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">Uploaded</span>
+                            <span *ngIf="doc.status === 'Pending'"
+                                class="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs font-medium">Pending</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Summary Card -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="font-bold text-navy dark:text-white mb-4">{{ 'DETAILS.QUOTATION.SUMMARY' | translate }}
+                    </h3>
+                    <div class="space-y-3 pb-4 border-b border-gray-100 dark:border-gray-700 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.PRODUCT' | translate
+                                }}</span>
+                            <span class="font-medium">{{ displayData.header.product }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.POLICY_TERM' |
+                                translate }}</span>
+                            <span class="font-medium">{{ 'DETAILS.QUOTATION.ONE_YEAR' | translate }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.STATUS' | translate
+                                }}</span>
+                            <span class="font-medium text-primary capitalize">{{ displayData.header.stage }}</span>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.TOTAL_PREMIUM' |
+                                translate }}</span>
+                            <span class="text-xl font-bold text-primary">{{ displayData.pricing.grossPremium }}</span>
+                        </div>
+                        <!-- Accept Quote button hidden -->
+                    </div>
+                </div>
+
+                <!-- Important Information -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i-lucide name="info" class="w-5 h-5 text-primary"></i-lucide>
+                        {{ 'DETAILS.QUOTATION.IMPORTANT_INFO' | translate }}
+                    </h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between py-2 border-b border-gray-100 last:border-0">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.QUOTE_NUMBER' |
+                                translate }}</span>
+                            <span class="font-medium">{{ displayData.header.opportunityNumber }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-100 last:border-0">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.CREATED_DATE' |
+                                translate }}</span>
+                            <span class="font-medium">{{ displayData.header.date }}</span>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-gray-100 last:border-0">
+                            <span class="text-gray-600 dark:text-gray-300">{{ 'DETAILS.QUOTATION.VALID_UNTIL' |
+                                translate }}</span>
+                            <span class="font-medium text-primary">{{ 'DETAILS.QUOTATION.DAYS_30' | translate }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Box -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="message-circle" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'DETAILS.QUOTATION.MESSAGES' | translate }}
+                        </h3>
+                    </div>
+
+                    <!-- Messages List -->
+                    <div class="p-4 max-h-96 overflow-y-auto space-y-3">
+                        <div *ngIf="messages.length === 0"
+                            class="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+                            {{ 'DETAILS.QUOTATION.NO_MESSAGES' | translate }}
+                        </div>
+
+                        <div *ngFor="let message of messages" class="flex gap-3">
+                            <div
+                                class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i-lucide name="user" class="w-4 h-4 text-primary"></i-lucide>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-sm font-semibold text-navy dark:text-white">{{ message.userName
+                                        }}</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ message.timestamp
+                                        }}</span>
+                                </div>
+                                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">{{ message.message }}</p>
+                                <div *ngIf="message.attachment"
+                                    class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <i-lucide name="paperclip" class="w-3 h-3"></i-lucide>
+                                    <span>{{ message.attachment }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Input -->
+                    <div class="p-4 border-t border-gray-100 dark:border-gray-700">
+                        <div class="flex gap-2">
+                            <input type="file" #fileInput (change)="onFileSelected($event)" class="hidden" />
+                            <button (click)="fileInput.click()"
+                                class="p-2 text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                title="Attach file">
+                                <i-lucide name="paperclip" class="w-5 h-5"></i-lucide>
+                            </button>
+                            <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()"
+                                [placeholder]="'DETAILS.QUOTATION.TYPE_MESSAGE' | translate"
+                                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors text-sm" />
+                            <button (click)="sendMessage()" [disabled]="!newMessage.trim() || sendingMessage"
+                                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                <i-lucide *ngIf="!sendingMessage" name="send" class="w-4 h-4"></i-lucide>
+                                <i-lucide *ngIf="sendingMessage" name="loader-2"
+                                    class="w-4 h-4 animate-spin"></i-lucide>
+                                <span class="text-sm">{{ 'DETAILS.QUOTATION.SEND' | translate }}</span>
+                            </button>
+                        </div>
+                        <div *ngIf="selectedFile"
+                            class="mt-2 flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 p-2 rounded">
+                            <i-lucide name="file" class="w-3 h-3"></i-lucide>
+                            <span>{{ selectedFile.name }}</span>
+                            <button (click)="removeFile()" class="ml-auto text-red-500 hover:text-red-700">
+                                <i-lucide name="x" class="w-3 h-3"></i-lucide>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex items-center justify-center h-96">
+        <app-loading-spinner [loading]="true" [message]="'DETAILS.QUOTATION.LOADING' | translate"></app-loading-spinner>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="flex items-center justify-center h-96">
+        <div class="text-center">
+            <i-lucide name="alert-circle" class="h-12 w-12 text-red-500 mx-auto mb-4"></i-lucide>
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">{{ 'DETAILS.QUOTATION.ERROR_LOADING' |
+                translate }}</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">{{ error }}</p>
+            <button (click)="loadQuotation()"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                <i-lucide name="refresh-cw" class="w-4 h-4 mr-2 inline"></i-lucide>
+                {{ 'DETAILS.QUOTATION.TRY_AGAIN' | translate }}
+            </button>
+        </div>
+    </div>
+</app-dashboard-layout>

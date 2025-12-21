@@ -1,0 +1,389 @@
+<app-dashboard-layout>
+    <!-- Success Ribbon -->
+    <div *ngIf="successMessage" class="fixed top-0 left-0 right-0 z-40 animate-slideDown">
+        <div
+            class="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 flex items-center gap-3 shadow-lg">
+            <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0"></i>
+            <span class="font-medium">{{ successMessage }}</span>
+            <button (click)="successMessage = null" class="ml-auto text-green-100 hover:text-white transition-colors">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex items-center justify-center min-h-screen">
+        <div class="text-center">
+            <app-loading-spinner></app-loading-spinner>
+            <p class="text-gray-600 dark:text-gray-300 mt-4">Loading quotation details...</p>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="flex items-center justify-center min-h-screen">
+        <div class="text-center">
+            <i data-lucide="alert-circle" class="h-12 w-12 text-red-500 mx-auto mb-4"></i>
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">Error Loading Quotation</h2>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">{{ error || 'Quotation not found' }}</p>
+            <button (click)="goBack()"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 mx-auto">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                Back to Quotations
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!loading && !error && quote" class="space-y-8">
+        <!-- Header -->
+        <div class="mb-8 animate-fadeIn">
+            <div class="relative">
+                <!-- Corner ribbon for lost status -->
+                <div *ngIf="quote?.status === 'lost'" class="corner-ribbon">LOST</div>
+
+                <button (click)="goBack()"
+                    class="flex items-center text-gray-500 dark:text-gray-400 hover:text-primary mb-4 transition-all duration-300 text-sm">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                    Back to Quotations
+                </button>
+
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+                            <i data-lucide="file-text" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold text-navy dark:text-white mb-1 flex items-center gap-3">
+                                Quotation {{ quote.quotationNumber }}
+                            </h1>
+                            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="user" class="w-3.5 h-3.5"></i> {{ quote.customer.name }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Created {{ quote.date }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5"></i> Valid until {{ quote.validUntil }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span [ngClass]="'bg-' + statusConfig.color + '-100 text-' + statusConfig.color + '-800'"
+                            class="px-4 py-2 rounded-full text-sm font-semibold capitalize flex items-center gap-2">
+                            {{ statusConfig.label }}
+                        </span>
+                        <button *ngIf="isBroker && quote?.status !== 'lost'" (click)="showMarkLostModal = true"
+                            class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors flex items-center gap-2">
+                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            Mark as Lost
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Customer Information -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 animate-fadeIn">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5 text-primary"></i>
+                        Customer Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Full Name</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.name }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> Phone
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.phone }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i data-lucide="mail" class="w-3.5 h-3.5"></i> Email
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.email }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i data-lucide="building" class="w-3.5 h-3.5"></i> Type
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.type }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i data-lucide="hash" class="w-3.5 h-3.5"></i> Tax ID
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.taxId }}</p>
+                        </div>
+                        <div class="space-y-1 md:col-span-2">
+                            <p class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Address
+                            </p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.customer.address }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insurance Details -->
+                <div
+                    class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-700 animate-fadeIn">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="shield" class="w-5 h-5 text-blue-600"></i>
+                        Insurance Coverage
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Type</p>
+                            <p class="font-semibold text-navy dark:text-white">{{ quote.insurance.type }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Plan</p>
+                            <p class="font-semibold text-navy dark:text-white">{{ quote.insurance.coveragePlan }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Period</p>
+                            <p class="font-semibold text-navy dark:text-white">{{ quote.insurance.coveragePeriod }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Sum Insured</p>
+                            <p class="font-semibold text-navy dark:text-white">EGP {{ (quote.insurance.sumInsured ||
+                                0).toLocaleString() }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Add-ons -->
+                    <div *ngIf="quote.insurance.addons?.length > 0">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Coverage Extensions</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span *ngFor="let addon of quote.insurance.addons"
+                                class="px-3 py-1 bg-white text-blue-700 rounded-full text-xs font-medium flex items-center gap-1">
+                                <i data-lucide="check" class="w-3 h-3"></i>
+                                {{ addon }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Details -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 animate-fadeIn">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="car" class="w-5 h-5 text-primary"></i>
+                        Subject Matter - Vehicle Details
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Make & Model</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.vehicle.make }} {{
+                                quote.vehicle.model }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Year</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.vehicle.year }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Plate Number</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.vehicle.plateNumber }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Color</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.vehicle.color }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Chassis Number</p>
+                            <p class="font-medium text-navy dark:text-white font-mono text-xs">{{
+                                quote.vehicle.chassisNumber }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-gray-500 dark:text-gray-400">Usage</p>
+                            <p class="font-medium text-navy dark:text-white">{{ quote.vehicle.usage }}</p>
+                        </div>
+                        <div class="space-y-1 md:col-span-2">
+                            <p class="text-gray-500 dark:text-gray-400">Estimated Value</p>
+                            <p class="font-medium text-navy dark:text-white">EGP {{ (quote.vehicle.value ||
+                                0).toLocaleString() }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Comparison -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 animate-fadeIn">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i data-lucide="award" class="w-5 h-5 text-primary"></i>
+                            Compare Plans
+                        </h3>
+                        <button (click)="showComparison = !showComparison"
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
+                            {{ showComparison ? 'Hide' : 'Show' }} Comparison
+                        </button>
+                    </div>
+
+                    <div *ngIf="showComparison" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div *ngFor="let plan of quote.plans"
+                            [ngClass]="plan.recommended ? 'border-primary bg-blue-50 dark:bg-blue-900/30 relative' : 'border-gray-200 hover:border-primary'"
+                            class="border-2 rounded-xl p-6 transition-all hover:shadow-lg">
+                            <div *ngIf="plan.recommended" class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                <span class="px-3 py-1 bg-primary text-white rounded-full text-xs font-bold">
+                                    Recommended
+                                </span>
+                            </div>
+                            <h4 class="font-bold text-navy dark:text-white text-lg mb-2">{{ plan.name }}</h4>
+                            <div class="mb-6">
+                                <p class="text-3xl font-bold text-primary">
+                                    EGP {{ (plan.price || 0).toLocaleString() }}
+                                </p>
+                                <span class="text-sm text-gray-500 dark:text-gray-400 font-normal">Gross Premium /
+                                    Year</span>
+                            </div>
+
+                            <!-- Detailed Proposal Fields -->
+                            <div class="space-y-3 mb-6 border-t border-b py-4">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Sum Insured</span>
+                                    <span class="font-semibold text-navy dark:text-white">EGP {{
+                                        (plan.details?.sumInsured || 0).toLocaleString() }}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Net Rate</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ (plan.details?.netRate ||
+                                        0).toFixed(3) }}%</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Net Premium</span>
+                                    <span class="font-medium text-navy dark:text-white">EGP {{ (plan.details?.netPremium
+                                        || 0).toLocaleString() }}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Taxes</span>
+                                    <span class="font-medium text-navy dark:text-white">EGP {{ (plan.details?.taxes ||
+                                        0).toLocaleString() }}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Stamp Duty</span>
+                                    <span class="font-medium text-navy dark:text-white">EGP {{ (plan.details?.stampDuty
+                                        || 0).toLocaleString() }}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Issue Fees</span>
+                                    <span class="font-medium text-navy dark:text-white">EGP {{ (plan.details?.fees ||
+                                        0).toLocaleString() }}</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="plan.features?.length > 0" class="space-y-3">
+                                <div *ngFor="let feature of plan.features" class="flex items-center gap-2 text-sm">
+                                    <i *ngIf="feature.included" data-lucide="check-circle"
+                                        class="w-4 h-4 text-green-600 flex-shrink-0"></i>
+                                    <i *ngIf="!feature.included" data-lucide="x-circle"
+                                        class="w-4 h-4 text-gray-300 flex-shrink-0"></i>
+                                    <span [ngClass]="feature.included ? 'text-gray-700' : 'text-gray-400'">
+                                        {{ feature.name }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ChatterBox Placeholder -->
+                <div
+                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-5 h-5 text-primary"></i>
+                        Comments & Messages
+                    </h3>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">
+                        ChatterBox component integration pending
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Premium Summary -->
+                <div
+                    class="bg-gradient-to-br from-purple-600 to-indigo-700 p-6 rounded-xl text-white shadow-lg animate-fadeIn">
+                    <p class="text-purple-200 text-sm mb-1">Total Annual Premium</p>
+                    <p class="text-3xl font-bold mb-6">EGP {{ (quote?.premium?.total || 0).toLocaleString() }}</p>
+                    <div class="space-y-2 text-sm text-purple-100 mb-6">
+                        <div class="flex justify-between">
+                            <span>Subtotal</span>
+                            <span>EGP {{ (calculateSubtotal() || 0).toLocaleString() }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Taxes & Fees</span>
+                            <span>EGP {{ ((quote.premium.total || 0) - (calculateSubtotal() || 0)).toLocaleString()
+                                }}</span>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full bg-white text-purple-600 hover:bg-purple-50 dark:bg-purple-900/30 font-semibold px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i>
+                        Accept & Pay
+                    </button>
+                </div>
+
+                <!-- Validity Notice -->
+                <div class="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-xl border border-blue-100 animate-fadeIn">
+                    <h4 class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                        Important Note
+                    </h4>
+                    <p class="text-sm text-blue-800 leading-relaxed">
+                        This quotation is valid for 30 days from the date of creation. Prices and coverage terms are
+                        subject to change after the validity period.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mark as Lost Modal -->
+    <div *ngIf="showMarkLostModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 animate-fadeIn">
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-4">Mark Quotation as Lost</h2>
+
+            <div class="space-y-4">
+                <div>
+                    <app-selection-modal label="Reason for Losing" [(value)]="selectedReason" [options]="lostReasons"
+                        [title]="'Select Lost Reason'" [subtitle]="'Why was this quotation lost?'"
+                        [placeholder]="'Select a reason...'" [layout]="'list'" [displayKey]="'name'" [valueKey]="'id'"
+                        [required]="true">
+                    </app-selection-modal>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Feedback/Comments
+                    </label>
+                    <textarea [(ngModel)]="lostFeedback" placeholder="Enter any additional feedback..."
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                        rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button (click)="showMarkLostModal = false; selectedReason = ''; lostFeedback = ''"
+                    [disabled]="submittingLost"
+                    class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    Cancel
+                </button>
+                <button (click)="handleMarkAsLost()" [disabled]="submittingLost"
+                    class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                    {{ submittingLost ? 'Processing...' : 'Mark as Lost' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</app-dashboard-layout>

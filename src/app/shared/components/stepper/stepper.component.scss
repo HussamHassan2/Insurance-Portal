@@ -1,0 +1,8 @@
+/* Stepper Styles */
+/* Colors are handled via Tailwind classes in HTML, but scoped overrides can go here */
+
+/* Ensure lucide icons work if they aren't globally styled yet (though they likely are) */
+[data-lucide] {
+    display: inline-block;
+    vertical-align: middle;
+}

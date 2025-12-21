@@ -1,0 +1,72 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">System Settings</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Configure system preferences</p>
+        </div>
+
+        <!-- Settings Form -->
+        <app-card title="General Settings">
+            <form (ngSubmit)="saveSettings()" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Name</label>
+                    <input type="text" [(ngModel)]="settings.siteName" name="siteName"
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Support Email</label>
+                    <input type="email" [(ngModel)]="settings.supportEmail" name="supportEmail"
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                </div>
+
+                <div class="space-y-4">
+                    <div
+                        class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Maintenance Mode</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Temporarily disable public access</p>
+                        </div>
+                        <input type="checkbox" [(ngModel)]="settings.maintenanceMode" name="maintenanceMode"
+                            class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Allow Registration</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Enable new user registration</p>
+                        </div>
+                        <input type="checkbox" [(ngModel)]="settings.allowRegistration" name="allowRegistration"
+                            class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">Email Notifications</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Send email notifications to users</p>
+                        </div>
+                        <input type="checkbox" [(ngModel)]="settings.emailNotifications" name="emailNotifications"
+                            class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    </div>
+
+                    <div
+                        class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-white">SMS Notifications</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Send SMS notifications to users</p>
+                        </div>
+                        <input type="checkbox" [(ngModel)]="settings.smsNotifications" name="smsNotifications"
+                            class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <app-button type="submit" variant="primary">Save Settings</app-button>
+                </div>
+            </form>
+        </app-card>
+    </div>
+</app-dashboard-layout>

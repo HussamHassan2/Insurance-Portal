@@ -1,0 +1,208 @@
+<app-dashboard-layout>
+    <div class="max-w-4xl mx-auto space-y-8">
+        <!-- Header -->
+        <div>
+            <h1 class="text-3xl font-bold text-navy dark:text-white">{{ 'SETTINGS.TITLE' | translate }}</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">{{ 'SETTINGS.SUBTITLE' | translate }}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Sidebar Navigation -->
+            <div class="md:col-span-1 space-y-2">
+                <a href="#security"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-all">
+                    <i-lucide name="shield" class="w-5 h-5"></i-lucide>
+                    {{ 'SETTINGS.SECURITY.TITLE' | translate }}
+                </a>
+                <a href="#preferences"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                    <i-lucide name="settings" class="w-5 h-5"></i-lucide>
+                    {{ 'SETTINGS.PREFERENCES.TITLE' | translate }}
+                </a>
+                <a href="#notifications" *ngIf="false"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all">
+                    <i-lucide name="bell" class="w-5 h-5"></i-lucide>
+                    {{ 'SETTINGS.NOTIFICATIONS.TITLE' | translate }}
+                </a>
+            </div>
+
+            <!-- Content Area -->
+            <div class="md:col-span-2 space-y-8">
+                <!-- Security Section -->
+                <section id="security"
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h2 class="text-xl font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="shield" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'SETTINGS.SECURITY.TITLE' | translate }}
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="flex flex-col gap-4">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Manage your account password and security settings
+                            </p>
+                            <div>
+                                <button (click)="openChangePassword()"
+                                    class="px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+                                    <i-lucide name="lock" class="w-4 h-4"></i-lucide>
+                                    {{ 'SETTINGS.SECURITY.UPDATE_PASSWORD' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Preferences Section -->
+                <section id="preferences"
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h2 class="text-xl font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="settings" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'SETTINGS.PREFERENCES.TITLE' | translate }}
+                        </h2>
+                    </div>
+                    <div class="p-6 space-y-8">
+                        <!-- Appearance -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                                    <i-lucide name="eye" class="w-5 h-5"></i-lucide>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 dark:text-white">{{
+                                        'SETTINGS.PREFERENCES.APPEARANCE' | translate }}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{
+                                        'SETTINGS.PREFERENCES.APPEARANCE_DESC' | translate }}</p>
+                                </div>
+                            </div>
+                            <button (click)="themeService.toggleTheme()"
+                                [ngClass]="themeService.isDark() ? 'bg-primary' : 'bg-gray-300'"
+                                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                                <span [ngClass]="themeService.isDark() ? 'translate-x-6' : 'translate-x-1'"
+                                    class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"></span>
+                            </button>
+                        </div>
+
+                        <!-- Language -->
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                                    <i-lucide name="refresh-cw" class="w-5 h-5"></i-lucide>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 dark:text-white">{{
+                                        'SETTINGS.PREFERENCES.LANGUAGE' | translate }}</h3>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{
+                                        'SETTINGS.PREFERENCES.LANGUAGE_DESC' | translate }}</p>
+                                </div>
+                            </div>
+                            <div class="flex p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                                <button (click)="changeLanguage('en')"
+                                    [ngClass]="currentLanguage === 'en' ? 'bg-white dark:bg-gray-600 shadow-sm text-primary' : 'text-gray-500'"
+                                    class="px-4 py-1.5 rounded-md text-sm font-medium transition-all">
+                                    EN
+                                </button>
+                                <button (click)="changeLanguage('ar')"
+                                    [ngClass]="currentLanguage === 'ar' ? 'bg-white dark:bg-gray-600 shadow-sm text-primary' : 'text-gray-500'"
+                                    class="px-4 py-1.5 rounded-md text-sm font-medium transition-all">
+                                    AR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notifications Section -->
+                <section id="notifications" *ngIf="false"
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                        <h2 class="text-xl font-bold text-navy dark:text-white flex items-center gap-2">
+                            <i-lucide name="bell" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'SETTINGS.NOTIFICATIONS.TITLE' | translate }}
+                        </h2>
+                    </div>
+                    <div class="p-6 pb-2">
+                        <form (ngSubmit)="saveNotifications()" class="space-y-4">
+                            <div
+                                class="flex items-center justify-between py-4 border-b border-gray-50 dark:border-gray-700/50">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
+                                        <i-lucide name="mail" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{
+                                            'SETTINGS.NOTIFICATIONS.EMAIL' | translate }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{
+                                            'SETTINGS.NOTIFICATIONS.EMAIL_DESC' | translate }}</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" [(ngModel)]="notifications.email" name="email"
+                                        class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between py-4 border-b border-gray-50 dark:border-gray-700/50">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-400">
+                                        <i-lucide name="trending-up" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{
+                                            'SETTINGS.NOTIFICATIONS.PUSH' | translate }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{
+                                            'SETTINGS.NOTIFICATIONS.PUSH_DESC' | translate }}</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" [(ngModel)]="notifications.push" name="push"
+                                        class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between py-4">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="p-2 bg-purple-50 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400">
+                                        <i-lucide name="award" class="w-5 h-5"></i-lucide>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{
+                                            'SETTINGS.NOTIFICATIONS.MARKETING' | translate }}</h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{
+                                            'SETTINGS.NOTIFICATIONS.MARKETING_DESC' | translate }}</p>
+                                    </div>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" [(ngModel)]="notifications.marketing" name="marketing"
+                                        class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="flex justify-end pt-4 pb-4">
+                                <button type="submit"
+                                    class="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-navy rounded-lg hover:bg-black dark:hover:bg-gray-200 transition-all font-medium">
+                                    {{ 'SETTINGS.NOTIFICATIONS.SAVE_PREFERENCES' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <app-change-password></app-change-password>
+</app-dashboard-layout>

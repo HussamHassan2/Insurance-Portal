@@ -1,0 +1,74 @@
+<div class="relative inline-block text-left">
+    <button type="button" (click)="toggleDropdown()"
+        class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+        [attr.aria-expanded]="isDropdownOpen" aria-label="Toggle column visibility">
+        <i data-lucide="columns" class="h-4 w-4 text-gray-500 dark:text-gray-400"></i>
+        <span>Columns ({{ visibleCount }}/{{ totalCount }})</span>
+        <i data-lucide="chevron-down" class="h-4 w-4 text-gray-400 transition-transform duration-200"
+            [class.rotate-180]="isDropdownOpen"></i>
+    </button>
+
+    <div *ngIf="isDropdownOpen"
+        class="absolute right-0 z-50 mt-2 w-72 origin-top-right rounded-xl bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-100 dark:border-gray-700 animate-in fade-in zoom-in-95 duration-200"
+        role="dialog" aria-label="Column visibility settings">
+
+        <!-- Header & Search -->
+        <div class="p-3 border-b border-gray-100 dark:border-gray-700">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"></i>
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search columns..."
+                    class="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 pl-9 pr-3 py-2 text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                    aria-label="Search columns">
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div
+            class="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700">
+            <button type="button" (click)="selectAll()"
+                class="text-xs font-medium text-primary hover:text-primary-700 dark:hover:text-primary-400 transition-colors">
+                Select All
+            </button>
+            <div class="h-3 w-px bg-gray-300 dark:bg-gray-600"></div>
+            <button type="button" (click)="deselectAll()"
+                class="text-xs font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                Deselect All
+            </button>
+            <div class="h-3 w-px bg-gray-300 dark:bg-gray-600"></div>
+            <button type="button" (click)="resetToDefault()"
+                class="text-xs font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                Reset
+            </button>
+        </div>
+
+        <!-- Column List -->
+        <div class="max-h-64 overflow-y-auto p-2 space-y-0.5 custom-scrollbar">
+            <label *ngFor="let col of filteredColumns"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors group"
+                [class.opacity-60]="col.mandatory" [class.cursor-not-allowed]="col.mandatory"
+                [class.hover:bg-gray-50]="!col.mandatory" [class.dark:hover:bg-gray-700]="!col.mandatory">
+
+                <div class="relative flex items-center">
+                    <input type="checkbox" [checked]="col.visible" [disabled]="col.mandatory"
+                        (change)="toggleColumn(col)"
+                        class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                </div>
+
+                <div class="flex-1 flex items-center justify-between min-w-0">
+                    <span
+                        class="text-sm text-gray-700 dark:text-gray-200 truncate font-medium group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                        {{ col.label }}
+                    </span>
+                    <span *ngIf="col.mandatory"
+                        class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                        REQ
+                    </span>
+                </div>
+            </label>
+
+            <div *ngIf="filteredColumns.length === 0" class="py-6 text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">No columns found</p>
+            </div>
+        </div>
+    </div>
+</div>

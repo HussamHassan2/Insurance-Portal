@@ -1,0 +1,154 @@
+<app-dashboard-layout>
+    <div class="space-y-8">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-navy dark:text-white mb-2">Analytics Dashboard</h1>
+                <p class="text-gray-600 dark:text-gray-300">Comprehensive insurance business insights</p>
+            </div>
+            <div class="flex gap-2">
+                <button (click)="fetchData()" [disabled]="loading"
+                    class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 flex items-center gap-2 transition-all">
+                    <i data-lucide="refresh-cw" [class.animate-spin]="loading" class="w-4 h-4"></i>
+                    Refresh
+                </button>
+                <button
+                    class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 flex items-center gap-2 transition-all">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-4">
+            <div class="flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-gray-400"></i>
+                <select [(ngModel)]="dateRange" (change)="fetchData()"
+                    class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <option value="7">Last 7 days</option>
+                    <option value="30">Last 30 days</option>
+                    <option value="90">Last 90 days</option>
+                    <option value="365">Last year</option>
+                </select>
+            </div>
+        </div>
+
+        <div *ngIf="loading" class="flex justify-center py-12">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+
+        <div *ngIf="!loading" class="space-y-8">
+            <!-- Executive Summary KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Total Policies</div>
+                    <div class="text-2xl font-bold text-navy">{{ kpis.totalPolicies }}</div>
+                    <div class="mt-2 p-2 bg-blue-100 dark:bg-blue-900/20 text-blue-600 rounded inline-block">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Net Premium</div>
+                    <div class="text-2xl font-bold text-navy">EGP {{ kpis.netPremium | number:'1.0-2' }}</div>
+                    <div class="text-xs text-gray-500">Gross: {{ kpis.grossPremium | number:'1.0-2' }}</div>
+                    <div class="mt-2 p-2 bg-green-100 dark:bg-green-900/20 text-green-600 rounded inline-block">
+                        <i data-lucide="dollar-sign" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Active Claims</div>
+                    <div class="text-2xl font-bold text-navy">{{ kpis.activeClaims }}</div>
+                    <div class="text-xs text-gray-500">{{ kpis.claimsPercentage }}% of policies</div>
+                    <div class="mt-2 p-2 bg-red-100 dark:bg-red-900/20 text-red-600 rounded inline-block">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Open Opps</div>
+                    <div class="text-2xl font-bold text-navy">{{ kpis.openOpportunities }}</div>
+                    <div class="text-xs text-gray-500">{{ kpis.conversionRate }}% conversion</div>
+                    <div class="mt-2 p-2 bg-purple-100 dark:bg-purple-900/20 text-purple-600 rounded inline-block">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Pending Quotes</div>
+                    <div class="text-2xl font-bold text-navy">{{ kpis.pendingQuotations }}</div>
+                    <div class="mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 rounded inline-block">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+
+                <app-card class="col-span-1">
+                    <div class="text-sm font-medium text-gray-500 mb-1">Renewals (30d)</div>
+                    <div class="text-2xl font-bold text-navy">{{ kpis.dueForRenewal }}</div>
+                    <div class="mt-2 p-2 bg-orange-100 dark:bg-orange-900/20 text-orange-600 rounded inline-block">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                    </div>
+                </app-card>
+            </div>
+
+            <!-- Charts Row 1: Pipeline & Sales Persons -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <app-card title="Opportunities by Stage">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="pipelineData" [options]="barChartOptions"
+                            [type]="'bar'">
+                        </canvas>
+                    </div>
+                </app-card>
+
+                <app-card title="Top Sales Persons">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="salesPersonData" [options]="barChartOptions"
+                            [type]="'bar'">
+                        </canvas>
+                    </div>
+                </app-card>
+            </div>
+
+            <!-- Charts Row 2: Quote Status & Premium -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <app-card title="Quotation Status">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="quoteStatusData" [options]="pieChartOptions"
+                            [type]="'pie'">
+                        </canvas>
+                    </div>
+                </app-card>
+
+                <app-card title="Premium by Product">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="premiumData" [options]="barChartOptions"
+                            [type]="'bar'">
+                        </canvas>
+                    </div>
+                </app-card>
+            </div>
+
+            <!-- Charts Row 3: Claims -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <app-card title="Claims by Status">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="claimsStatusData" [options]="pieChartOptions"
+                            [type]="'pie'">
+                        </canvas>
+                    </div>
+                </app-card>
+
+                <app-card title="Claims by LOB">
+                    <div class="h-[300px]">
+                        <canvas baseChart class="w-full h-full" [data]="claimsLobData" [options]="barChartOptions"
+                            [type]="'bar'">
+                        </canvas>
+                    </div>
+                </app-card>
+            </div>
+        </div>
+    </div>
+</app-dashboard-layout>

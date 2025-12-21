@@ -1,0 +1,121 @@
+<nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a routerLink="/" class="flex items-center gap-2">
+                    <img src="assets/logo.png" alt="Orient Insurance" class="h-12 object-contain" />
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="text-primary"
+                    class="text-gray-600 dark:text-gray-300 hover:text-primary font-medium transition-colors">
+                    {{ link.name | translate }}
+                </a>
+            </div>
+
+            <!-- Desktop Actions -->
+            <div class="hidden md:flex items-center space-x-4">
+                <app-language-switcher class="mr-4"></app-language-switcher>
+                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300 mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-4 w-4">
+                        <path
+                            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                        </path>
+                    </svg>
+                    <span class="text-sm font-medium">19258</span>
+                </div>
+
+                <ng-container *ngIf="!user; else loggedInMenu">
+                    <a routerLink="/login">
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-4 w-4">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Login
+                        </button>
+                    </a>
+                </ng-container>
+
+                <ng-template #loggedInMenu>
+                    <a [routerLink]="getDashboardLink()">
+                        <button
+                            class="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-4 w-4">
+                                <rect width="7" height="9" x="3" y="3" rx="1" />
+                                <rect width="7" height="5" x="14" y="3" rx="1" />
+                                <rect width="7" height="9" x="14" y="12" rx="1" />
+                                <rect width="7" height="5" x="3" y="16" rx="1" />
+                            </svg>
+                            {{ 'MENU.DASHBOARD' | translate }}
+                        </button>
+                    </a>
+                </ng-template>
+
+                <a routerLink="/login">
+                    <button
+                        class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                        {{ 'MENU.GET_QUOTE' | translate }}
+                    </button>
+                </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button (click)="toggleMenu()"
+                    class="text-gray-600 dark:text-gray-300 hover:text-primary focus:outline-none">
+                    <svg *ngIf="!isOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="h-8 w-8">
+                        <line x1="4" x2="20" y1="12" y2="12"></line>
+                        <line x1="4" x2="20" y1="6" y2="6"></line>
+                        <line x1="4" x2="20" y1="18" y2="18"></line>
+                    </svg>
+                    <svg *ngIf="isOpen" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="h-8 w-8">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="isOpen" class="md:hidden bg-white dark:bg-gray-900 border-t dark:border-gray-700">
+        <div class="px-4 pt-2 pb-6 space-y-2">
+            <div class="px-3 py-2">
+                <app-language-switcher></app-language-switcher>
+            </div>
+            <a *ngFor="let link of navLinks" [routerLink]="link.path" (click)="closeMenu()"
+                class="block px-3 py-2 text-base font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition-colors">
+                {{ link.name | translate }}
+            </a>
+            <div class="pt-4 space-y-3">
+                <a routerLink="/login" (click)="closeMenu()">
+                    <button
+                        class="w-full justify-start px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                        {{ 'MENU.LOGIN' | translate }}
+                    </button>
+                </a>
+                <a routerLink="/login" (click)="closeMenu()">
+                    <button
+                        class="w-full px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                        {{ 'MENU.GET_QUOTE' | translate }}
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

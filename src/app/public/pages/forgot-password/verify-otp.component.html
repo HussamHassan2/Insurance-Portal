@@ -1,0 +1,58 @@
+<app-auth-layout [title]="'AUTH.OTP.TITLE' | translate" [subtitle]="('AUTH.OTP.SUBTITLE_PREFIX' | translate) + email">
+    <form class="space-y-6" (submit)="handleSubmit()">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 text-center">
+                {{ 'AUTH.OTP.ENTER_CODE' | translate }}
+            </label>
+            <div class="flex gap-2 justify-center" (paste)="handlePaste($event)">
+                <input *ngFor="let digit of otp; let i = index" [id]="'otp-' + i" type="text" inputmode="numeric"
+                    maxLength="1" [(ngModel)]="otp[i]" [name]="'otp-' + i" (input)="handleChange(i, otp[i])"
+                    (keydown)="handleKeyDown(i, $event)"
+                    class="w-12 h-12 text-center text-lg font-bold border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all bg-white dark:bg-gray-800 text-navy dark:text-white" />
+            </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div *ngIf="error"
+            class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+                <i-lucide name="alert-circle"
+                    class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0"></i-lucide>
+                <p class="text-sm text-red-800 dark:text-red-300 font-medium">{{ error }}</p>
+            </div>
+        </div>
+
+        <!-- Resend Code Section -->
+        <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+            <div class="text-center text-sm">
+                <button *ngIf="canResend" type="button" (click)="handleResend()"
+                    class="inline-flex items-center gap-2 font-semibold text-primary hover:text-primary/80 transition-colors">
+                    <i-lucide name="refresh-cw" class="w-4 h-4"></i-lucide>
+                    {{ 'AUTH.OTP.RESEND' | translate }}
+                </button>
+                <div *ngIf="!canResend" class="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400">
+                    <i-lucide name="clock" class="w-4 h-4"></i-lucide>
+                    <p>
+                        {{ 'AUTH.OTP.RESEND_IN' | translate }} <span class="font-bold text-primary">{{ countdown
+                            }}s</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="loading || otp.join('').length !== 6"
+            class="w-full h-12 flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20 disabled:opacity-70 disabled:cursor-not-allowed">
+            <i-lucide *ngIf="loading" name="loader-2" class="w-5 h-5 animate-spin"></i-lucide>
+            <i-lucide *ngIf="!loading" name="shield-check" class="w-5 h-5"></i-lucide>
+            {{ loading ? ('AUTH.OTP.VERIFYING' | translate) : ('AUTH.OTP.VERIFY_BTN' | translate) }}
+        </button>
+
+        <div class="text-center">
+            <a routerLink="/forgot-password"
+                class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-primary transition-colors">
+                <i-lucide name="arrow-left" class="w-4 h-4 mr-2"></i-lucide>
+                {{ 'AUTH.OTP.CHANGE_EMAIL' | translate }}
+            </a>
+        </div>
+    </form>
+</app-auth-layout>

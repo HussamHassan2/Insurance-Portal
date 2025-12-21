@@ -1,0 +1,131 @@
+<app-dashboard-layout>
+    <div class="space-y-6" *ngIf="!loading && policy">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button (click)="goBack()" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-5 w-5">
+                        <path d="m12 19-7-7 7-7"></path>
+                        <path d="M19 12H5"></path>
+                    </svg>
+                </button>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Policy Details</h1>
+                    <p class="text-gray-600 dark:text-gray-400">{{ policy.policy_number }}</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <app-button variant="outline" (click)="downloadPolicy()">Download PDF</app-button>
+                <app-button variant="primary" (click)="renewPolicy()">Renew Policy</app-button>
+            </div>
+        </div>
+
+        <!-- Policy Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <app-card title="Policy Information">
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Product</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.product_name }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Status</p>
+                        <span
+                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            {{ policy.status }}
+                        </span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Policy Number</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.policy_number }}</p>
+                    </div>
+                </div>
+            </app-card>
+
+            <app-card title="Coverage Period">
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Start Date</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.start_date }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">End Date</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">{{ policy.end_date }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Duration</p>
+                        <p class="font-semibold text-gray-900 dark:text-white">12 Months</p>
+                    </div>
+                </div>
+            </app-card>
+
+            <app-card title="Premium Details">
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Premium Amount</p>
+                        <p class="text-2xl font-bold text-primary">${{ policy.premium }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Payment Status</p>
+                        <span
+                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            Paid
+                        </span>
+                    </div>
+                </div>
+            </app-card>
+        </div>
+
+        <!-- Coverage Details -->
+        <app-card title="Coverage Details">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Covered Items</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-green-500">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            <span class="text-gray-700 dark:text-gray-300">Comprehensive Coverage</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-green-500">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            <span class="text-gray-700 dark:text-gray-300">Third Party Liability</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-green-500">
+                                <path d="M20 6 9 17l-5-5"></path>
+                            </svg>
+                            <span class="text-gray-700 dark:text-gray-300">Personal Accident</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Policy Holder</h3>
+                    <div class="space-y-2">
+                        <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Name:</span> {{
+                            policy.customer_name }}</p>
+                        <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Email:</span> {{
+                            policy.customer_email }}</p>
+                        <p class="text-gray-700 dark:text-gray-300"><span class="font-medium">Phone:</span> {{
+                            policy.customer_phone }}</p>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <div *ngIf="loading" class="flex items-center justify-center h-96">
+        <app-loading-spinner [loading]="true" message="Loading policy details..."></app-loading-spinner>
+    </div>
+</app-dashboard-layout>

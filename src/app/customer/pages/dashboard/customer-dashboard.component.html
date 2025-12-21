@@ -1,0 +1,138 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+        <div *ngIf="!loading" class="space-y-6">
+            <!-- Welcome Header -->
+            <div class="bg-gradient-to-r from-primary to-primary-dark rounded-lg p-6 text-white">
+                <h1 class="text-3xl font-bold mb-2">{{ 'CUSTOMER.DASHBOARD.WELCOME' | translate:{name: user?.name ||
+                    'Customer'} }}</h1>
+                <p class="text-blue-100">{{ 'CUSTOMER.DASHBOARD.SUBTITLE' | translate }}</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <app-card *ngFor="let stat of stats" [hover]="true">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ stat.title }}</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-2">{{ stat.value }}</p>
+                            <p class="text-sm text-green-600 dark:text-green-400 mt-1">{{ stat.change }}</p>
+                        </div>
+                        <div [ngClass]="stat.color" class="p-3 rounded-full">
+                            <svg *ngIf="stat.icon === 'shield'" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                                <path
+                                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                                </path>
+                            </svg>
+                            <svg *ngIf="stat.icon === 'file-text'" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            </svg>
+                            <svg *ngIf="stat.icon === 'credit-card'" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                <line x1="2" x2="22" y1="10" y2="10"></line>
+                            </svg>
+                            <svg *ngIf="stat.icon === 'scroll-text'" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                                <path d="M15 12h-5"></path>
+                                <path d="M15 8h-5"></path>
+                                <path d="M19 17V5a2 2 0 0 0-2-2H4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </app-card>
+            </div>
+
+            <!-- Quick Actions -->
+            <app-card [title]="'CUSTOMER.DASHBOARD.QUICK_ACTIONS.TITLE' | translate">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button
+                        class="flex items-center gap-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-all">
+                        <div class="bg-primary/10 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-primary">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.FILE_CLAIM' | translate }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.FILE_CLAIM_DESC' | translate }}</p>
+                        </div>
+                    </button>
+
+                    <button
+                        class="flex items-center gap-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-all">
+                        <div class="bg-primary/10 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-primary">
+                                <path
+                                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.VIEW_POLICIES' | translate }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.VIEW_POLICIES_DESC' | translate }}</p>
+                        </div>
+                    </button>
+
+                    <button
+                        class="flex items-center gap-3 p-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-all">
+                        <div class="bg-primary/10 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-primary">
+                                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                <line x1="2" x2="22" y1="10" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.MAKE_PAYMENT' | translate }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{
+                                'CUSTOMER.DASHBOARD.QUICK_ACTIONS.MAKE_PAYMENT_DESC' | translate }}</p>
+                        </div>
+                    </button>
+                </div>
+            </app-card>
+
+            <!-- Recent Activity -->
+            <app-card [title]="'CUSTOMER.DASHBOARD.RECENT_ACTIVITY' | translate">
+                <div class="space-y-4">
+                    <div *ngFor="let activity of recentActivities"
+                        class="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <div class="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="h-5 w-5 text-blue-600 dark:text-blue-400">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ activity.title }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ activity.description }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ activity.time }}</p>
+                        </div>
+                    </div>
+                </div>
+            </app-card>
+        </div>
+    </div>
+</app-dashboard-layout>

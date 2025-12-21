@@ -1,0 +1,106 @@
+<app-dashboard-layout>
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Back Link -->
+        <button (click)="goBack()"
+            class="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-6 transition-colors">
+            <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i>
+            {{ 'BROKER.ENDORSEMENT.BACK_TO_POLICY' | translate }}
+        </button>
+
+        <!-- Header -->
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+            <div class="flex items-center gap-4 mb-6">
+                <div
+                    class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary">
+                    <i data-lucide="file-text" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-navy-900 dark:text-white">{{ 'BROKER.ENDORSEMENT.TITLE' |
+                        translate }}</h1>
+                    <p class="text-gray-600 dark:text-gray-400" *ngIf="!pageLoading">
+                        {{ 'BROKER.ENDORSEMENT.POLICY_NUM' | translate }}{{ policyNumber }}
+                    </p>
+                    <div *ngIf="pageLoading" class="h-4 w-32 bg-gray-200 animate-pulse rounded mt-1"></div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div *ngIf="pageLoading" class="p-8 text-center text-gray-500">
+                <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto mb-2"></i>
+                {{ 'BROKER.ENDORSEMENT.LOADING_OPTIONS' | translate }}
+            </div>
+
+            <!-- Content -->
+            <div *ngIf="!pageLoading">
+                <!-- Error Message -->
+                <div *ngIf="error"
+                    class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                    {{ error | translate }}
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Endorsement Type -->
+                    <div>
+                        <app-selection-modal [label]="'BROKER.ENDORSEMENT.SELECT_TYPE.LABEL' | translate"
+                            [options]="types" [(value)]="formData.end_sub_type_code"
+                            (valueChange)="onTypeChange($event)"
+                            [title]="'BROKER.ENDORSEMENT.SELECT_TYPE.TITLE' | translate"
+                            [subtitle]="'BROKER.ENDORSEMENT.SELECT_TYPE.SUBTITLE' | translate"
+                            [placeholder]="'BROKER.ENDORSEMENT.SELECT_TYPE.PLACEHOLDER' | translate" [required]="true"
+                            valueKey="code" displayKey="name">
+                        </app-selection-modal>
+                    </div>
+
+                    <!-- Effective Date -->
+                    <div>
+                        <app-date-picker [label]="'BROKER.ENDORSEMENT.EFFECTIVE_DATE.LABEL' | translate"
+                            [(ngModel)]="formData.effective_from_date" [disabled]="false">
+                        </app-date-picker>
+                    </div>
+
+                    <!-- Reason -->
+                    <div>
+                        <app-selection-modal [label]="'BROKER.ENDORSEMENT.SELECT_REASON.LABEL' | translate"
+                            [options]="reasons" [(value)]="formData.endorsement_reason_id"
+                            (valueChange)="onReasonChange($event)"
+                            [title]="'BROKER.ENDORSEMENT.SELECT_REASON.TITLE' | translate"
+                            [subtitle]="'BROKER.ENDORSEMENT.SELECT_REASON.SUBTITLE' | translate"
+                            [placeholder]="'BROKER.ENDORSEMENT.SELECT_REASON.PLACEHOLDER' | translate"
+                            [disabled]="!formData.end_sub_type_code" [required]="true" valueKey="id" displayKey="name">
+                        </app-selection-modal>
+                    </div>
+
+                    <!-- Additional Details (Remarks) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            {{ 'BROKER.ENDORSEMENT.REMARKS.LABEL' | translate }} <span
+                                class="text-gray-400 font-normal">{{ 'BROKER.ENDORSEMENT.REMARKS.OPTIONAL' | translate
+                                }}</span>
+                        </label>
+                        <textarea
+                            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-primary focus:border-primary py-2 px-3 min-h-[100px] transition-colors"
+                            [placeholder]="'BROKER.ENDORSEMENT.REMARKS.PLACEHOLDER' | translate"
+                            [(ngModel)]="formData.remarks"></textarea>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <button (click)="goBack()"
+                            class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            {{ 'BUTTON.CANCEL' | translate }}
+                        </button>
+                        <button (click)="submit()"
+                            [disabled]="submitting || !formData.end_sub_type_code || !formData.endorsement_reason_id"
+                            class="px-6 py-2 bg-primary text-white rounded-lg font-medium shadow-sm hover:bg-primary/90 transition-all flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                            <i *ngIf="submitting" data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
+                            {{ submitting ? ('BROKER.ENDORSEMENT.SUBMITTING' | translate) : ('BROKER.ENDORSEMENT.SUBMIT'
+                            | translate) }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-dashboard-layout>

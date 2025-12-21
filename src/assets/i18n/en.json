@@ -1,0 +1,945 @@
+{
+    "APP": {
+        "TITLE": "Insurance Portal",
+        "DESCRIPTION": "Welcome to the Insurance Portal",
+        "SUPPORT": "Support",
+        "SETTINGS": "Settings",
+        "LOGOUT": "Sign Out",
+        "PROFILE": "Profile"
+    },
+    "MENU": {
+        "HOME": "Home",
+        "SERVICES": "Services",
+        "CLAIMS_PUBLIC": "Claims",
+        "CONTACT": "Contact",
+        "DASHBOARD": "Dashboard",
+        "QUOTATIONS": "Quotations",
+        "POLICIES": "Policies",
+        "CLAIMS": "Claims",
+        "CLIENTS": "Clients",
+        "PAYMENTS": "Payments",
+        "COMMISSIONS": "Commissions",
+        "SETTINGS": "Settings",
+        "LOGOUT": "Logout",
+        "GET_QUOTE": "Get a Quote",
+        "LOGIN": "Login"
+    },
+    "SIDEBAR": {
+        "OVERVIEW": "Overview",
+        "ANALYTICS": "Analytics",
+        "POLICIES": "Policies",
+        "BROKER_POLICIES": "Policies",
+        "CLAIMS": "Claims",
+        "QUOTATIONS": "Quotations",
+        "PAYMENTS": "Payments",
+        "COMMISSIONS": "Commissions",
+        "CLIENTS": "Clients",
+        "USERS": "Users",
+        "REPORTS": "Reports",
+        "PENDING_SURVEYS": "Pending Surveys"
+    },
+    "BUTTON": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel",
+        "DELETE": "Delete",
+        "EDIT": "Edit",
+        "ADD": "Add",
+        "SUBMIT": "Submit",
+        "SEARCH": "Search",
+        "LOGIN": "Login",
+        "NEXT": "Next",
+        "PREVIOUS": "Previous",
+        "CONFIRM": "Confirm"
+    },
+    "FORM": {
+        "NAME": "Name",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "CONFIRM_PASSWORD": "Confirm Password",
+        "PHONE": "Phone Number",
+        "ADDRESS": "Address"
+    },
+    "VALIDATION": {
+        "REQUIRED": "This field is required",
+        "EMAIL_INVALID": "Please enter a valid email",
+        "PASSWORD_MIN": "Password must be at least 8 characters",
+        "PASSWORD_MISMATCH": "Passwords do not match"
+    },
+    "MESSAGE": {
+        "SUCCESS": "Operation completed successfully",
+        "ERROR": "An error occurred",
+        "LOADING": "Loading...",
+        "NO_DATA": "No data available",
+        "CONFIRM_DELETE": "Are you sure you want to delete?"
+    },
+    "ERROR": {
+        "USER_NOT_FOUND": "User not found. Please log in again.",
+        "LOADING_DATA": "Failed to load data",
+        "GENERIC": "An unexpected error occurred. Please try again.",
+        "NO_COMMISSION_DATA": "No commission records found",
+        "NO_PAYMENT_DATA": "No payment records found",
+        "NETWORK_ERROR": "Network error. Please check your connection."
+    },
+    "SETTINGS": {
+        "TITLE": "Settings",
+        "SUBTITLE": "Manage your account security, preferences, and notifications.",
+        "SECURITY": {
+            "TITLE": "Security Settings",
+            "CURRENT_PASSWORD": "Current Password",
+            "NEW_PASSWORD": "New Password",
+            "CONFIRM_PASSWORD": "Confirm New Password",
+            "UPDATE_PASSWORD": "Update Password"
+        },
+        "CHANGE_PASSWORD": {
+            "TITLE": "Change Password",
+            "DESCRIPTION": "Manage your account password and security settings",
+            "BUTTON": "Change Password",
+            "CURRENT_PASSWORD": "Current Password",
+            "CURRENT_PASSWORD_PLACEHOLDER": "Enter current password",
+            "NEW_PASSWORD": "New Password",
+            "NEW_PASSWORD_PLACEHOLDER": "Enter new password",
+            "CONFIRM_PASSWORD": "Confirm New Password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "Confirm new password",
+            "SHOW_PASSWORD": "Show password",
+            "HIDE_PASSWORD": "Hide password",
+            "STRENGTH": {
+                "LABEL": "Strength",
+                "WEAK": "Weak",
+                "FAIR": "Fair",
+                "GOOD": "Good",
+                "STRONG": "Strong"
+            },
+            "MATCH": "Passwords match",
+            "NO_MATCH": "Passwords do not match",
+            "REQUIREMENTS": {
+                "TITLE": "Password Requirements:",
+                "LENGTH": "At least 8 characters long",
+                "CASE": "Include uppercase and lowercase letters",
+                "SPECIAL": "Include at least one number and special character"
+            },
+            "SUBMIT": "Update Password",
+            "UPDATING": "Updating...",
+            "SUCCESS": {
+                "TITLE": "Password Updated!",
+                "MESSAGE": "Your password has been successfully changed. You will be logged out to sign in with your new password.",
+                "LOGGING_OUT": "Logging out..."
+            },
+            "ERRORS": {
+                "INCORRECT_CURRENT": "Current password is incorrect",
+                "GENERIC": "Failed to update password. Please try again."
+            }
+        },
+        "PREFERENCES": {
+            "TITLE": "Preferences",
+            "APPEARANCE": "Appearance",
+            "APPEARANCE_DESC": "Manage dark mode and theme",
+            "LANGUAGE": "Language",
+            "LANGUAGE_DESC": "Choose your preferred language"
+        },
+        "NOTIFICATIONS": {
+            "TITLE": "Notification Center",
+            "EMAIL": "Email Notifications",
+            "EMAIL_DESC": "Crucial account updates via email",
+            "PUSH": "Push Notifications",
+            "PUSH_DESC": "Real-time alerts on your browser",
+            "MARKETING": "Marketing Emails",
+            "MARKETING_DESC": "Updates on new policies and offers",
+            "SAVE_PREFERENCES": "Save Preferences"
+        }
+    },
+    "DETAILS": {
+        "POLICY": {
+            "BREADCRUMB": "Policies",
+            "DOWNLOADING": "Downloading...",
+            "DOWNLOAD_PDF": "Download PDF",
+            "CREATE_ENDORSEMENT": "Create Endorsement",
+            "TABS": {
+                "OVERVIEW": "Overview",
+                "COVERAGE": "Coverage",
+                "PREMIUM": "Premium"
+            },
+            "HIGHLIGHTS": {
+                "TITLE": "Policy Highlights",
+                "SUBTITLE": "Renewal status, important dates & payments",
+                "RENEWAL": "Policy Renewal",
+                "STATUS": "Status",
+                "DAYS_LEFT": "Days Left",
+                "EXPIRED": "Expired",
+                "RENEW": "Renew Policy",
+                "IMPORTANT_DATES": "Important Dates",
+                "START_DATE": "Start Date",
+                "END_DATE": "End Date",
+                "ISSUE_DATE": "Issue Date",
+                "FULLY_PAID": "Fully Paid",
+                "ALL_SETTLED": "All premiums settled"
+            },
+            "HOLDER": {
+                "TITLE": "Policy Holder Information",
+                "FULL_NAME": "Full Name",
+                "NATIONAL_ID": "National ID",
+                "GROUP": "Group",
+                "ACTIVITY": "Activity",
+                "ADDRESS": "Address"
+            },
+            "VEHICLE": {
+                "TITLE": "Vehicle Information",
+                "GENERAL": "General Details",
+                "MAKE": "Make",
+                "MODEL": "Model",
+                "YEAR": "Year",
+                "COLOR": "Color",
+                "PLATE_NUMBER": "Plate Number",
+                "CATEGORY": "Category",
+                "BODY_TYPE": "Body Type",
+                "SEATS": "Seats",
+                "PERSONS": "Persons",
+                "FUEL_TYPE": "Fuel Type",
+                "ENGINE_CC": "Engine CC",
+                "TECHNICAL": "Technical & Coverage Info",
+                "CHASSIS_NUMBER": "Chassis Number",
+                "ENGINE_NUMBER": "Engine Number",
+                "USAGE": "Usage",
+                "SUM_INSURED": "Sum Insured",
+                "ROADSIDE": "Roadside Assistance"
+            },
+            "COVERAGE_TAB": {
+                "RISK_TITLE": "Risk #{{number}} Coverage",
+                "COVER_AMOUNT": "Cover Amount",
+                "CONDITIONS_TITLE": "Policy Conditions",
+                "CONDITIONS_SUBTITLE": "Terms and clauses applicable to this policy"
+            },
+            "PREMIUM_TAB": {
+                "GROSS_PREMIUM": "Gross Premium",
+                "TOTAL_PAYABLE": "Total payable amount"
+            },
+            "ERROR_LOADING": "Error Loading Policy",
+            "BACK_TO_POLICIES": "Back to Policies",
+            "LOADING": "Loading policy details..."
+        },
+        "QUOTATION": {
+            "BREADCRUMB": "Quotations",
+            "EDIT_QUOTE": "Edit Quote",
+            "DOWNLOAD_PDF": "Download PDF",
+            "CUSTOMER_INFO": "Customer Information",
+            "FULL_NAME": "Full Name",
+            "EMAIL": "Email",
+            "PHONE": "Phone",
+            "VEHICLE_INFO": "Vehicle Information",
+            "BASIC_INFO": "Basic Information",
+            "MAKE": "Make",
+            "MODEL": "Model",
+            "YEAR": "Year",
+            "COLOR": "Color",
+            "BODY_TYPE": "Body Type",
+            "CATEGORY": "Category",
+            "IDENTIFICATION": "Identification",
+            "PLATE_NUMBER": "Plate Number",
+            "CHASSIS_NUMBER": "Chassis Number",
+            "ENGINE_NUMBER": "Engine Number",
+            "SPECIFICATIONS": "Specifications",
+            "USAGE": "Usage",
+            "SEATS": "Seats",
+            "FUEL_TYPE": "Fuel Type",
+            "CONDITION": "Condition",
+            "SUM_INSURED": "Sum Insured",
+            "PROPOSALS": "Proposals",
+            "PREMIUM": "Premium",
+            "NET_PREMIUM": "Net Premium",
+            "COVERAGE": "Coverage",
+            "DEDUCTIBLE": "Deductible",
+            "TAXES": "Taxes",
+            "FEES": "Fees",
+            "CONDITIONS": "Policy Conditions",
+            "DOCUMENTS": "Required Documents",
+            "UPLOADED": "Uploaded",
+            "PENDING": "Pending",
+            "SUMMARY": "Summary",
+            "PRODUCT": "Product",
+            "POLICY_TERM": "Policy Term",
+            "ONE_YEAR": "1 Year",
+            "STATUS": "Status",
+            "TOTAL_PREMIUM": "Total Premium",
+            "IMPORTANT_INFO": "Important Information",
+            "QUOTE_NUMBER": "Quote Number",
+            "CREATED_DATE": "Created Date",
+            "VALID_UNTIL": "Valid Until",
+            "DAYS_30": "30 Days",
+            "MESSAGES": "Messages",
+            "NO_MESSAGES": "No messages yet. Start the conversation!",
+            "TYPE_MESSAGE": "Type your message...",
+            "SEND": "Send",
+            "ERROR_LOADING": "Error Loading Quotation",
+            "TRY_AGAIN": "Try Again",
+            "LOADING": "Loading quotation details..."
+        },
+        "CLIENT": {
+            "BREADCRUMB": "Clients",
+            "BACK_TO_CLIENTS": "Back to Clients",
+            "INTIMATE_CLAIM": "Intimate Claim",
+            "NEW_QUOTE": "New Quote",
+            "TABS": {
+                "OVERVIEW": "overview",
+                "POLICIES": "policies",
+                "CLAIMS": "claims",
+                "DOCUMENTS": "documents"
+            },
+            "INFO_TITLE": "Client Information",
+            "FULL_NAME": "Full Name",
+            "ARABIC_NAME": "Arabic Name",
+            "CLIENT_ID": "Client ID",
+            "IS_PASSPORT": "Is Passport",
+            "YES": "Yes",
+            "PASSPORT_NUMBER": "Passport Number",
+            "EMAIL": "Email",
+            "PHONE": "Phone",
+            "DOB": "Date of Birth",
+            "GENDER": "Gender",
+            "ADDRESS": "Address",
+            "NO_POLICIES": "No policies found for this client.",
+            "INSURANCE": "Insurance",
+            "VIEW_DETAILS": "View Details",
+            "NO_CLAIMS": "No claims found for this client.",
+            "POLICY": "Policy",
+            "EST": "Est.",
+            "NO_DOCUMENTS": "No documents available."
+        }
+    },
+    "PROFILE": {
+        "TITLE": "Profile",
+        "SUBTITLE": "Manage your personal information and preferences.",
+        "EDIT_PROFILE": "Edit Profile",
+        "LOADING": "Fetching profile details...",
+        "BIO": "Bio",
+        "NO_BIO": "No bio available",
+        "BIO_PLACEHOLDER": "Tell us about yourself...",
+        "NO_LOCATION": "No location provided",
+        "PERSONAL_INFO": "Personal Information",
+        "BASIC_INFO": "Basic Information",
+        "PERSONAL_DETAILS": "Personal Details",
+        "LOCATION": "Location",
+        "IDENTIFICATION": "Identification",
+        "NAME_EN": "Name (English)",
+        "NAME_AR": "Name (Arabic)",
+        "FULL_NAME": "Full Name",
+        "EMAIL": "Email",
+        "PHONE": "Phone",
+        "NO_PHONE": "No phone provided",
+        "ADDRESS": "Address",
+        "CITY": "City",
+        "STATE": "State / Province",
+        "COUNTRY": "Country",
+        "GENDER": "Gender",
+        "SELECT_GENDER": "Select Gender",
+        "MALE": "Male",
+        "FEMALE": "Female",
+        "BIRTH_DATE": "Date of Birth",
+        "IS_FOREIGN_CUSTOMER": "Foreign Customer",
+        "NATIONAL_ID": "National ID",
+        "PASSPORT_ID": "Passport ID",
+        "TAX_ID": "Tax ID",
+        "CANCEL": "Cancel",
+        "SAVE_CHANGES": "Save Changes"
+    },
+    "SUPPORT": {
+        "TITLE": "Support Center",
+        "SUBTITLE": "How can we help you today?",
+        "VIEW_DETAILS": "View Details",
+        "STILL_NEED_HELP": "Still need help?",
+        "HELP_DESC": "Our dedicated support team is available 24/7 to assist you with any inquiries or technical issues.",
+        "CALL_SUPPORT": "Call Support",
+        "EMAIL_US": "Email Us",
+        "FAQ_TITLE": "Frequently Asked Questions",
+        "VIEW_ALL_FAQ": "View all FAQs",
+        "OPTIONS": {
+            "FAQ": {
+                "TITLE": "FAQ",
+                "DESC": "Find answers to commonly asked questions about policies, claims, and payments."
+            },
+            "CONTACT": {
+                "TITLE": "Contact Us",
+                "DESC": "Get in touch with our support team via email, phone, or visit our office."
+            },
+            "GUIDE": {
+                "TITLE": "User Guide",
+                "DESC": "Learn how to navigate the portal and make the most of our features."
+            }
+        },
+        "GUIDE": {
+            "TITLE": "User Guides & Documentation",
+            "SUBTITLE": "Comprehensive guides to help you get the most out of Orient Insurance Portal.",
+            "READ_FULL": "Read Full Guide",
+            "FEATURED": {
+                "BADGE": "Featured Guide",
+                "TITLE": "Mastering the Claim Flow",
+                "DESC": "Comprehensive video tutorials and step-by-step instructions on intimate, tracking, and finalizing your insurance claims.",
+                "BUTTON": "Watch Tutorials"
+            },
+            "CARDS": {
+                "STARTED": {
+                    "TITLE": "Getting Started",
+                    "DESC": "Learn the basics of our portal and how to manage your account."
+                },
+                "POLICY": {
+                    "TITLE": "Policy Management",
+                    "DESC": "Find out how to view, download, and renew your insurance policies."
+                },
+                "CLAIMS": {
+                    "TITLE": "Claims Process",
+                    "DESC": "A step-by-step guide on how to report and track your insurance claims."
+                },
+                "PAYMENTS": {
+                    "TITLE": "Payments & Security",
+                    "DESC": "How to securely make payments and manage your account security settings."
+                }
+            }
+        }
+    },
+    "CUSTOMER": {
+        "DASHBOARD": {
+            "WELCOME": "Welcome back, {{name}}!",
+            "SUBTITLE": "Here's what's happening with your insurance policies today.",
+            "STATS": {
+                "ACTIVE_POLICIES": "Active Policies",
+                "PENDING_CLAIMS": "Pending Claims",
+                "TOTAL_PREMIUM": "Total Premium",
+                "UPCOMING_PAYMENTS": "Upcoming Payments"
+            },
+            "QUICK_ACTIONS": {
+                "TITLE": "Quick Actions",
+                "FILE_CLAIM": "File a Claim",
+                "FILE_CLAIM_DESC": "Submit new claim",
+                "VIEW_POLICIES": "View Policies",
+                "VIEW_POLICIES_DESC": "Manage your coverage",
+                "MAKE_PAYMENT": "Make Payment",
+                "MAKE_PAYMENT_DESC": "Pay your premium"
+            },
+            "RECENT_ACTIVITY": "Recent Activity"
+        },
+        "POLICIES": {
+            "TITLE": "My Policies",
+            "SUBTITLE": "View and manage your insurance policies",
+            "NEW_POLICY": "New Policy",
+            "COLUMNS": {
+                "POLICY_NUMBER": "Policy Number",
+                "PRODUCT": "Product",
+                "STATUS": "Status",
+                "START_DATE": "Start Date",
+                "END_DATE": "End Date",
+                "PREMIUM": "Premium",
+                "ACTIONS": "Actions"
+            },
+            "ERROR_LOADING": "Error loading policies"
+        },
+        "CLAIMS": {
+            "TITLE": "My Claims",
+            "SUBTITLE": "Track and manage your insurance claims",
+            "NEW_CLAIM": "New Claim",
+            "COLUMNS": {
+                "CLAIM_NUMBER": "Claim Number",
+                "POLICY": "Policy",
+                "TYPE": "Type",
+                "STATUS": "Status",
+                "DATE": "Date",
+                "AMOUNT": "Amount",
+                "ACTIONS": "Actions"
+            },
+            "ERROR_LOADING": "Error loading claims"
+        },
+        "QUOTATIONS": {
+            "TITLE": "My Quotations",
+            "SUBTITLE": "View your insurance quotes and requests",
+            "NEW_QUOTE": "New Quote",
+            "COLUMNS": {
+                "QUOTE_NUMBER": "Quote Number",
+                "PRODUCT": "Product",
+                "STATUS": "Status",
+                "DATE": "Date",
+                "PREMIUM": "Premium",
+                "VALID_UNTIL": "Valid Until",
+                "ACTIONS": "Actions"
+            },
+            "ERROR_LOADING": "Error loading quotations"
+        },
+        "PAYMENTS": {
+            "TITLE": "My Payments",
+            "SUBTITLE": "View your payment history and upcoming dues",
+            "MAKE_PAYMENT": "Make Payment",
+            "COLUMNS": {
+                "PAYMENT_ID": "Payment ID",
+                "POLICY": "Policy",
+                "AMOUNT": "Amount",
+                "STATUS": "Status",
+                "DATE": "Date",
+                "METHOD": "Method",
+                "ACTIONS": "Actions"
+            },
+            "ERROR_LOADING": "Error loading payments"
+        }
+    },
+    "AUTH": {
+        "LOGIN": {
+            "TITLE": "Welcome back",
+            "SUBTITLE": "Don't have an account?",
+            "CREATE_ACCOUNT": "Create one now",
+            "EMAIL": "Email address",
+            "EMAIL_PLACEHOLDER": "you@example.com",
+            "PASSWORD": "Password",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "REMEMBER_ME": "Remember me",
+            "FORGOT_PASSWORD": "Forgot your password?",
+            "SIGN_IN": "Sign in",
+            "SIGNING_IN": "Signing in...",
+            "OR_SIGN_IN_WITH": "Or sign in with",
+            "CONTINUE_WITH_GOOGLE": "Continue with Google",
+            "DEMO_ACCOUNTS": "Demo Accounts",
+            "CUSTOMER": "Customer",
+            "BROKER": "Broker",
+            "SURVEYOR": "Surveyor (Odoo)",
+            "BRANDING": {
+                "TAGLINE": "Protecting What Matters Most Since 1980",
+                "DESCRIPTION": "Join thousands of satisfied customers who trust Orient Insurance for their protection needs. Experience seamless claims and comprehensive coverage.",
+                "COPYRIGHT": "© 2025 Orient Insurance",
+                "PRIVACY": "Privacy Policy",
+                "TERMS": "Terms of Service"
+            }
+        },
+        "REGISTER": {
+            "TITLE": "Create your account",
+            "SUBTITLE": "Already have an account?",
+            "SIGN_IN": "Sign in",
+            "FULL_NAME": "Full Name",
+            "FULL_NAME_PLACEHOLDER": "John Doe",
+            "EMAIL": "Email address",
+            "EMAIL_PLACEHOLDER": "you@example.com",
+            "PHONE": "Phone Number",
+            "PHONE_PLACEHOLDER": "+20 123 456 7890",
+            "PASSWORD": "Password",
+            "PASSWORD_PLACEHOLDER": "••••••••",
+            "CONFIRM_PASSWORD": "Confirm Password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+            "TERMS_AGREE": "I agree to the",
+            "TERMS_LINK": "Terms and Conditions",
+            "AND": "and",
+            "PRIVACY_LINK": "Privacy Policy",
+            "CREATE_ACCOUNT": "Create Account",
+            "CREATING_ACCOUNT": "Creating account...",
+            "OR_REGISTER_WITH": "Or register with",
+            "CONTINUE_WITH_GOOGLE": "Continue with Google"
+        },
+        "FORGOT_PASSWORD": {
+            "TITLE": "Reset your password",
+            "SUBTITLE": "Enter your email address and we'll send you a link to reset your password.",
+            "EMAIL": "Email address",
+            "EMAIL_PLACEHOLDER": "you@example.com",
+            "SEND_RESET_LINK": "Send Reset Link",
+            "SENDING": "Sending...",
+            "BACK_TO_LOGIN": "Back to login",
+            "SUCCESS_MESSAGE": "Password reset link sent! Check your email."
+        }
+    },
+    "HOME": {
+        "HERO": {
+            "BADGE": "Trusted by over 2 million customers",
+            "TITLE": "Secure Your Future with",
+            "TITLE_HIGHLIGHT": "Confidence",
+            "DESCRIPTION": "Experience the highest rated insurance services in Egypt. From motor to medical, we've got you covered with innovative solutions tailored to your needs.",
+            "GET_QUOTE": "Get a Quote Now",
+            "EXPLORE_SERVICES": "Explore Services",
+            "ACTIVE_POLICY": "Active Policy",
+            "COMPREHENSIVE_MOTOR": "Comprehensive Motor",
+            "ACTIVE": "ACTIVE",
+            "POLICY_HOLDER": "Policy Holder",
+            "VEHICLE": "Vehicle",
+            "RENEWAL_DATE": "Renewal Date",
+            "VIEW_DETAILS": "View Details"
+        },
+        "FEATURES": {
+            "SECTION_LABEL": "Our Expertise",
+            "TITLE": "Comprehensive Insurance Solutions",
+            "DESCRIPTION": "We offer a wide range of insurance products designed to meet the diverse needs of individuals and businesses.",
+            "LEARN_MORE": "Learn More →"
+        },
+        "PRODUCTS": {
+            "MOTOR": {
+                "NAME": "Motor Insurance",
+                "DESCRIPTION": "Comprehensive coverage for your vehicle against accidents, theft, and third-party liabilities."
+            },
+            "MEDICAL": {
+                "NAME": "Medical Insurance",
+                "DESCRIPTION": "Top-tier healthcare plans for you and your family with access to a vast network of providers."
+            },
+            "TRAVEL": {
+                "NAME": "Travel Insurance",
+                "DESCRIPTION": "Travel with peace of mind. Coverage for medical emergencies, flight cancellations, and lost luggage."
+            },
+            "PROPERTY": {
+                "NAME": "Property Insurance",
+                "DESCRIPTION": "Protect your home and assets against fire, theft, and natural disasters with our flexible plans."
+            },
+            "MARINE": {
+                "NAME": "Marine Insurance",
+                "DESCRIPTION": "Secure your cargo and vessels with our specialized marine insurance solutions."
+            },
+            "ENGINEERING": {
+                "NAME": "Engineering Insurance",
+                "DESCRIPTION": "Tailored coverage for construction projects, machinery, and contractor risks."
+            }
+        }
+    },
+    "CONTACT": {
+        "HERO": {
+            "TITLE": "Get in Touch",
+            "DESC": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
+        },
+        "INFO": {
+            "PHONE": "Phone",
+            "EMAIL": "Email",
+            "ADDRESS": "Address",
+            "BUSINESS_HOURS": "Business Hours",
+            "ADDRESS_DETAILS": {
+                "CITY": "Dubai, UAE",
+                "BUILDING": "Al Rostamani Building"
+            },
+            "HOURS_DETAILS": {
+                "WEEKDAYS": "Mon - Fri: 9:00 AM - 6:00 PM",
+                "WEEKEND": "Sat: 10:00 AM - 2:00 PM"
+            }
+        },
+        "FORM": {
+            "TITLE": "Send us a Message",
+            "NAME_LABEL": "Full Name",
+            "NAME_PLACEHOLDER": "John Doe",
+            "EMAIL_LABEL": "Email Address",
+            "EMAIL_PLACEHOLDER": "john@example.com",
+            "PHONE_LABEL": "Phone Number",
+            "PHONE_PLACEHOLDER": "+971 50 000 0000",
+            "SUBJECT_LABEL": "Subject",
+            "SUBJECT_PLACEHOLDER": "How can we help?",
+            "MESSAGE_LABEL": "Message",
+            "MESSAGE_PLACEHOLDER": "Tell us more about your inquiry...",
+            "SUBMIT": "Send Message",
+            "SENDING": "Sending...",
+            "SUCCESS": "Thank you for contacting us! We will get back to you soon."
+        },
+        "WHY_US": {
+            "TITLE": "Why Contact Us?",
+            "REASON_1": "Expert insurance advisors ready to help you find the best coverage",
+            "REASON_2": "Fast response time - we usually get back within 24 hours",
+            "REASON_3": "Personalized insurance solutions tailored to your unique needs"
+        }
+    },
+    "STATUS": {
+        "ACTIVE": "Active",
+        "INACTIVE": "Inactive",
+        "PENDING": "Pending",
+        "COMPLETED": "Completed",
+        "CANCELLED": "Cancelled",
+        "DRAFT": "Draft",
+        "ISSUED": "Issued",
+        "APPROVED": "Approved",
+        "SETTLED": "Settled",
+        "PAID": "Paid",
+        "SUBMITTED": "Submitted",
+        "PROCESSING": "Processing",
+        "INTIMATED": "Intimated",
+        "NEW": "New",
+        "SENT": "Sent",
+        "NEGOTIATION": "Negotiation",
+        "ACCEPTED": "Accepted",
+        "WON": "Won",
+        "REJECTED": "Rejected",
+        "LOST": "Lost",
+        "EXPIRED": "Expired",
+        "OUTSTANDING": "Outstanding"
+    },
+    "TYPES": {
+        "NEW": "New",
+        "ENDORSEMENT": "Endorsement",
+        "RENEWAL": "Renewal",
+        "CANCELLATION": "Cancellation",
+        "MODIFICATION": "Modification"
+    },
+    "GREETING": "Hello {{name}}, welcome back!",
+    "BROKER": {
+        "DASHBOARD": {
+            "WELCOME": "Welcome Back! 👋",
+            "SUBTITLE": "Here's what's happening with your business today.",
+            "STATS": {
+                "ACTIVE_POLICIES": "Active & Approved Policies",
+                "ACTIVE_POLICIES_TEXT": "policies active",
+                "CANCELED_POLICIES": "Canceled Policies",
+                "CANCELLATION_RATE": "cancellation rate",
+                "TOTAL_CLIENTS": "Total Clients",
+                "UNIQUE_CLIENTS": "unique clients",
+                "TOTAL_OPPORTUNITIES": "Total Opportunities",
+                "OPEN_OPPORTUNITIES": "open opportunities",
+                "CONVERSION_RATE": "Conversion Rate",
+                "OPPORTUNITIES_WON": "of opportunities won",
+                "TOTAL_PREMIUM": "Total Premium",
+                "NET_PREMIUM": "Net premium from active policies",
+                "TOTAL_COMMISSIONS": "Total Commissions",
+                "COMMISSION_EARNINGS": "Commission earnings"
+            },
+            "PERFORMANCE": {
+                "TITLE": "Performance Overview",
+                "SUBTITLE": "Top performing products",
+                "NO_DATA": "No policy data available",
+                "POLICIES": "policies",
+                "WEEK": "week",
+                "MONTH": "month",
+                "YEAR": "year"
+            },
+            "QUICK_TOOLS": {
+                "TITLE": "Quick Tools",
+                "GET_QUOTE": "Get Quote",
+                "MANAGE_CLIENTS": "Manage Clients",
+                "CREATE_CLAIM": "Create Claim"
+            }
+        },
+        "POLICIES": {
+            "TITLE": "Policy Management",
+            "SUBTITLE": "Search, filter, and manage all client policies.",
+            "ERROR_LOADING": "Failed to load policies.",
+            "COLUMNS": {
+                "CAR_IMAGE": "Car Image",
+                "POLICY_NO": "Policy No",
+                "TRANSACTION_TYPE": "Transaction Type",
+                "PRODUCT": "Product",
+                "CUSTOMER": "Customer",
+                "STATUS": "Status",
+                "APPROVE_DATE": "Approve Date",
+                "ISSUE_DATE": "Issue Date",
+                "EFFECTIVE_FROM": "Effective From",
+                "EFFECTIVE_TO": "Effective To",
+                "GROSS_PREMIUM": "Gross Premium",
+                "NET_PREMIUM": "Net Premium",
+                "CURRENCY": "Currency",
+                "PAYMENT_STATUS": "Payment Status",
+                "ISSUING_BRANCH": "Issuing Branch",
+                "ACTIONS": "Actions"
+            }
+        },
+        "QUOTATIONS": {
+            "TITLE": "Quotation Management",
+            "SUBTITLE": "Search, filter, and manage all quotation requests.",
+            "CREATE_QUOTE": "Create Quote",
+            "ERROR_LOADING": "Failed to load quotations",
+            "COLUMNS": {
+                "QUOTE_NUMBER": "Quote Number",
+                "TITLE": "Title",
+                "DATE": "Date",
+                "CUSTOMER_NAME": "Customer Name",
+                "STAGE": "Stage",
+                "TYPE": "Type",
+                "ACTIONS": "Actions"
+            }
+        },
+        "CLIENTS": {
+            "TITLE": "Client Management",
+            "SUBTITLE": "Search, filter, and manage all client information.",
+            "ADD_CLIENT": "Add New Client",
+            "ERROR_LOADING": "Failed to load clients.",
+            "COLUMNS": {
+                "CLIENT_ID": "Client ID",
+                "FULL_NAME": "Full Name",
+                "EMAIL": "Email",
+                "PHONE": "Phone",
+                "STATUS": "Status",
+                "POLICIES": "Policies",
+                "JOIN_DATE": "Join Date",
+                "ACTIONS": "Actions"
+            }
+        },
+        "PAYMENTS": {
+            "TITLE": "Payment Management",
+            "SUBTITLE": "Search, filter, and manage all payment transactions.",
+            "DOWNLOAD_REPORT": "Download Report",
+            "COLUMNS": {
+                "PAYMENT_ID": "Payment ID",
+                "POLICY_NO": "Policy No",
+                "CLIENT_NAME": "Client Name",
+                "AMOUNT": "Amount",
+                "STATUS": "Status",
+                "DATE": "Date",
+                "METHOD": "Method",
+                "ACTIONS": "Actions"
+            }
+        },
+        "COMMISSIONS": {
+            "TITLE": "Commission Management",
+            "SUBTITLE": "Search, filter, and manage all commission records.",
+            "CARDS": {
+                "TOTAL": "Total Commissions",
+                "PAID": "Paid",
+                "PENDING": "Pending"
+            },
+            "COLUMNS": {
+                "COMMISSION_ID": "Commission ID",
+                "POLICY_NO": "Policy No",
+                "CLIENT_NAME": "Client Name",
+                "PRODUCT": "Product",
+                "RATE": "Rate %",
+                "COMMISSION": "Commission",
+                "STATUS": "Status",
+                "DATE": "Date",
+                "ACTIONS": "Actions"
+            }
+        },
+        "CLAIMS": {
+            "TITLE": "Claims Management",
+            "SUBTITLE": "Search, filter, and manage all insurance claims.",
+            "INTIMATE_CLAIM": "Intimate Claim",
+            "ERROR_LOADING": "Failed to load claims.",
+            "COLUMNS": {
+                "CLAIM_NO": "Claim No",
+                "POLICY_NO": "Policy No",
+                "CLIENT_NAME": "Client Name",
+                "VEHICLE_PLATE": "Vehicle Plate",
+                "VEHICLE_MAKER": "Vehicle Maker",
+                "LOB": "LOB",
+                "PRODUCT": "Product",
+                "STATUS": "Status",
+                "AMOUNT": "Claim Amount",
+                "INTIMATION_DATE": "Intimation Date",
+                "ACTIONS": "Actions"
+            }
+        },
+        "ENDORSEMENT": {
+            "TITLE": "Request Endorsement",
+            "BACK_TO_POLICY": "Back to Policy Details",
+            "POLICY_NUM": "Policy #",
+            "LOADING_OPTIONS": "Loading options...",
+            "SELECT_TYPE": {
+                "TITLE": "Select Endorsement Type",
+                "LABEL": "Endorsement Type",
+                "SUBTITLE": "Choose the type of endorsement",
+                "PLACEHOLDER": "Select Type"
+            },
+            "SELECT_REASON": {
+                "TITLE": "Select Endorsement Reason",
+                "LABEL": "Endorsement Reason",
+                "SUBTITLE": "Choose the reason for endorsement",
+                "PLACEHOLDER": "Select Reason"
+            },
+            "EFFECTIVE_DATE": {
+                "LABEL": "Effective From"
+            },
+            "REMARKS": {
+                "LABEL": "Additional Details",
+                "OPTIONAL": "(Optional)",
+                "PLACEHOLDER": "Please provide any additional context..."
+            },
+            "SUBMIT": "Submit Request",
+            "SUBMITTING": "Submitting...",
+            "SUCCESS_MSG": "Endorsement Request Submitted Successfully!",
+            "ERROR": {
+                "POLICY_MISSING": "Policy ID is missing",
+                "LOAD_FAILED": "Failed to load policy or endorsement options",
+                "REQUIRED_FIELDS": "Please fill in all required fields",
+                "CREATION_FAILED": "An error occurred during endorsement creation",
+                "SUBMISSION_FAILED": "Submission failed. Please try again."
+            }
+        }
+    },
+    "PRODUCTS": {
+        "MOTOR": {
+            "TITLE": "Motor Insurance",
+            "SUBTITLE": "Comprehensive protection for your vehicle",
+            "FEATURES": {
+                "0": "Comprehensive coverage for your vehicle",
+                "1": "Third-party liability protection",
+                "2": "Personal accident cover",
+                "3": "Roadside assistance 24/7",
+                "4": "Replacement vehicle during repairs",
+                "5": "Coverage for natural disasters"
+            },
+            "COVERAGE_OPTIONS": {
+                "TITLE": "Coverage Options",
+                "COMPREHENSIVE": {
+                    "TITLE": "Comprehensive",
+                    "DESC": "Full coverage including damage, theft, and third-party liability",
+                    "PRICE": "From $800/year"
+                },
+                "THIRD_PARTY_FIRE": {
+                    "TITLE": "Third Party Fire & Theft",
+                    "DESC": "Third-party coverage plus fire and theft protection",
+                    "PRICE": "From $500/year",
+                    "POPULAR": "Most Popular"
+                },
+                "THIRD_PARTY": {
+                    "TITLE": "Third Party",
+                    "DESC": "Basic coverage for damage to other vehicles and property",
+                    "PRICE": "From $300/year"
+                }
+            }
+        },
+        "MEDICAL": {
+            "TITLE": "Medical Insurance",
+            "SUBTITLE": "Complete healthcare protection for you and your family",
+            "FEATURES": {
+                "0": "Comprehensive health coverage",
+                "1": "Hospitalization expenses",
+                "2": "Outpatient consultations",
+                "3": "Prescription medications",
+                "4": "Emergency medical services",
+                "5": "Dental and vision care"
+            }
+        },
+        "ENGINEERING": {
+            "TITLE": "Engineering Insurance",
+            "SUBTITLE": "Specialized protection for construction and engineering projects",
+            "FEATURES": {
+                "0": "Construction all risk coverage",
+                "1": "Machinery breakdown protection",
+                "2": "Contractor equipment insurance",
+                "3": "Professional indemnity",
+                "4": "Project delay coverage",
+                "5": "Third-party liability"
+            }
+        },
+        "MARINE": {
+            "TITLE": "Marine Insurance",
+            "SUBTITLE": "Secure your cargo and vessels against maritime risks",
+            "FEATURES": {
+                "0": "Cargo insurance coverage",
+                "1": "Hull and machinery protection",
+                "2": "Liability coverage",
+                "3": "Port risk coverage",
+                "4": "Piracy and theft protection",
+                "5": "Weather damage coverage"
+            }
+        },
+        "PROPERTY": {
+            "TITLE": "Property Insurance",
+            "SUBTITLE": "Protect your home and business assets",
+            "FEATURES": {
+                "0": "Building structure coverage",
+                "1": "Contents and belongings",
+                "2": "Fire and natural disaster protection",
+                "3": "Theft and vandalism coverage",
+                "4": "Liability protection",
+                "5": "Temporary accommodation"
+            }
+        },
+        "TRAVEL": {
+            "TITLE": "Travel Insurance",
+            "SUBTITLE": "Travel with peace of mind worldwide",
+            "FEATURES": {
+                "0": "Trip cancellation coverage",
+                "1": "Medical emergencies abroad",
+                "2": "Lost or delayed baggage",
+                "3": "Flight delays and cancellations",
+                "4": "Emergency evacuation",
+                "5": "24/7 travel assistance"
+            }
+        },
+        "COMMON": {
+            "GET_QUOTE": "Get a Quote",
+            "GET_STARTED": "Get Started",
+            "COVERAGE_BENEFITS": "Coverage Benefits",
+            "WHATS_COVERED": "What's Covered",
+            "READY_TO_PROTECT": "Ready to Get Protected?",
+            "GET_PERSONALIZED_QUOTE": "Get a personalized quote in minutes"
+        }
+    }
+}

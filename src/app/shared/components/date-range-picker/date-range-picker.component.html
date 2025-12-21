@@ -1,0 +1,97 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-50 flex items-center justify-center" (click)="onBackdropClick($event)">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/20"></div>
+
+    <!-- Calendar Popup -->
+    <!-- Calendar Popup -->
+    <div class="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 w-80" (click)="$event.stopPropagation()">
+        <!-- Close Button -->
+        <button (click)="onClose()"
+            class="absolute top-2 right-2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Month Navigation -->
+        <div class="flex items-center justify-between mb-4 mt-2" *ngIf="view === 'calendar'">
+            <button (click)="previousMonth()"
+                class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+                <i data-lucide="chevron-left" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+            </button>
+
+            <button (click)="toggleView()"
+                class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ getMonthYearLabel() }}</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+            </button>
+
+            <button (click)="nextMonth()"
+                class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+                <i data-lucide="chevron-right" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- Year Navigation Header (for Year View) -->
+        <div class="flex items-center justify-center mb-4 mt-2" *ngIf="view === 'year'">
+            <button (click)="toggleView()"
+                class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 py-1 rounded transition-colors">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">Select Year</span>
+                <i data-lucide="chevron-up" class="w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+            </button>
+        </div>
+
+        <!-- Month Label -->
+        <div class="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 pl-1" *ngIf="view === 'calendar'">
+            {{ currentMonth | date:'MMM' | uppercase }}
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid" *ngIf="view === 'calendar'">
+            <!-- Week Day Headers -->
+            <div class="grid grid-cols-7 gap-1 mb-2">
+                <div *ngFor="let day of weekDays"
+                    class="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1">
+                    {{ day }}
+                </div>
+            </div>
+
+            <!-- Calendar Days -->
+            <div class="grid grid-cols-7 gap-1">
+                <ng-container *ngFor="let week of calendarDays">
+                    <div *ngFor="let date of week" (click)="selectDate(date)" (mouseenter)="onMouseEnter(date)"
+                        (mouseleave)="onMouseLeave()" [class]="getDayClasses(date)" class="day-cell">
+                        <span *ngIf="date">{{ date.getDate() }}</span>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- Year Grid -->
+        <div class="year-grid h-64 overflow-y-auto" *ngIf="view === 'year'">
+            <div class="grid grid-cols-3 gap-2 p-1">
+                <button *ngFor="let year of years" (click)="selectYear(year)"
+                    [class.bg-primary]="year === currentMonth.getFullYear()"
+                    [class.text-white]="year === currentMonth.getFullYear()"
+                    class="px-2 py-3 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    {{ year }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button (click)="onClose()"
+                class="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+                Cancel
+            </button>
+            <button (click)="onClear()"
+                class="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+                Clear
+            </button>
+            <button (click)="onApply()"
+                [disabled]="mode === 'single' ? !selectedDate : (!selectedRange.from || !selectedRange.to)"
+                class="px-3 py-1.5 text-sm bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Apply
+            </button>
+        </div>
+    </div>
+</div>

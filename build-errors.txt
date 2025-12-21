@@ -1,0 +1,3894 @@
+﻿node.exe : - 
+Generating browser 
+application bundles 
+(phase: setup)...
+At C:\Users\lenovo\Ap
+pData\Roaming\npm\ng.
+ps1:24 char:5
++     & "node$exe"  "
+$basedir/node_modules
+/@angular/cli/bin/ng.
+js" $arg ...
++     ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (- Gener   
+ ating br...hase:    
+ setup)...:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Γ£ö Browser 
+application bundle 
+generation complete.
+Γ£ö Browser 
+application bundle 
+generation complete.
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:25:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+25                   
+      
+<app-selection-modal 
+label="Make" 
+[required]="true" 
+[options]="makers"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+26                   
+          [value]="ve
+hicleForm.make" 
+title="Select 
+Vehicle Make" 
+placeholder="Choose 
+vehicle make"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+27                   
+          (valueChang
+e)="vehicleForm.make 
+= $event; 
+onMakeChange()">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:25:59 - 
+error NG8002: Can't 
+bind to 'required' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+25                   
+      
+<app-selection-modal 
+label="Make" 
+[required]="true" 
+[options]="makers"
+                     
+                     
+                   
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:25:77 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+25                   
+      
+<app-selection-modal 
+label="Make" 
+[required]="true" 
+[options]="makers"
+                     
+                     
+                     
+                
+~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:26:29 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+26                   
+          [value]="ve
+hicleForm.make" 
+title="Select 
+Vehicle Make" 
+placeholder="Choose 
+vehicle make"
+                     
+          ~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:27:44 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+27                   
+          (valueChang
+e)="vehicleForm.make 
+= $event; 
+onMakeChange()">
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:31:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+31                   
+      
+<app-selection-modal 
+label="Model" 
+[required]="true" [di
+sabled]="!vehicleForm
+.make"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+32                   
+          
+[options]="models" [v
+alue]="vehicleForm.mo
+del" title="Select 
+Vehicle Model"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~
+33                   
+          
+placeholder="Choose 
+model" (valueChange)=
+"vehicleForm.model = 
+$event; 
+onModelChange()">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:31:60 - 
+error NG8002: Can't 
+bind to 'required' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+31                   
+      
+<app-selection-modal 
+label="Model" 
+[required]="true" [di
+sabled]="!vehicleForm
+.make"
+                     
+                     
+                    
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:31:78 - 
+error NG8002: Can't 
+bind to 'disabled' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'disabled' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+31                   
+      
+<app-selection-modal 
+label="Model" 
+[required]="true" [di
+sabled]="!vehicleForm
+.make"
+                     
+                     
+                     
+                 ~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:32:29 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+32                   
+          
+[options]="models" [v
+alue]="vehicleForm.mo
+del" title="Select 
+Vehicle Model"
+                     
+          
+~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:32:48 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+32                   
+          
+[options]="models" [v
+alue]="vehicleForm.mo
+del" title="Select 
+Vehicle Model"
+                     
+                     
+        ~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:33:71 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+33                   
+          
+placeholder="Choose 
+model" (valueChange)=
+"vehicleForm.model = 
+$event; 
+onModelChange()">
+                     
+                     
+                     
+          ~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:37:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+37                   
+      
+<app-selection-modal 
+label="Year" 
+[required]="true" [di
+sabled]="!vehicleForm
+.model"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+38                   
+          
+[options]="years" [va
+lue]="vehicleForm.yea
+r" title="Select 
+Year" 
+placeholder="Choose 
+year"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+39                   
+          (valueChang
+e)="vehicleForm.year 
+= $event">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:37:59 - 
+error NG8002: Can't 
+bind to 'required' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+37                   
+      
+<app-selection-modal 
+label="Year" 
+[required]="true" [di
+sabled]="!vehicleForm
+.model"
+                     
+                     
+                   
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:37:77 - 
+error NG8002: Can't 
+bind to 'disabled' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'disabled' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+37                   
+      
+<app-selection-modal 
+label="Year" 
+[required]="true" [di
+sabled]="!vehicleForm
+.model"
+                     
+                     
+                     
+                ~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:38:29 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+38                   
+          
+[options]="years" [va
+lue]="vehicleForm.yea
+r" title="Select 
+Year" 
+placeholder="Choose 
+year"
+                     
+          
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:38:47 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+38                   
+          
+[options]="years" [va
+lue]="vehicleForm.yea
+r" title="Select 
+Year" 
+placeholder="Choose 
+year"
+                     
+                     
+       ~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:39:44 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+39                   
+          (valueChang
+e)="vehicleForm.year 
+= $event">
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:43:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+43                   
+      
+<app-selection-modal 
+label="Category" [dis
+abled]="!vehicleForm.
+model" [options]="cat
+egories"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+44                   
+          [value]="ve
+hicleForm.category" 
+title="Select 
+Category" 
+placeholder="Choose 
+category"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+45                   
+          (valueChang
+e)="vehicleForm.categ
+ory = $event">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:43:63 - 
+error NG8002: Can't 
+bind to 'disabled' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'disabled' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+43                   
+      
+<app-selection-modal 
+label="Category" [dis
+abled]="!vehicleForm.
+model" [options]="cat
+egories"
+                     
+                     
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:43:95 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+43                   
+      
+<app-selection-modal 
+label="Category" [dis
+abled]="!vehicleForm.
+model" [options]="cat
+egories"
+                     
+                     
+                     
+                     
+             ~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:44:29 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+44                   
+          [value]="ve
+hicleForm.category" 
+title="Select 
+Category" 
+placeholder="Choose 
+category"
+                     
+          ~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:45:44 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+45                   
+          (valueChang
+e)="vehicleForm.categ
+ory = $event">
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:88:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+88                   
+      
+<app-selection-modal 
+label="Body Type" 
+[required]="true" 
+[options]="bodyTypes"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+89                   
+          [value]="ve
+hicleForm.bodyType" 
+title="Select Body 
+Type" 
+placeholder="Choose 
+body type"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+90                   
+          (valueChang
+e)="vehicleForm.bodyT
+ype = $event">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:88:64 - 
+error NG8002: Can't 
+bind to 'required' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+88                   
+      
+<app-selection-modal 
+label="Body Type" 
+[required]="true" 
+[options]="bodyTypes"
+                     
+                     
+                     
+   ~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:88:82 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+88                   
+      
+<app-selection-modal 
+label="Body Type" 
+[required]="true" 
+[options]="bodyTypes"
+                     
+                     
+                     
+                     
+~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:89:29 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+89                   
+          [value]="ve
+hicleForm.bodyType" 
+title="Select Body 
+Type" 
+placeholder="Choose 
+body type"
+                     
+          ~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:90:44 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+90                   
+          (valueChang
+e)="vehicleForm.bodyT
+ype = $event">
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:94:25 - 
+error NG8001: 'app-se
+lection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+94                   
+      
+<app-selection-modal 
+label="Color" 
+[required]="true" 
+[options]="colors"
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+95                   
+          [value]="ve
+hicleForm.color" 
+title="Select Color" 
+placeholder="Choose 
+color"
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~
+96                   
+          (valueChang
+e)="vehicleForm.color
+ = $event">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:94:60 - 
+error NG8002: Can't 
+bind to 'required' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+94                   
+      
+<app-selection-modal 
+label="Color" 
+[required]="true" 
+[options]="colors"
+                     
+                     
+                    
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:94:78 - 
+error NG8002: Can't 
+bind to 'options' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+94                   
+      
+<app-selection-modal 
+label="Color" 
+[required]="true" 
+[options]="colors"
+                     
+                     
+                     
+                 
+~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:95:29 - 
+error NG8002: Can't 
+bind to 'value' 
+since it isn't a 
+known property of 'ap
+p-selection-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+95                   
+          [value]="ve
+hicleForm.color" 
+title="Select Color" 
+placeholder="Choose 
+color"
+                     
+          ~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:96:44 - 
+error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+96                   
+          (valueChang
+e)="vehicleForm.color
+ = $event">
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:100:25 
+- error NG8001: 'app-
+selection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+100                  
+       
+<app-selection-modal 
+label="Fuel Type" [op
+tions]="fuelTypes" [v
+alue]="vehicleForm.fu
+elType"
+                     
+       ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+101                  
+           
+title="Select Fuel 
+Type" 
+placeholder="Choose 
+fuel type"
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~
+102                  
+           (valueChan
+ge)="vehicleForm.fuel
+Type = $event">
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:100:64 
+- error NG8002: 
+Can't bind to 
+'options' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+100                  
+       
+<app-selection-modal 
+label="Fuel Type" [op
+tions]="fuelTypes" [v
+alue]="vehicleForm.fu
+elType"
+                     
+                     
+                     
+    
+~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:100:86 
+- error NG8002: 
+Can't bind to 
+'value' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+100                  
+       
+<app-selection-modal 
+label="Fuel Type" [op
+tions]="fuelTypes" [v
+alue]="vehicleForm.fu
+elType"
+                     
+                     
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:102:44 
+- error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+102                  
+           (valueChan
+ge)="vehicleForm.fuel
+Type = $event">
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:106:25 
+- error NG8001: 'app-
+selection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+106                  
+       
+<app-selection-modal 
+label="Vehicle 
+Usage" 
+[required]="true" 
+[options]="usages"
+                     
+       ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~
+107                  
+           [value]="v
+ehicleForm.usage" 
+title="Select 
+Vehicle Usage" 
+placeholder="Choose 
+usage type"
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+108                  
+           (valueChan
+ge)="vehicleForm.usag
+e = $event">
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:106:68 
+- error NG8002: 
+Can't bind to 
+'required' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+106                  
+       
+<app-selection-modal 
+label="Vehicle 
+Usage" 
+[required]="true" 
+[options]="usages"
+                     
+                     
+                     
+        
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:106:86 
+- error NG8002: 
+Can't bind to 
+'options' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+106                  
+       
+<app-selection-modal 
+label="Vehicle 
+Usage" 
+[required]="true" 
+[options]="usages"
+                     
+                     
+                     
+                     
+     
+~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:107:29 
+- error NG8002: 
+Can't bind to 
+'value' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+107                  
+           [value]="v
+ehicleForm.usage" 
+title="Select 
+Vehicle Usage" 
+placeholder="Choose 
+usage type"
+                     
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:108:44 
+- error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+108                  
+           (valueChan
+ge)="vehicleForm.usag
+e = $event">
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:112:25 
+- error NG8001: 'app-
+selection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+112                  
+       
+<app-selection-modal 
+label="Engine CC" 
+[required]="true" 
+[options]="ccs"
+                     
+       ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+113                  
+           [value]="v
+ehicleForm.cc" 
+title="Select Engine 
+CC" 
+placeholder="Choose 
+engine CC"
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~
+114                  
+           (valueChan
+ge)="vehicleForm.cc 
+= $event">
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:112:64 
+- error NG8002: 
+Can't bind to 
+'required' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'required' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+112                  
+       
+<app-selection-modal 
+label="Engine CC" 
+[required]="true" 
+[options]="ccs"
+                     
+                     
+                     
+    ~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:112:82 
+- error NG8002: 
+Can't bind to 
+'options' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+112                  
+       
+<app-selection-modal 
+label="Engine CC" 
+[required]="true" 
+[options]="ccs"
+                     
+                     
+                     
+                     
+ ~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:113:29 
+- error NG8002: 
+Can't bind to 
+'value' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+113                  
+           [value]="v
+ehicleForm.cc" 
+title="Select Engine 
+CC" 
+placeholder="Choose 
+engine CC"
+                     
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:114:44 
+- error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+114                  
+           (valueChan
+ge)="vehicleForm.cc 
+= $event">
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:143:25 
+- error NG8001: 'app-
+selection-modal' is 
+not a known element:
+1. If 'app-selection-
+modal' is an Angular 
+component, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+
+143                  
+       
+<app-selection-modal 
+label="Vehicle 
+Condition"
+                     
+       ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+144                  
+           
+[options]="[{code: 
+'new', name: 'New'}, 
+{code: 'used', name: 
+'Used'}]"
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+145                  
+           [value]="v
+ehicleForm.vehicle_st
+ate" title="Select 
+Vehicle Condition"
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+146                  
+           
+placeholder="Select 
+condition" (valueChan
+ge)="vehicleForm.vehi
+cle_state = $event">
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:144:29 
+- error NG8002: 
+Can't bind to 
+'options' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'options' input, 
+then verify that it 
+is included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+144                  
+           
+[options]="[{code: 
+'new', name: 'New'}, 
+{code: 'used', name: 
+'Used'}]"
+                     
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:145:29 
+- error NG8002: 
+Can't bind to 
+'value' since it 
+isn't a known 
+property of 'app-sele
+ction-modal'.
+1. If 'app-selection-
+modal' is an Angular 
+component and it has 
+'value' input, then 
+verify that it is 
+included in the 
+'@Component.imports' 
+of this component.
+2. If 'app-selection-
+modal' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@Component.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@Component.schemas' 
+of this component.
+
+145                  
+           [value]="v
+ehicleForm.vehicle_st
+ate" title="Select 
+Vehicle Condition"
+                     
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.html:146:75 
+- error TS2322: Type 
+'Event' is not 
+assignable to type 
+'string'.
+
+146                  
+           
+placeholder="Select 
+condition" (valueChan
+ge)="vehicleForm.vehi
+cle_state = $event">
+                     
+                     
+                     
+               ~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~
+
+  src/app/customer/pa
+ges/quote-flow/custom
+er-quote-flow.compone
+nt.ts:26:18
+    26     
+templateUrl: './custo
+mer-quote-flow.compon
+ent.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component CustomerQuo
+teFlowComponent.
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:266:40 - 
+error TS2339: 
+Property 
+'national_id' does 
+not exist on type 
+'User'.
+
+266                  
+   national_id: 
+user?.national_id,
+                     
+                     
+ ~~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:267:51 - 
+error TS2339: 
+Property 
+'date_of_birth' does 
+not exist on type 
+'User'.
+
+267                  
+   customer_date_of_b
+irth: 
+user?.date_of_birth 
+|| '',
+                     
+                     
+            
+~~~~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:268:35 - 
+error TS2339: 
+Property 'gender' 
+does not exist on 
+type 'User'.
+
+268                  
+   gender: 
+user?.gender || 
+'male',
+                     
+                 
+~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:269:48 - 
+error TS2339: 
+Property 
+'is_foreign' does 
+not exist on type 
+'User'.
+
+269                  
+   
+is_foreign_customer: 
+user?.is_foreign || 
+false,
+                     
+                     
+         ~~~~~~~~~~
+
+
+Error: src/app/custom
+er/pages/quote-flow/c
+ustomer-quote-flow.co
+mponent.ts:270:40 - 
+error TS2339: 
+Property 
+'passport_id' does 
+not exist on type 
+'User'.
+
+270                  
+   passport_id: 
+user?.passport_id || 
+'',
+                     
+                     
+ ~~~~~~~~~~~
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:48:
+45 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'select'.
+
+48                   
+                  
+<select [(ngModel)]="
+columnFilters[col.key
+]"
+                     
+                     
+     ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:49:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+49                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:63:
+41 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'input'.
+
+63                   
+                     
+ [(ngModel)]="columnF
+ilters[col.key]"
+                     
+                     
+ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/dynamic-t
+able-with-filters/dyn
+amic-table-with-filte
+rs.component.html:64:
+82 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+64                   
+                     
+ (ngModelChange)="onF
+ilterChange(col.key, 
+$event)"
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/dynamic-table-
+with-filters/dynamic-
+table-with-filters.co
+mponent.ts:17:18
+    17     
+templateUrl: './dynam
+ic-table-with-filters
+.component.html',
+                     
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    Error occurs in 
+the template of 
+component DynamicTabl
+eWithFiltersComponent
+.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:9:9 
+- error NG8002: 
+Can't bind to 
+'ngClass' since it 
+isn't a known 
+property of 'button'.
+
+  9         
+[ngClass]="{
+            
+~~~~~~~~~~~~
+ 10         
+'bg-gray-50 
+dark:bg-gray-800 
+text-gray-400 
+border-gray-200 
+dark:border-gray-700 
+cursor-not-allowed': 
+disabled,
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+... 
+ 12         
+'focus:ring-2 
+focus:ring-primary fo
+cus:border-primary': 
+!disabled
+    ~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
+ 13       }">
+    ~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:20:1
+3 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+20             
+<i-lucide 
+name="chevron-down"
+               ~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~
+21                 
+class="h-4 w-4 
+text-gray-400 group-h
+over:text-blue-500 tr
+ansition-colors"></i-
+lucide>
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:45:2
+1 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+45                   
+  <i-lucide name="x" 
+class="h-5 
+w-5"></i-lucide>
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:53:2
+5 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+53                   
+      <i-lucide 
+name="search" 
+class="h-4 w-4 text-g
+ray-400"></i-lucide>
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:55:5
+3 - error NG8002: 
+Can't bind to 
+'ngModel' since it 
+isn't a known 
+property of 'input'.
+
+55                   
+  <input 
+#searchInput 
+type="text" [ngModel]
+="searchQuery" (ngMod
+elChange)="onSearch($
+event)"
+                     
+                     
+             ~~~~~~~~
+~~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:55:1
+03 - error TS2345: 
+Argument of type 
+'Event' is not 
+assignable to 
+parameter of type 
+'string'.
+
+55                   
+  <input 
+#searchInput 
+type="text" [ngModel]
+="searchQuery" (ngMod
+elChange)="onSearch($
+event)"
+                     
+                     
+                     
+                     
+                     
+~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:70:2
+1 - error NG8002: 
+Can't bind to 
+'ngClass' since it 
+isn't a known 
+property of 'button'.
+
+70                   
+  [ngClass]="{
+                     
+  ~~~~~~~~~~~~
+71               
+'bg-blue-50 
+dark:bg-blue-900/20 
+text-blue-700 
+dark:text-blue-300 
+font-medium': 
+option.code === 
+value,
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+72               
+'text-gray-700 
+dark:text-gray-300 
+hover:bg-gray-50 dark
+:hover:bg-gray-700': 
+option.code !== value
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+73             }">
+   ~~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/shared
+/components/selection
+-modal/selection-moda
+l.component.html:76:2
+1 - error NG8001: 
+'i-lucide' is not a 
+known element:
+1. If 'i-lucide' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 'i-lucide' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+76                   
+  <i-lucide 
+*ngIf="option.code 
+=== value" 
+name="check"
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+77                   
+      class="h-4 w-4 
+text-blue-600 
+dark:text-blue-400">
+   ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+
+  src/app/shared/comp
+onents/selection-moda
+l/selection-modal.com
+ponent.ts:5:18
+    5     
+templateUrl: './selec
+tion-modal.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SelectionMo
+dalComponent.
+
+
+Error: src/app/survey
+or/pages/issuance/iss
+uance-survey.componen
+t.html:1:1 - error 
+NG8001: 'app-dashboar
+d-layout' is not a 
+known element:
+1. If 'app-dashboard-
+layout' is an 
+Angular component, 
+then verify that it 
+is part of this 
+module.
+2. If 'app-dashboard-
+layout' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+1 <app-dashboard-layo
+ut>
+  ~~~~~~~~~~~~~~~~~~~
+~~~
+
+  src/app/surveyor/pa
+ges/issuance/issuance
+-survey.component.ts:
+9:18
+    9     
+templateUrl: './issua
+nce-survey.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component IssuanceSur
+veyComponent.
+
+
+Error: src/app/survey
+or/pages/issuance/iss
+uance-survey.componen
+t.html:13:9 - error 
+NG8001: 
+'app-data-table' is 
+not a known element:
+1. If 
+'app-data-table' is 
+an Angular 
+component, then 
+verify that it is 
+part of this module.
+2. If 
+'app-data-table' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+13         
+<app-data-table [conf
+ig]="tableConfig" (ro
+wClick)="onRowClick($
+event)" (exportData)=
+"onExport()">
+           ~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~
+
+  src/app/surveyor/pa
+ges/issuance/issuance
+-survey.component.ts:
+9:18
+    9     
+templateUrl: './issua
+nce-survey.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component IssuanceSur
+veyComponent.
+
+
+Error: src/app/survey
+or/pages/issuance/iss
+uance-survey.componen
+t.html:13:25 - error 
+NG8002: Can't bind 
+to 'config' since it 
+isn't a known 
+property of 
+'app-data-table'.
+1. If 
+'app-data-table' is 
+an Angular component 
+and it has 'config' 
+input, then verify 
+that it is part of 
+this module.
+2. If 
+'app-data-table' is 
+a Web Component then 
+add 'CUSTOM_ELEMENTS_
+SCHEMA' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+3. To allow any 
+property add 
+'NO_ERRORS_SCHEMA' 
+to the 
+'@NgModule.schemas' 
+of this component.
+
+13         
+<app-data-table [conf
+ig]="tableConfig" (ro
+wClick)="onRowClick($
+event)" (exportData)=
+"onExport()">
+                     
+      ~~~~~~~~~~~~~~~
+~~~~~~~
+
+  src/app/surveyor/pa
+ges/issuance/issuance
+-survey.component.ts:
+9:18
+    9     
+templateUrl: './issua
+nce-survey.component.
+html',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component IssuanceSur
+veyComponent.
+
+
+Error: src/app/survey
+or/pages/stages/surve
+y-stages.component.ht
+ml:1:1 - error 
+NG8001: 'app-dashboar
+d-layout' is not a 
+known element:
+1. If 'app-dashboard-
+layout' is an 
+Angular component, 
+then verify that it 
+is part of this 
+module.
+2. If 'app-dashboard-
+layout' is a Web 
+Component then add 'C
+USTOM_ELEMENTS_SCHEMA
+' to the 
+'@NgModule.schemas' 
+of this component to 
+suppress this 
+message.
+
+1 <app-dashboard-layo
+ut>
+  ~~~~~~~~~~~~~~~~~~~
+~~~
+
+  src/app/surveyor/pa
+ges/stages/survey-sta
+ges.component.ts:8:18
+    8     
+templateUrl: './surve
+y-stages.component.ht
+ml',
+                     
+  ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component SurveyStage
+sComponent.
+
+
+

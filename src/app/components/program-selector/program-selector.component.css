@@ -1,0 +1,36 @@
+/* Custom styles for the program selector */
+:host {
+    display: block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Toggle Switch Customization if needed beyond Tailwind */
+.toggle-checkbox:checked {
+    right: 0;
+    border-color: #68D391;
+}
+
+.toggle-checkbox:checked+.toggle-label {
+    background-color: #68D391;
+}
+
+/* Ensure smooth transitions for the grid opacity */
+.grid {
+    transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
+}

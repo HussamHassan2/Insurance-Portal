@@ -1,0 +1,53 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <!-- Professional Header -->
+        <div class="bg-green-50 px-7 py-6 border-b border-gray-200">
+            <div class="flex items-start gap-4">
+                <div class="bg-gradient-to-br from-green-500 to-green-600 p-3 rounded-lg shadow-sm flex-shrink-0">
+                    <i data-lucide="trending-up" class="w-6 h-6 text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ 'BROKER.COMMISSIONS.TITLE' | translate }}</h1>
+                    <p class="text-gray-600 text-base">{{ 'BROKER.COMMISSIONS.SUBTITLE' | translate }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <app-card [title]="'BROKER.COMMISSIONS.CARDS.TOTAL' | translate">
+                <p class="text-3xl font-bold text-primary">${{ totalCommissions.toLocaleString() }}</p>
+            </app-card>
+
+            <app-card [title]="'BROKER.COMMISSIONS.CARDS.PAID' | translate">
+                <p class="text-3xl font-bold text-green-600">${{ paidCommissions.toLocaleString() }}</p>
+            </app-card>
+
+            <app-card [title]="'BROKER.COMMISSIONS.CARDS.PENDING' | translate">
+                <p class="text-3xl font-bold text-yellow-600">${{ pendingCommissions.toLocaleString() }}</p>
+            </app-card>
+        </div>
+
+        <!-- Commissions Table -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div *ngIf="error" class="p-8 text-center text-red-500">
+                {{ error | translate }}
+            </div>
+
+            <div *ngIf="isLoading" class="p-12 flex justify-center">
+                <app-loading-spinner></app-loading-spinner>
+            </div>
+
+            <app-dynamic-table-with-filters *ngIf="!isLoading && !error" [data]="data" [columns]="columns"
+                [showExport]="true" [maxSelectOptions]="10" (filteredDataChange)="onFilteredDataChange($event)"
+                (exportData)="onExport()" (action)="handleTableAction($event)">
+            </app-dynamic-table-with-filters>
+
+            <!-- Pagination -->
+            <app-pagination *ngIf="!isLoading && !error && totalRecords > 0" [currentPage]="currentPage"
+                [pageSize]="pageSize" [totalRecords]="totalRecords" (pageChange)="onPageChange($event)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</app-dashboard-layout>

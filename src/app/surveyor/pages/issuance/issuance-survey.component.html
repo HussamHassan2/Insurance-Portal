@@ -1,0 +1,16 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <div class="mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Issuance Surveys</h1>
+                    <p class="text-gray-600 dark:text-gray-400">Manage requested inspections for new policies.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <app-data-table [config]="tableConfig" (rowClick)="onRowClick($event)" (exportData)="onExport()">
+        </app-data-table>
+    </div>
+</app-dashboard-layout>

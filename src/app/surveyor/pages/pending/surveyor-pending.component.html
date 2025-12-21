@@ -1,0 +1,101 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                    {{ currentType === 'all' ? 'Pending Surveys' : (currentType | titlecase) + ' Surveys' }}
+                </h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1">Review and complete assigned surveys</p>
+            </div>
+
+            <!-- View Toggle -->
+            <div class="flex bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+                <button (click)="toggleView('board')" [class.bg-white]="viewMode === 'board'"
+                    [class.dark:bg-gray-600]="viewMode === 'board'" [class.shadow-sm]="viewMode === 'board'"
+                    class="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                    [class.text-gray-900]="viewMode === 'board'" [class.dark:text-white]="viewMode === 'board'"
+                    [class.text-gray-500]="viewMode !== 'board'">
+                    Board
+                </button>
+                <button (click)="toggleView('table')" [class.bg-white]="viewMode === 'table'"
+                    [class.dark:bg-gray-600]="viewMode === 'table'" [class.shadow-sm]="viewMode === 'table'"
+                    class="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                    [class.text-gray-900]="viewMode === 'table'" [class.dark:text-white]="viewMode === 'table'"
+                    [class.text-gray-500]="viewMode !== 'table'">
+                    List
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="tableConfig.loading" class="flex justify-center items-center h-64">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+
+        <!-- Board View -->
+        <div *ngIf="!tableConfig.loading && viewMode === 'board'" class="overflow-x-auto pb-4">
+            <div class="flex gap-6 min-w-[1000px]">
+                <!-- Columns -->
+                <div *ngFor="let column of boardColumns" class="flex-1 min-w-[300px]">
+                    <!-- Column Header -->
+                    <div class="flex items-center justify-between mb-4 p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <span [class]="'w-3 h-3 rounded-full bg-' + column.color + '-500'"></span>
+                            <h3 class="font-semibold text-gray-900 dark:text-white">{{ column.title }}</h3>
+                        </div>
+                        <span
+                            class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded text-xs">
+                            {{ column.items.length }}
+                        </span>
+                    </div>
+
+                    <!-- Cards Container -->
+                    <div class="space-y-4">
+                        <div *ngFor="let item of column.items" (click)="onRowClick(item)"
+                            class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary/50 cursor-pointer transition-all duration-200 group">
+
+                            <div class="flex justify-between items-start mb-3">
+                                <span
+                                    class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs font-medium rounded text-gray-600 dark:text-gray-300">
+                                    {{ item.survey_number }}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ item.assigned_date | date }}
+                                </span>
+                            </div>
+
+                            <h4
+                                class="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
+                                {{ item.customer_name }}
+                            </h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ item.survey_type | titlecase }}
+                                Inspection</p>
+
+                            <div
+                                class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
+                                <div class="flex items-center gap-2">
+                                    <div [innerHTML]="getPriorityBadge(item.priority)" class="text-sm"></div>
+                                </div>
+                                <div class="text-xs font-medium text-primary">
+                                    View Details →
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Empty State for Column -->
+                        <div *ngIf="column.items.length === 0"
+                            class="text-center py-8 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">No surveys</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table View -->
+        <div *ngIf="!tableConfig.loading && viewMode === 'table'">
+            <app-data-table [config]="tableConfig" (rowClick)="onRowClick($event)" (exportData)="onExport()">
+            </app-data-table>
+        </div>
+    </div>
+</app-dashboard-layout>

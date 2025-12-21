@@ -1,0 +1,115 @@
+<div class="space-y-4">
+    <!-- Header Controls -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <h2 class="text-sm font-medium text-gray-700 dark:text-gray-300 hidden">
+                Showing {{ filteredData.length }} of {{ data.length }} results
+            </h2>
+            <button *ngIf="hasActiveFilters" (click)="clearAllFilters()"
+                class="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors">
+                <i data-lucide="x" class="w-3 h-3"></i>
+                Clear all ({{ activeFilterCount }})
+            </button>
+        </div>
+
+        <div class="flex gap-2">
+            <!-- Export button hidden globally as per requirement -->
+            <!-- <button *ngIf="showExport" (click)="onExport()"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                Export
+            </button> -->
+            <ng-content select="[customActions]"></ng-content>
+        </div>
+    </div>
+
+    <!-- Table with Column Filters -->
+    <div
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <!-- Column Headers -->
+                    <tr class="bg-gray-50 dark:bg-gray-700/50 text-gray-500 dark:text-gray-400 text-sm">
+                        <th *ngFor="let col of columns; trackBy: trackByKey" class="px-6 py-3 text-left font-medium">
+                            {{ col.label }}
+                        </th>
+                    </tr>
+
+                    <!-- Filter Row -->
+                    <tr class="bg-gray-50 dark:bg-gray-700/30 border-b border-gray-200 dark:border-gray-600">
+                        <th *ngFor="let col of columns; trackBy: trackByKey" class="px-6 py-2">
+                            <div *ngIf="col.filterable && columnFilterConfig[col.key]" class="relative min-w-[150px]">
+
+                                <!-- Select Dropdown -->
+                                <ng-container *ngIf="getFilterType(col.key) === 'select'">
+                                    <i data-lucide="filter"
+                                        class="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none z-10"></i>
+                                    <select [(ngModel)]="columnFilters[col.key]"
+                                        (ngModelChange)="onFilterChange(col.key, $event)"
+                                        class="w-full pl-8 pr-8 py-1.5 text-xs rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary appearance-none cursor-pointer transition-colors">
+                                        <option value="">All {{ col.label }}</option>
+                                        <option *ngFor="let option of getFilterOptions(col.key)" [value]="option">
+                                            {{ option }}
+                                        </option>
+                                    </select>
+                                </ng-container>
+
+                                <!-- Text Search Input -->
+                                <ng-container *ngIf="getFilterType(col.key) === 'text'">
+                                    <i data-lucide="search"
+                                        class="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"></i>
+                                    <input type="text" [placeholder]="'Search ' + col.label.toLowerCase() + '...'"
+                                        [(ngModel)]="columnFilters[col.key]"
+                                        (ngModelChange)="onFilterChange(col.key, $event)"
+                                        class="w-full pl-8 pr-2 py-1.5 text-xs rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+                                </ng-container>
+
+                                <!-- Date Range Picker Button -->
+                                <ng-container *ngIf="getFilterType(col.key) === 'date'">
+                                    <div class="relative min-w-[200px]">
+                                        <button (click)="toggleDatePicker(col.key)"
+                                            class="w-full px-3 py-1.5 text-xs rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors flex items-center justify-between gap-2">
+                                            <span class="flex items-center gap-1.5">
+                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
+                                                <span class="truncate">{{ getDateRangeLabel(col.key) }}</span>
+                                            </span>
+                                            <i *ngIf="dateRangeFilters[col.key]?.from || dateRangeFilters[col.key]?.to"
+                                                (click)="clearDateFilter(col.key); $event.stopPropagation()"
+                                                data-lucide="x"
+                                                class="w-3.5 h-3.5 text-gray-400 hover:text-red-500 flex-shrink-0"></i>
+                                        </button>
+
+                                        <!-- Calendar Picker Popup -->
+                                        <app-date-range-picker [isOpen]="showDatePicker[col.key] || false"
+                                            [selectedRange]="tempDateRange[col.key] || { from: null, to: null }"
+                                            (apply)="onDateRangeApply(col.key, $event)"
+                                            (close)="closeDatePicker(col.key)">
+                                        </app-date-range-picker>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700" (click)="onTableClick($event)">
+                    <tr *ngFor="let row of filteredData; trackBy: trackByIndex"
+                        class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <td *ngFor="let col of columns; trackBy: trackByKey" class="px-6 py-4">
+                            <span *ngIf="!col.render" class="text-gray-900 dark:text-gray-100">
+                                {{ row[col.key] }}
+                            </span>
+                            <span *ngIf="col.render" [innerHTML]="getSafeHtml(col.render(row))"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="filteredData.length === 0" class="p-12 text-center">
+            <i data-lucide="file-text" class="mx-auto h-12 w-12 text-gray-400 mb-4"></i>
+            <p class="text-gray-500 dark:text-gray-400">No results found matching your filters.</p>
+        </div>
+    </div>
+</div>

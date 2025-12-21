@@ -1,0 +1,13 @@
+<app-dashboard-layout>
+    <div class="space-y-6">
+        <!-- Header -->
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Claims Assessment</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-1">Manage claim surveys and assessments</p>
+        </div>
+
+        <!-- Claims Table -->
+        <app-data-table [config]="tableConfig" (rowClick)="onRowClick($event)" (exportData)="onExport()">
+        </app-data-table>
+    </div>
+</app-dashboard-layout>

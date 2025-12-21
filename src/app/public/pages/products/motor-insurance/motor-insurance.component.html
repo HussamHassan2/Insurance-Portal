@@ -1,0 +1,87 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ 'PRODUCTS.MOTOR.TITLE' | translate }}</h1>
+            <p class="text-xl mb-8">{{ 'PRODUCTS.MOTOR.SUBTITLE' | translate }}</p>
+            <a routerLink="/login"
+                class="inline-block bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors">
+                {{ 'PRODUCTS.COMMON.GET_QUOTE' | translate }}
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">{{ 'PRODUCTS.COMMON.WHATS_COVERED'
+            | translate }}</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let feature of features" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-start gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-6 w-6 text-primary flex-shrink-0 mt-1">
+                        <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+                    <p class="text-gray-900 dark:text-white">{{ feature | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coverage Types -->
+    <div class="bg-white dark:bg-gray-800 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">{{
+                'PRODUCTS.MOTOR.COVERAGE_OPTIONS.TITLE' | translate }}</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-8 hover:border-primary transition-colors">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.COMPREHENSIVE.TITLE' | translate }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.COMPREHENSIVE.DESC' | translate }}</p>
+                    <p class="text-3xl font-bold text-primary mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.COMPREHENSIVE.PRICE' | translate }}</p>
+                </div>
+
+                <div class="border-2 border-primary bg-primary/5 rounded-xl p-8">
+                    <div class="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold mb-4">
+                        {{ 'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY_FIRE.POPULAR' | translate }}</div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY_FIRE.TITLE' | translate }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY_FIRE.DESC' | translate }}</p>
+                    <p class="text-3xl font-bold text-primary mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY_FIRE.PRICE' | translate }}</p>
+                </div>
+
+                <div
+                    class="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-8 hover:border-primary transition-colors">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY.TITLE' | translate }}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY.DESC' | translate }}</p>
+                    <p class="text-3xl font-bold text-primary mb-4">{{
+                        'PRODUCTS.MOTOR.COVERAGE_OPTIONS.THIRD_PARTY.PRICE' | translate }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-2xl shadow-xl p-12 text-center text-white">
+            <h2 class="text-3xl font-bold mb-4">{{ 'PRODUCTS.COMMON.READY_TO_PROTECT' | translate }}</h2>
+            <p class="text-xl mb-8">{{ 'PRODUCTS.COMMON.GET_PERSONALIZED_QUOTE' | translate }}</p>
+            <a routerLink="/login"
+                class="inline-block bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-8 rounded-lg transition-colors">
+                {{ 'PRODUCTS.COMMON.GET_STARTED' | translate }}
+            </a>
+        </div>
+    </div>
+</div>
