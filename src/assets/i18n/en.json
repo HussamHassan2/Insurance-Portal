@@ -651,14 +651,21 @@
         "REJECTED": "Rejected",
         "LOST": "Lost",
         "EXPIRED": "Expired",
-        "OUTSTANDING": "Outstanding"
+        "OUTSTANDING": "Outstanding",
+        "REVIEW": "Review"
     },
     "TYPES": {
         "NEW": "New",
         "ENDORSEMENT": "Endorsement",
         "RENEWAL": "Renewal",
         "CANCELLATION": "Cancellation",
-        "MODIFICATION": "Modification"
+        "MODIFICATION": "Modification",
+        "NON_TECHNICAL": "Non-Technical",
+        "TECHNICAL_REFUND": "Technical Refund",
+        "TECHNICAL_ADD": "Technical Add",
+        "TECHNICAL_BORNDEAD": "Technical Borndead",
+        "END": "Endorsement",
+        "CANCEL": "Cancellation"
     },
     "GREETING": "Hello {{name}}, welcome back!",
     "BROKER": {

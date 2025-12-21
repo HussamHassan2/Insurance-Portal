@@ -607,14 +607,21 @@
         "REJECTED": "مرفوضة",
         "LOST": "خسارة",
         "EXPIRED": "منتهية الصلاحية",
-        "OUTSTANDING": "معلق"
+        "OUTSTANDING": "معلق",
+        "REVIEW": "مراجعة"
     },
     "TYPES": {
         "NEW": "جديد",
         "ENDORSEMENT": "تعديل",
         "RENEWAL": "تجديد",
         "CANCELLATION": "إلغاء",
-        "MODIFICATION": "تغيير"
+        "MODIFICATION": "تغيير",
+        "NON_TECHNICAL": "غير فني",
+        "TECHNICAL_REFUND": "استرداد فني",
+        "TECHNICAL_ADD": "إضافة فنية",
+        "TECHNICAL_BORNDEAD": "إلغاء فني",
+        "END": "تعديل",
+        "CANCEL": "إلغاء"
     },
     "GREETING": "مرحبا {{name}}، أهلا بعودتك!",
     "BROKER": {

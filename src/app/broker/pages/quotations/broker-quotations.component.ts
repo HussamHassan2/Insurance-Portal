@@ -77,14 +77,14 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
                 key: 'stage',
                 label: this.appTranslate.instant('BROKER.QUOTATIONS.COLUMNS.STAGE'),
                 filterable: true,
-                render: (row) => this.renderStatus(row.stage)
+                render: (row) => this.renderStatus(row)
             },
             {
                 key: 'type',
                 label: this.appTranslate.instant('BROKER.QUOTATIONS.COLUMNS.TYPE'),
                 filterable: true,
                 filterType: 'select',
-                render: (row) => this.renderType(row.type)
+                render: (row) => this.renderType(row)
             },
             {
                 key: 'actions',
@@ -112,8 +112,9 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
         this.visibleColumns = columns;
     }
 
-    renderStatus(status: string): string {
-        const s = status?.toLowerCase() || 'draft';
+    renderStatus(row: any): string {
+        // Use rawStage for styling logic, fallback to 'draft'
+        const s = row.rawStage || 'draft';
         let classes = '';
 
         // Assign unique color to each stage value
@@ -128,6 +129,7 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
                 classes = 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300';
                 break;
             case 'pending':
+            case 'review':
                 classes = 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
                 break;
             case 'negotiation':
@@ -151,12 +153,13 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
                 classes = 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300';
         }
 
-        const translatedStatus = this.appTranslate.instant(`STATUS.${s.toUpperCase()}`);
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedStatus}</span>`;
+        // Use pre-translated stage for display
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.stage}</span>`;
     }
 
-    renderType(type: string): string {
-        const t = type?.toLowerCase() || 'new';
+    renderType(row: any): string {
+        // Use rawType for styling logic, fallback to 'new'
+        const t = row.rawType || 'new';
         let classes = '';
 
         // Assign unique color to each type value
@@ -168,20 +171,26 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
                 classes = 'bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300';
                 break;
             case 'endorsement':
+            case 'end':
                 classes = 'bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300';
                 break;
             case 'cancellation':
+            case 'cancel':
                 classes = 'bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300';
                 break;
             case 'modification':
+            case 'non_technical':
+            case 'technical_refund':
+            case 'technical_add':
+            case 'technical_borndead':
                 classes = 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
                 break;
             default:
                 classes = 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
         }
 
-        const translatedType = this.appTranslate.instant(`TYPES.${t.toUpperCase()}`);
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedType}</span>`;
+        // Use pre-translated type for display
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.type}</span>`;
     }
 
     loadQuotations(): void {
@@ -208,15 +217,27 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
                 }
 
                 // Map to match columns using actual API response fields
-                this.data = quotes.map((q: any) => ({
-                    id: q.opportunity_id,
-                    quoteNumber: q.opportunity_number || 'N/A',
-                    title: q.name ? q.name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
-                    date: q.opportunity_date || 'N/A',
-                    customerName: q.contact_name ? q.contact_name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
-                    stage: q.stage_name ? q.stage_name.charAt(0).toUpperCase() + q.stage_name.slice(1).toLowerCase() : 'Draft',
-                    type: q.opportunity_type ? q.opportunity_type.charAt(0).toUpperCase() + q.opportunity_type.slice(1).toLowerCase() : 'N/A'
-                }));
+                this.data = quotes.map((q: any) => {
+                    // Pre-process Stage/Status
+                    const rawStage = q.stage_name ? q.stage_name.replace(/^STATUS\./i, '').toLowerCase() : 'draft';
+                    const stageDisplay = this.appTranslate.instant(`STATUS.${rawStage.toUpperCase()}`);
+
+                    // Pre-process Type
+                    const rawType = q.opportunity_type ? q.opportunity_type.replace(/^TYPES\./i, '').toLowerCase() : 'new';
+                    const typeDisplay = this.appTranslate.instant(`TYPES.${rawType.toUpperCase()}`);
+
+                    return {
+                        id: q.opportunity_id,
+                        quoteNumber: q.opportunity_number || 'N/A',
+                        title: q.name ? q.name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
+                        date: q.opportunity_date || 'N/A',
+                        customerName: q.contact_name ? q.contact_name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
+                        stage: stageDisplay,
+                        rawStage: rawStage,
+                        type: typeDisplay,
+                        rawType: rawType
+                    };
+                });
                 this.isLoading = false;
             },
             error: (err) => {

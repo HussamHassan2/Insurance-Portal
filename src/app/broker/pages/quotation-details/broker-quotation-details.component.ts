@@ -223,40 +223,27 @@ export class BrokerQuotationDetailsComponent implements OnInit {
             }
 
             // Call the API
-            await this.crmService.postChatterMessage(
+            const response = await this.crmService.postChatterMessage(
                 Number(this.quotationId),
                 this.newMessage,
                 attachments
             ).toPromise();
 
+            // Check for error in 200 OK response
+            if (response && (response.error || (response.result && response.result.error) || response.success === false)) {
+                let errorMessage = response.error || (response.result && response.result.error) || 'Failed to send message';
+
+                if (typeof errorMessage === 'string' && errorMessage.includes('security restrictions')) {
+                    errorMessage = 'You do not have permission to perform this action.';
+                }
+
+                this.notificationService.error(errorMessage);
+                return;
+            }
+
             // Add message to local list
             this.messages.push({
                 userName: 'You',
-                timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-                message: this.newMessage,
-                attachment: this.selectedFile ? this.selectedFile.name : null
-            });
-
-            // Clear input
-            this.newMessage = '';
-            this.selectedFile = null;
-
-        } catch (err: any) {
-            console.error('Failed to send message', err);
-
-            // Check if it's a 404 error
-            if (err.status === 404) {
-                this.notificationService.error('The chat API endpoint is not available on the backend to send messages.');
-            } else if (err.status === 400) {
-                this.notificationService.error(`Bad Request: ${err.error?.message || err.error?.error || 'Invalid request parameters'}`);
-            } else {
-                this.notificationService.error(`Failed to send message: ${err.error?.message || err.message || 'Please try again.'}`);
-            }
-
-            // For testing: Still add message locally even if API fails
-            // Remove this in production once API is working
-            this.messages.push({
-                userName: 'You (Not Sent)',
                 timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
                 message: this.newMessage,
                 attachment: this.selectedFile ? this.selectedFile.name : null

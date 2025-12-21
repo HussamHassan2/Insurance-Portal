@@ -90,7 +90,7 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
                 key: 'transactionType',
                 label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.TRANSACTION_TYPE'),
                 filterable: true,
-                render: (row) => this.renderTransactionType(row.transactionType)
+                render: (row) => this.renderTransactionType(row)
             },
             { key: 'productName', label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.PRODUCT'), filterable: true, filterType: 'text', sortable: true },
             { key: 'customerName', label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.CUSTOMER'), filterable: true, filterType: 'text', sortable: true },
@@ -98,7 +98,7 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
                 key: 'status',
                 label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.STATUS'),
                 filterable: true,
-                render: (row) => this.renderStatus(row.status)
+                render: (row) => this.renderStatus(row)
             },
             { key: 'approveDate', label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.APPROVE_DATE'), filterable: true, filterType: 'date', sortable: true },
             { key: 'issueDate', label: this.appTranslate.instant('BROKER.POLICIES.COLUMNS.ISSUE_DATE'), filterable: true, filterType: 'date', sortable: true },
@@ -151,36 +151,40 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
         this.visibleColumns = columns;
     }
 
-    renderStatus(status: string): string {
-        const s = status?.toLowerCase() || 'pending';
+    renderStatus(row: any): string {
+        // Use rawStatus for logic, fallback to 'pending'
+        const s = row.rawStatus || 'pending';
         let classes = '';
 
         if (['active', 'approved', 'paid'].includes(s)) {
             classes = 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-        } else if (['pending', 'processing'].includes(s)) {
+        } else if (['pending', 'processing', 'review'].includes(s)) {
             classes = 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
         } else {
             classes = 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
         }
 
-        const translatedStatus = this.appTranslate.instant(`STATUS.${s.toUpperCase()}`);
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedStatus}</span>`;
+        // Use pre-translated status for display
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.status}</span>`;
     }
 
-    renderTransactionType(type: string): string {
-        const t = type?.toLowerCase() || 'new';
+    renderTransactionType(row: any): string {
+        // Use rawTransactionType for logic
+        const t = row.rawTransactionType || 'new';
         let classes = 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300';
 
-        if (t === 'endorsement') {
+        if (t === 'endorsement' || t === 'end') {
             classes = 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300';
         } else if (t === 'renewal') {
             classes = 'bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300';
-        } else if (t === 'cancellation') {
+        } else if (t === 'cancellation' || t === 'cancel') {
             classes = 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+        } else if (['non_technical', 'technical_refund', 'technical_add', 'technical_borndead'].includes(t)) {
+            classes = 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
         }
 
-        const translatedType = this.appTranslate.instant(`TYPES.${t.toUpperCase()}`);
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedType}</span>`;
+        // Use pre-translated type for display
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.transactionType}</span>`;
     }
 
     renderPaymentStatus(status: string): string {
@@ -237,24 +241,36 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
                     this.totalRecords = response.data.total_count || response.data.count;
                 }
 
-                this.data = policiesData.map((p: any) => ({
-                    id: p.id || p.policy_number,
-                    policyNumber: p.policy_number || 'Draft',
-                    riskImage: p.risk_image,
-                    transactionType: p.transaction_type || 'New',
-                    productName: p.product_name || 'Motor Private Section',
-                    customerName: p.customer_name || 'Customer',
-                    status: (p.state || 'Draft').toLowerCase(),
-                    approveDate: p.approve_date || '-',
-                    issueDate: p.issue_date || '-',
-                    effectiveFrom: p.effective_from_date || '-',
-                    effectiveTo: p.effective_to_date || '-',
-                    grossPremium: p.gross_premium || 0,
-                    netPremium: p.net_premium || 0,
-                    currency: p.currency || 'EGP',
-                    paymentStatus: p.payment_status || 'outstanding',
-                    issuingBranch: p.issuing_branch || 'Head office'
-                }));
+                this.data = policiesData.map((p: any) => {
+                    // Pre-process Status
+                    const rawStatus = (p.state || 'Draft').replace(/^STATUS\./i, '').toLowerCase();
+                    const statusDisplay = this.appTranslate.instant(`STATUS.${rawStatus.toUpperCase()}`);
+
+                    // Pre-process Transaction Type
+                    const rawTransactionType = (p.transaction_type || 'New').replace(/^TYPES\./i, '').toLowerCase();
+                    const typeDisplay = this.appTranslate.instant(`TYPES.${rawTransactionType.toUpperCase()}`);
+
+                    return {
+                        id: p.id || p.policy_number,
+                        policyNumber: p.policy_number || 'Draft',
+                        riskImage: p.risk_image,
+                        transactionType: typeDisplay,
+                        rawTransactionType: rawTransactionType,
+                        productName: p.product_name || 'Motor Private Section',
+                        customerName: p.customer_name || 'Customer',
+                        status: statusDisplay,
+                        rawStatus: rawStatus,
+                        approveDate: p.approve_date || '-',
+                        issueDate: p.issue_date || '-',
+                        effectiveFrom: p.effective_from_date || '-',
+                        effectiveTo: p.effective_to_date || '-',
+                        grossPremium: p.gross_premium || 0,
+                        netPremium: p.net_premium || 0,
+                        currency: p.currency || 'EGP',
+                        paymentStatus: p.payment_status || 'outstanding',
+                        issuingBranch: p.issuing_branch || 'Head office'
+                    };
+                });
 
                 this.isLoading = false;
             },

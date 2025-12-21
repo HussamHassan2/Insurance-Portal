@@ -38,6 +38,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                     } else if (error.error && error.error.result && error.error.result.error) {
                         // Common pattern in this app based on previous file reads
                         errorMessage = error.error.result.error;
+
+                        // Handle specific Odoo security error
+                        if (errorMessage.includes('security restrictions')) {
+                            errorMessage = 'You do not have permission to perform this action.';
+                        }
                     } else if (error.error && error.error.error) {
                         // Handle {"error": "message"} format
                         errorMessage = error.error.error;
