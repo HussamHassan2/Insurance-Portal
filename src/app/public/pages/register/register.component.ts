@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
+import { extractBirthDateFromNationalId } from '../../../shared/utils/national-id.utils';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +26,15 @@ export class RegisterComponent {
     private router: Router,
     private notificationService: NotificationService
   ) { }
+
+  onNationalIdChange(value: string): void {
+    if (value) {
+      const dob = extractBirthDateFromNationalId(value);
+      if (dob) {
+        this.formData.dateOfBirth = dob;
+      }
+    }
+  }
 
   onSubmit(): void {
     if (!this.formData.name || !this.formData.email || !this.formData.password) {

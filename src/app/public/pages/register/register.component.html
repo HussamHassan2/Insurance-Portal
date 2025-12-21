@@ -106,29 +106,28 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Gender -->
-                    <div>
-                        <app-selection-modal [label]="'PROFILE.GENDER' | translate" [(value)]="formData.gender"
-                            [options]="[{code: 'male', name: 'PROFILE.MALE' | translate, icon: '👨'}, {code: 'female', name: 'PROFILE.FEMALE' | translate, icon: '👩'}]"
-                            [title]="'PROFILE.SELECT_GENDER' | translate" [layout]="'list'">
-                        </app-selection-modal>
-                    </div>
-
-                    <!-- DOB -->
-                    <div>
-                        <app-date-picker [(ngModel)]="formData.dateOfBirth" name="dateOfBirth"
-                            [label]="'PROFILE.BIRTH_DATE' | translate"></app-date-picker>
-                    </div>
+                <!-- National ID -->
+                <div>
+                    <app-selection-modal [label]="'PROFILE.GENDER' | translate" [(value)]="formData.gender"
+                        [options]="[{code: 'male', name: 'PROFILE.MALE' | translate, icon: '👨'}, {code: 'female', name: 'PROFILE.FEMALE' | translate, icon: '👩'}]"
+                        [title]="'PROFILE.SELECT_GENDER' | translate" [layout]="'list'">
+                    </app-selection-modal>
                 </div>
 
                 <!-- National ID -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{{
                         'PROFILE.NATIONAL_ID' | translate }}</label>
-                    <input type="text" [(ngModel)]="formData.nationalId" name="nationalId"
+                    <input type="text" [(ngModel)]="formData.nationalId" (ngModelChange)="onNationalIdChange($event)"
+                        name="nationalId"
                         class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
                         placeholder="29908140123456" />
+                </div>
+
+                <!-- DOB -->
+                <div class="col-span-2">
+                    <app-date-picker [(ngModel)]="formData.dateOfBirth" name="dateOfBirth"
+                        [label]="'PROFILE.BIRTH_DATE' | translate"></app-date-picker>
                 </div>
 
                 <!-- Password -->

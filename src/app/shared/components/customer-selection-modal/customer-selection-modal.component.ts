@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../../core/services/customer.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { extractBirthDateFromNationalId } from '../../utils/national-id.utils';
 
 type ModalView = 'type-selection' | 'new-customer' | 'select-customer';
 
@@ -80,6 +81,16 @@ export class CustomerSelectionModalComponent implements OnInit {
       city: [''],
       stateName: [''],
       countryName: ['Egypt']
+    });
+
+    // Auto-fill DOB from National ID
+    this.newCustomerForm.get('nationalId')?.valueChanges.subscribe(value => {
+      if (value) {
+        const dob = extractBirthDateFromNationalId(value);
+        if (dob) {
+          this.newCustomerForm.patchValue({ dateOfBirth: dob }, { emitEvent: false });
+        }
+      }
     });
   }
 

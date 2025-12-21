@@ -3,6 +3,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { CustomerService } from '../../../core/services/customer.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ChangePasswordComponent } from '../../components/change-password/change-password.component';
+import { extractBirthDateFromNationalId } from '../../utils/national-id.utils';
 
 @Component({
     selector: 'app-profile',
@@ -106,6 +107,15 @@ export class ProfileComponent implements OnInit {
 
     toggleEdit(): void {
         this.isEditing = !this.isEditing;
+    }
+
+    onNationalIdChange(value: string): void {
+        if (value) {
+            const dob = extractBirthDateFromNationalId(value);
+            if (dob) {
+                this.formData.birth_date = dob;
+            }
+        }
     }
 
     onSubmit(): void {
