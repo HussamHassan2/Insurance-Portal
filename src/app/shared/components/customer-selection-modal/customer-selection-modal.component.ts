@@ -34,11 +34,12 @@ export class CustomerSelectionModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() selectCustomer = new EventEmitter<any>();
 
-  currentView: ModalView = 'type-selection';
+  currentView: ModalView = 'select-customer';
   newCustomerForm!: FormGroup;
   searchResults: Customer[] = [];
   selectedCustomer: Customer | null = null;
   loading: boolean = false;
+  hasSearched: boolean = false;
   error: string = '';
   searchQuery: string = '';
 
@@ -55,8 +56,8 @@ export class CustomerSelectionModalComponent implements OnInit {
 
   checkForPrefilledData(): void {
     // If national ID is pre-filled, auto-select existing customer view and search
+    // Logic remains similar but view is already 'select-customer'
     if (this.prefilledNationalId && this.prefilledNationalId.trim()) {
-      this.currentView = 'select-customer';
       this.searchQuery = this.prefilledNationalId;
       // Trigger search automatically
       setTimeout(() => {
@@ -85,16 +86,34 @@ export class CustomerSelectionModalComponent implements OnInit {
   onSelectType(type: 'new' | 'existing'): void {
     if (type === 'new') {
       this.currentView = 'new-customer';
+
+      // Auto-fill form based on search query
+      if (this.searchQuery) {
+        // If query contains only digits, assume it's a National ID or Phone
+        if (/^\d+$/.test(this.searchQuery)) {
+          this.newCustomerForm.patchValue({
+            nationalId: this.searchQuery
+          });
+        } else {
+          // Otherwise assume it's a name
+          this.newCustomerForm.patchValue({
+            name: this.searchQuery
+          });
+        }
+      }
     } else {
       this.currentView = 'select-customer';
     }
   }
 
   onBack(): void {
-    this.currentView = 'type-selection';
-    this.error = '';
-    this.searchResults = [];
-    this.selectedCustomer = null;
+    if (this.currentView === 'new-customer') {
+      this.currentView = 'select-customer';
+      this.error = '';
+    } else {
+      // If back is clicked on select-customer, close the modal
+      this.onClose();
+    }
   }
 
   async onSubmitNewCustomer(): Promise<void> {
@@ -166,6 +185,7 @@ export class CustomerSelectionModalComponent implements OnInit {
     this.loading = true;
     this.error = '';
     this.searchResults = [];
+    this.hasSearched = true;
 
     try {
       const user = this.authService.currentUserValue;
@@ -190,12 +210,11 @@ export class CustomerSelectionModalComponent implements OnInit {
 
       this.searchResults = contactsArray;
 
-      if (contactsArray.length === 0) {
-        this.error = 'No customers found matching your search';
-      }
+      // Note: error message "No customers found" is removed here as it will be handled in the template
+      // to show the "Create New" card instead.
     } catch (err: any) {
       console.error('Failed to search customers', err);
-      this.error = err?.error?.result?.error || err?.error?.message || err?.message || 'Failed to search customers';
+      this.error = err?.error?.error || err?.error?.result?.error || err?.error?.message || err?.message || 'Failed to search customers';
     } finally {
       this.loading = false;
     }
@@ -234,11 +253,12 @@ export class CustomerSelectionModalComponent implements OnInit {
 
   onClose(): void {
     this.isOpen = false;
-    this.currentView = 'type-selection';
+    this.currentView = 'select-customer';
     this.error = '';
     this.searchResults = [];
     this.selectedCustomer = null;
     this.searchQuery = '';
+    this.hasSearched = false;
     this.newCustomerForm.reset({
       gender: 'male',
       isForeignCustomer: false,
