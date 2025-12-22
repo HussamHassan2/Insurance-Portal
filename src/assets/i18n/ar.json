@@ -42,7 +42,10 @@
         "ALL_QUOTATIONS": "جميع عروض الأسعار",
         "RENEWAL_REQUESTS": "طلبات التجديد",
         "ENDORSEMENT_REQUESTS": "طلبات التعديل",
-        "LOST_REQUESTS": "طلبات مفقودة"
+        "LOST_REQUESTS": "طلبات مفقودة",
+        "SURVEYS": "الاستطلاعات",
+        "IN_PROGRESS": "قيد التنفيذ",
+        "SUSPENDED": "معلقة"
     },
     "BUTTON": {
         "SAVE": "حفظ",

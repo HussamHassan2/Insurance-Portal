@@ -71,13 +71,31 @@
                             <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ item.survey_type | titlecase }}
                                 Inspection</p>
 
-                            <div
-                                class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3">
-                                <div class="flex items-center gap-2">
-                                    <div [innerHTML]="getPriorityBadge(item.priority)" class="text-sm"></div>
+                            <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div [innerHTML]="getPriorityBadge(item.priority)" class="text-sm"></div>
+                                    </div>
+                                    <div class="text-xs font-medium text-primary">
+                                        View Details →
+                                    </div>
                                 </div>
-                                <div class="text-xs font-medium text-primary">
-                                    View Details →
+
+                                <!-- Action Buttons for Pending State -->
+                                <div *ngIf="column.id === 'pending'"
+                                    class="flex gap-2 mt-3 pt-3 border-t border-gray-50 dark:border-gray-700/50">
+                                    <button (click)="onAccept($event, item)"
+                                        class="flex-1 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded text-xs font-medium transition-colors dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/40">
+                                        Accept
+                                    </button>
+                                    <button (click)="onSuspend($event, item)"
+                                        class="flex-1 py-1.5 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded text-xs font-medium transition-colors dark:bg-yellow-900/20 dark:text-yellow-400 dark:hover:bg-yellow-900/40">
+                                        Suspend
+                                    </button>
+                                    <button (click)="onReject($event, item)"
+                                        class="flex-1 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded text-xs font-medium transition-colors dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40">
+                                        Reject
+                                    </button>
                                 </div>
                             </div>
                         </div>

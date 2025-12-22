@@ -42,7 +42,10 @@
         "ALL_QUOTATIONS": "All Quotations",
         "RENEWAL_REQUESTS": "Renewal Requests",
         "ENDORSEMENT_REQUESTS": "Endorsement Requests",
-        "LOST_REQUESTS": "Lost Requests"
+        "LOST_REQUESTS": "Lost Requests",
+        "SURVEYS": "Surveys",
+        "IN_PROGRESS": "In Progress",
+        "SUSPENDED": "Suspended"
     },
     "BUTTON": {
         "SAVE": "Save",

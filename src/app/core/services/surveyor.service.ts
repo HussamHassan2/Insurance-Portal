@@ -136,4 +136,30 @@ export class SurveyorService {
             }
         });
     }
+    /**
+     * Accept Survey
+     */
+    acceptSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/accept', {
+            params: { survey_id: surveyId }
+        });
+    }
+
+    /**
+     * Suspend Survey
+     */
+    suspendSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/suspend', {
+            params: { survey_id: surveyId }
+        });
+    }
+
+    /**
+     * Reject Survey
+     */
+    rejectSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/reject', {
+            params: { survey_id: surveyId }
+        });
+    }
 }

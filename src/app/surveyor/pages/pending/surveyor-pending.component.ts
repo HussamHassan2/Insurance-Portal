@@ -10,7 +10,7 @@ import { debounceTime } from 'rxjs/operators';
     styleUrls: ['./surveyor-pending.component.css']
 })
 export class SurveyorPendingComponent implements OnInit {
-    viewMode: 'table' | 'board' = 'table';
+    viewMode: 'table' | 'board' = 'board';
     currentType: 'issuance' | 'claim' | 'all' = 'all';
     statusFilter: string | null = null;
 
@@ -25,13 +25,13 @@ export class SurveyorPendingComponent implements OnInit {
     };
 
     // For Board View
-    boardColumns = [
+    readonly ALL_BOARD_COLUMNS = [
         {
             id: 'pending',
             title: 'Pending',
             color: 'yellow',
             items: [] as any[],
-            states: ['pending', 'surveyor', 'reassign', 'new']
+            states: ['pending', 'surveyor', 'reassign', 'new', 'surveyor assigned']
         },
         {
             id: 'in_progress',
@@ -39,6 +39,13 @@ export class SurveyorPendingComponent implements OnInit {
             color: 'blue',
             items: [] as any[],
             states: ['in_progress', 'surveying']
+        },
+        {
+            id: 'suspended',
+            title: 'Suspended',
+            color: 'red',
+            items: [] as any[],
+            states: ['suspended']
         },
         {
             id: 'completed',
@@ -49,6 +56,8 @@ export class SurveyorPendingComponent implements OnInit {
         }
     ];
 
+    boardColumns = [...this.ALL_BOARD_COLUMNS];
+
     constructor(
         private surveyorService: SurveyorService,
         private router: Router,
@@ -58,16 +67,41 @@ export class SurveyorPendingComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        const path = this.route.snapshot.url[0]?.path;
+
+
         this.route.queryParams.pipe(debounceTime(50)).subscribe(params => {
+
             if (params['view']) {
                 this.viewMode = params['view'];
             }
             if (params['type']) {
                 this.currentType = params['type'];
             }
-            if (params['status']) {
+
+            // Reset filter first
+            this.statusFilter = null;
+
+            // Route path overrides query params for status
+            if (path === 'suspended') {
+                this.statusFilter = 'suspended';
+                this.boardColumns = [this.ALL_BOARD_COLUMNS.find(c => c.id === 'suspended')!];
+            } else if (path === 'pending') {
+                this.statusFilter = 'pending';
+                this.boardColumns = [this.ALL_BOARD_COLUMNS.find(c => c.id === 'pending')!];
+            } else if (path === 'in-progress') {
+                this.statusFilter = 'in_progress';
+                this.boardColumns = [this.ALL_BOARD_COLUMNS.find(c => c.id === 'in_progress')!];
+            } else if (params['status']) {
                 this.statusFilter = params['status'];
+                // Try to find matching column for status, otherwise show all or default
+                // This handles complex cases if needed later
+            } else {
+                // Default to Pending column if no specific route
+                this.boardColumns = [this.ALL_BOARD_COLUMNS.find(c => c.id === 'pending')!];
             }
+
+
             this.loadPendingSurveys();
         });
     }
@@ -109,19 +143,22 @@ export class SurveyorPendingComponent implements OnInit {
         // Apply status filter if present
         if (this.statusFilter) {
             if (this.statusFilter === 'suspended') {
-                params.status = 'suspended';
+                params.domain = JSON.stringify([['state', '=', 'suspended']]);
             } else if (this.statusFilter === 'pending') {
-                // Map 'pending' filter to 'surveyor' status for API
-                params.status = 'surveyor';
+                // Map 'pending' filter to 'surveyor' state in domain
+                params.domain = JSON.stringify([['state', '=', 'surveyor']]);
+            } else if (this.statusFilter === 'in_progress') {
+                // Map 'in_progress' filter to 'surveying' or 'in_progress' states
+                params.domain = JSON.stringify([['state', 'in', ['surveying', 'in_progress']]]);
             }
         } else if (this.viewMode !== 'board') {
-            // Default to 'surveyor' (pending) status for table view if no filter
-            params.status = 'surveyor';
+            // Default to 'surveyor' (pending) state for table view if no filter
+            params.domain = JSON.stringify([['state', '=', 'surveyor']]);
         }
 
         this.surveyorService.listSurveys(params).subscribe({
             next: (response) => {
-                console.log('SurveyorPendingComponent listSurveys response:', response);
+
                 let rawData: any[] = [];
                 // Handle different response structures
                 if (response.surveys) {
@@ -138,7 +175,7 @@ export class SurveyorPendingComponent implements OnInit {
                     rawData = response;
                 }
 
-                console.log('SurveyorPendingComponent Extracted Data:', rawData);
+
 
                 // Map API fields to Table columns
                 const mappedData = rawData.map(item => ({
@@ -149,7 +186,7 @@ export class SurveyorPendingComponent implements OnInit {
                     claim_number: item.claim_number || (item.claim_id ? item.claim_id : 'N/A')
                 }));
 
-                console.log('SurveyorPendingComponent Mapped Data:', mappedData);
+
 
                 this.tableConfig.data = mappedData;
 
@@ -173,20 +210,16 @@ export class SurveyorPendingComponent implements OnInit {
         data.forEach(item => {
             const status = (item.state || item.status || 'pending').toLowerCase();
 
-            // Find column that includes this state
+            // Check if status belongs to current visible columns
             const column = this.boardColumns.find(c => c.states && c.states.includes(status));
 
             if (column) {
                 column.items.push(item);
             } else {
-                // Determine fallback: probably Pending if it looks like a new state, or just log
-                // If it's suspended, we might ignoring it or putting it somewhere?
-                // Assuming suspended surveys are filtered out unless filter is 'suspended'.
-                if (status === 'suspended') {
-                    // Do nothing/Do not add to board unless we have a suspended column (which we don't in this view)
-                } else {
-                    this.boardColumns[0].items.push(item);
-                }
+                // If status doesn't match visible columns, check ALL columns to be safe or ignore
+                // In single column view, we only show items for that column.
+                // However, we might have mixed data if API filter isn't perfect. 
+                // We will just ignore items that don't fit the visible column.
             }
         });
     }
@@ -222,5 +255,35 @@ export class SurveyorPendingComponent implements OnInit {
     toggleView(mode: 'table' | 'board'): void {
         this.viewMode = mode;
         this.loadPendingSurveys();
+    }
+
+    onAccept(event: Event, survey: any): void {
+        event.stopPropagation();
+        this.surveyorService.acceptSurvey(survey.id).subscribe({
+            next: () => {
+                this.loadPendingSurveys();
+            },
+            error: (err) => console.error('Error accepting survey:', err)
+        });
+    }
+
+    onSuspend(event: Event, survey: any): void {
+        event.stopPropagation();
+        this.surveyorService.suspendSurvey(survey.id).subscribe({
+            next: () => {
+                this.loadPendingSurveys();
+            },
+            error: (err) => console.error('Error suspending survey:', err)
+        });
+    }
+
+    onReject(event: Event, survey: any): void {
+        event.stopPropagation();
+        this.surveyorService.rejectSurvey(survey.id).subscribe({
+            next: () => {
+                this.loadPendingSurveys();
+            },
+            error: (err) => console.error('Error rejecting survey:', err)
+        });
     }
 }

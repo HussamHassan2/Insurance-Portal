@@ -12,6 +12,8 @@ const routes: Routes = [
     { path: '', component: SurveyorDashboardComponent },
     { path: 'stages', component: SurveyStagesComponent },
     { path: 'pending', component: SurveyorPendingComponent },
+    { path: 'suspended', component: SurveyorPendingComponent },
+    { path: 'in-progress', component: SurveyorPendingComponent },
     { path: 'surveys/:id', component: SurveyDetailsComponent },
     { path: 'claims', component: SurveyorClaimsComponent },
     { path: 'profile', component: ProfileComponent },

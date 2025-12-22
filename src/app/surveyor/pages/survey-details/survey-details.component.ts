@@ -20,6 +20,12 @@ export class SurveyDetailsComponent implements OnInit {
         photos: [] as File[]
     };
 
+    activeTab: 'overview' | 'risk' | 'documents' | 'actions' = 'overview';
+
+    setActiveTab(tab: 'overview' | 'risk' | 'documents' | 'actions'): void {
+        this.activeTab = tab;
+    }
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -54,6 +60,53 @@ export class SurveyDetailsComponent implements OnInit {
 
     goBack(): void {
         this.router.navigate(['/dashboard/surveyor/pending']);
+    }
+
+    onAccept(): void {
+        this.loading = true;
+        this.surveyorService.acceptSurvey(this.surveyId).subscribe({
+            next: () => {
+                this.notificationService.success('Survey accepted successfully');
+                this.loadSurvey();
+            },
+            error: (err) => {
+                console.error('Error accepting survey:', err);
+                this.notificationService.error('Failed to accept survey');
+                this.loading = false;
+            }
+        });
+    }
+
+    onSuspend(): void {
+        this.loading = true;
+        this.surveyorService.suspendSurvey(this.surveyId).subscribe({
+            next: () => {
+                this.notificationService.success('Survey suspended successfully');
+                this.loadSurvey();
+            },
+            error: (err) => {
+                console.error('Error suspending survey:', err);
+                this.notificationService.error('Failed to suspend survey');
+                this.loading = false;
+            }
+        });
+    }
+
+    onReject(): void {
+        if (confirm('Are you sure you want to reject this survey?')) {
+            this.loading = true;
+            this.surveyorService.rejectSurvey(this.surveyId).subscribe({
+                next: () => {
+                    this.notificationService.success('Survey rejected successfully');
+                    this.router.navigate(['/dashboard/surveyor/pending']);
+                },
+                error: (err) => {
+                    console.error('Error rejecting survey:', err);
+                    this.notificationService.error('Failed to reject survey');
+                    this.loading = false;
+                }
+            });
+        }
     }
 
     submitAssessment(): void {

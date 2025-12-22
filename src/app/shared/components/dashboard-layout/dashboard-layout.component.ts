@@ -110,7 +110,16 @@ export class DashboardLayoutComponent implements OnInit {
             case 'surveyor':
                 return [
                     { name: 'SIDEBAR.OVERVIEW', path: '/dashboard/surveyor', icon: 'layout-dashboard' },
-                    { name: 'SIDEBAR.PENDING_SURVEYS', path: '/dashboard/surveyor/pending', icon: 'clock' },
+                    {
+                        name: 'SIDEBAR.SURVEYS',
+                        path: '/dashboard/surveyor/surveys',
+                        icon: 'clipboard-list',
+                        children: [
+                            { name: 'SIDEBAR.PENDING_SURVEYS', path: '/dashboard/surveyor/pending', icon: 'clock' }, // stored as surveyor status
+                            { name: 'SIDEBAR.IN_PROGRESS', path: '/dashboard/surveyor/in-progress', icon: 'play-circle' }, // In Progress Surveys List
+                            { name: 'SIDEBAR.SUSPENDED', path: '/dashboard/surveyor/suspended', icon: 'pause-circle' }
+                        ]
+                    },
                     ...common
                 ];
             default:
@@ -200,5 +209,44 @@ export class DashboardLayoutComponent implements OnInit {
                 }
             }
         });
+    }
+
+    // Flyout Submenu Logic
+    hoveredItem: NavItem | null = null;
+    activeSubMenuItem: NavItem | null = null;
+    flyoutTop: number = 0;
+    private hoverTimeout: any;
+
+    onMouseEnter(item: NavItem, event: MouseEvent): void {
+
+        // Calculate position for fixed flyout
+        const target = event.currentTarget as HTMLElement;
+        const rect = target.getBoundingClientRect();
+        this.flyoutTop = rect.top;
+
+        if (this.isCollapsed && item.children) {
+            if (this.hoverTimeout) {
+                clearTimeout(this.hoverTimeout);
+                this.hoverTimeout = null;
+            }
+            this.hoveredItem = item;
+        }
+    }
+
+    onMouseLeave(item: NavItem): void {
+        if (this.isCollapsed && item.children) {
+            this.hoverTimeout = setTimeout(() => {
+                this.hoveredItem = null;
+            }, 300);
+        }
+    }
+
+    onSubmenuItemClick(parent: NavItem, child: NavItem): void {
+        this.activeSubMenuItem = child;
+        this.hoveredItem = null;
+        if (this.hoverTimeout) {
+            clearTimeout(this.hoverTimeout);
+            this.hoverTimeout = null;
+        }
     }
 }

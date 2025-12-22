@@ -104,12 +104,22 @@ export class SurveyStagesComponent implements OnInit {
     }
 
     handleStageClick(stage: string): void {
-        this.router.navigate(['/dashboard/surveyor/pending'], {
-            queryParams: {
-                type: this.surveyType,
-                view: 'board',
-                status: stage
-            }
+        let route = '/dashboard/surveyor/pending';
+        let queryParams: any = {
+            type: this.surveyType
+        };
+
+        if (stage === 'suspended') {
+            route = '/dashboard/surveyor/suspended';
+        } else if (stage === 'pending') {
+            route = '/dashboard/surveyor/pending';
+        } else {
+            // Fallback for other potential stages
+            queryParams.status = stage;
+        }
+
+        this.router.navigate([route], {
+            queryParams: queryParams
         });
     }
 
