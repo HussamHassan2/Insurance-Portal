@@ -46,6 +46,7 @@ export class SelectionModalComponent implements OnInit, OnChanges {
     // Outputs
     @Output() valueChange = new EventEmitter<string>();
     @Output() change = new EventEmitter<void>();
+    @Output() search = new EventEmitter<string>();
 
     @ViewChild('searchInput') searchInput!: ElementRef;
 
@@ -127,6 +128,16 @@ export class SelectionModalComponent implements OnInit, OnChanges {
     }
 
     get filteredOptions(): SelectOption[] {
+        // If enableSearch is true but no 'search' output is bound (client-side), filter here.
+        // But if 'search' output IS used (server-side), we might still show normalizedOptions assuming parent updates them?
+        // Let's assume parent updates 'options' input on search.
+
+        // However, existing logic filters locally. 
+        // We should support both: emit event AND filter locally? 
+        // Or if event emitted, let parent handle data.
+        // For now, let's keep local filtering for display if parent doesn't update options immediately, 
+        // but typically with server search, parent replaces options.
+
         if (!this.searchQuery) {
             return this.normalizedOptions;
         }
@@ -164,6 +175,7 @@ export class SelectionModalComponent implements OnInit, OnChanges {
 
     onSearch(query: string): void {
         this.searchQuery = query;
+        this.search.emit(query);
     }
 
     isSelected(option: SelectOption): boolean {

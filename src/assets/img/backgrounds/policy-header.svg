@@ -1,0 +1,36 @@
+<svg width="1920" height="400" viewBox="0 0 1920 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="deepBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#2563eb;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-opacity="0.05" stroke-width="1"/>
+        </pattern>
+    </defs>
+
+    <!-- Base Background -->
+    <rect width="1920" height="400" fill="url(#deepBlueGrad)"/>
+    <rect width="1920" height="400" fill="url(#grid)"/>
+
+    <!-- Decorative Elements -->
+    <circle cx="1750" cy="350" r="200" fill="white" fill-opacity="0.03"/>
+    <path d="M0 350 L1920 300" stroke="white" stroke-opacity="0.05" stroke-width="1"/>
+
+    <!-- Shield Icon -->
+    <g transform="translate(1550, 80) scale(5)" opacity="0.08" stroke="white" stroke-width="1.5" fill="none">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </g>
+
+    <!-- Checkmark Badge -->
+    <g transform="translate(1700, 200) scale(2)" opacity="0.06" fill="white">
+         <circle cx="12" cy="12" r="10" fill-opacity="0.1"/>
+         <path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" fill="none"/>
+    </g>
+
+    <!-- Contract Lines -->
+    <rect x="1450" y="100" width="80" height="100" rx="2" stroke="white" stroke-opacity="0.05" stroke-width="2" fill="none"/>
+    <line x1="1460" y1="120" x2="1520" y2="120" stroke="white" stroke-opacity="0.05" stroke-width="2"/>
+    <line x1="1460" y1="140" x2="1520" y2="140" stroke="white" stroke-opacity="0.05" stroke-width="2"/>
+</svg>

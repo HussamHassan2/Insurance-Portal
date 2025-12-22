@@ -1,0 +1,38 @@
+<svg width="1920" height="400" viewBox="0 0 1920 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="deepBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#2563eb;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+        </linearGradient>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-opacity="0.05" stroke-width="1"/>
+        </pattern>
+    </defs>
+
+    <!-- Base Background -->
+    <rect width="1920" height="400" fill="url(#deepBlueGrad)"/>
+    <rect width="1920" height="400" fill="url(#grid)"/>
+
+    <!-- Decorative Elements: Network Connections -->
+    <circle cx="100" cy="100" r="4" fill="white" fill-opacity="0.2"/>
+    <circle cx="150" cy="180" r="4" fill="white" fill-opacity="0.2"/>
+    <line x1="100" y1="100" x2="150" y2="180" stroke="white" stroke-opacity="0.1" stroke-width="1"/>
+    
+    <circle cx="1700" cy="200" r="150" fill="white" fill-opacity="0.02"/>
+
+    <!-- Users/Community Icon -->
+    <g transform="translate(1500, 80) scale(3.5)" opacity="0.08" stroke="white" stroke-width="2" fill="none">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </g>
+
+    <!-- Handshake/Connection Symbols -->
+    <circle cx="1650" cy="150" r="8" fill="white" fill-opacity="0.1"/>
+    <circle cx="1750" cy="250" r="8" fill="white" fill-opacity="0.1"/>
+    <line x1="1650" y1="150" x2="1750" y2="250" stroke="white" stroke-opacity="0.05" stroke-width="1"/>
+    <line x1="1650" y1="150" x2="1580" y2="130" stroke="white" stroke-opacity="0.05" stroke-width="1"/>
+
+</svg>

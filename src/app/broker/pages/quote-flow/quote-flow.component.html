@@ -1,410 +1,490 @@
 <app-dashboard-layout>
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="mb-8 max-w-4xl mx-auto text-center">
+        <div class="mb-8 max-w-4xl mx-auto text-center" *ngIf="!issuanceSuccess">
             <h1 class="text-3xl font-bold text-navy dark:text-white mb-2">Create New Insurance Quote</h1>
             <p class="text-gray-600 dark:text-gray-300">Follow the steps below to create a new insurance quote</p>
         </div>
 
         <!-- Progress Bar -->
-        <app-modern-stepper [steps]="steps" [currentStep]="currentStep"></app-modern-stepper>
+        <app-modern-stepper *ngIf="!issuanceSuccess" [steps]="steps" [currentStep]="currentStep"></app-modern-stepper>
 
-        <!-- Step 1: Vehicle Details -->
-        <div *ngIf="currentStep === 0" class="space-y-4">
-            <!-- Error Message -->
-            <!-- Error Message Removed - Using Toasts -->
+        <!-- Wizard Content Container -->
+        <div *ngIf="!issuanceSuccess">
+            <!-- Step 1: Vehicle Details -->
+            <div *ngIf="currentStep === 0" class="space-y-4">
 
-            <!-- Vehicle Selection Section -->
-            <app-collapsible-section title="Vehicle Selection" icon="car" [expanded]="isSectionOpen('selection')"
-                (toggle)="toggleSection('selection')" [isComplete]="isSelectionComplete">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div>
-                        <app-selection-modal label="Make" [(value)]="vehicleForm.make" [options]="makers"
-                            [title]="'Select Vehicle Make'" [subtitle]="'Choose the manufacturer'"
-                            [placeholder]="'Choose vehicle make'" [layout]="'grid'" [gridCols]="4" [required]="true"
-                            (valueChange)="onMakeChange()" [imageKey]="'risk_image'">
-                        </app-selection-modal>
+                <!-- Vehicle Selection Section -->
+                <app-collapsible-section title="Vehicle Selection" icon="car" [expanded]="isSectionOpen('selection')"
+                    (toggle)="toggleSection('selection')" [isComplete]="isSelectionComplete">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <app-selection-modal label="Make" [(value)]="vehicleForm.make" [options]="makers"
+                                [title]="'Select Vehicle Make'" [subtitle]="'Choose the manufacturer'"
+                                [placeholder]="'Choose vehicle make'" [layout]="'grid'" [gridCols]="4" [required]="true"
+                                (valueChange)="onMakeChange()" [imageKey]="'risk_image'">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Model" [(value)]="vehicleForm.model" [options]="models"
+                                [title]="'Select Vehicle Model'" [subtitle]="'Choose the model'"
+                                [placeholder]="!vehicleForm.make ? 'Select make first' : 'Choose model'"
+                                [layout]="'grid'" [gridCols]="4" [disabled]="!vehicleForm.make" [required]="true"
+                                (valueChange)="onModelChange()">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Year" [(value)]="vehicleForm.year" [options]="years"
+                                [title]="'Select Manufacturing Year'" [subtitle]="'Choose the year'"
+                                [placeholder]="!vehicleForm.model ? 'Select model first' : 'Choose year'"
+                                [layout]="'grid'" [gridCols]="5" [disabled]="!vehicleForm.model" [required]="true">
+                            </app-selection-modal>
+                        </div>
                     </div>
-                    <div>
-                        <app-selection-modal label="Model" [(value)]="vehicleForm.model" [options]="models"
-                            [title]="'Select Vehicle Model'" [subtitle]="'Choose the model'"
-                            [placeholder]="!vehicleForm.make ? 'Select make first' : 'Choose model'" [layout]="'grid'"
-                            [gridCols]="4" [disabled]="!vehicleForm.make" [required]="true"
-                            (valueChange)="onModelChange()">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <app-selection-modal label="Year" [(value)]="vehicleForm.year" [options]="years"
-                            [title]="'Select Manufacturing Year'" [subtitle]="'Choose the year'"
-                            [placeholder]="!vehicleForm.model ? 'Select model first' : 'Choose year'" [layout]="'grid'"
-                            [gridCols]="5" [disabled]="!vehicleForm.model" [required]="true">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <app-selection-modal label="Category" [(value)]="vehicleForm.category" [options]="categories"
-                            [title]="'Select Vehicle Category'" [subtitle]="'Choose the category'"
-                            [placeholder]="!vehicleForm.model ? 'Select model first' : 'Choose category'"
-                            [layout]="'list'" [disabled]="!vehicleForm.model">
-                        </app-selection-modal>
-                    </div>
-                </div>
-            </app-collapsible-section>
+                </app-collapsible-section>
 
-            <!-- Identification Section -->
-            <app-collapsible-section title="Identification" icon="hash" [expanded]="isSectionOpen('identification')"
-                (toggle)="toggleSection('identification')" [isComplete]="isIdentificationComplete">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Chassis No <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" [(ngModel)]="vehicleForm.chassisNo"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
-                            required>
+                <!-- Identification Section -->
+                <app-collapsible-section title="Identification" icon="hash" [expanded]="isSectionOpen('identification')"
+                    (toggle)="toggleSection('identification')" [isComplete]="isIdentificationComplete">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Chassis No <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" [(ngModel)]="vehicleForm.chassisNo"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Engine No <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" [(ngModel)]="vehicleForm.engineNo"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
+                                required>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Engine No <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" [(ngModel)]="vehicleForm.engineNo"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
-                            required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Plate No <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" [(ngModel)]="vehicleForm.plateNo"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
-                            required>
-                    </div>
-                </div>
-            </app-collapsible-section>
+                </app-collapsible-section>
 
-            <!-- Specifications Section -->
-            <app-collapsible-section title="Specifications" icon="file-text"
-                [expanded]="isSectionOpen('specifications')" (toggle)="toggleSection('specifications')"
-                [isComplete]="isSpecificationsComplete">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div>
-                        <app-selection-modal label="Body Type" [(value)]="vehicleForm.bodyType" [options]="bodyTypes"
-                            [title]="'Select Body Type'" [subtitle]="'Choose the vehicle body type'"
-                            [placeholder]="'Choose body type'" [layout]="'grid'" [gridCols]="3" [required]="true">
-                        </app-selection-modal>
+                <!-- Financial & Condition Section -->
+                <app-collapsible-section title="Financial & Condition" icon="dollar-sign"
+                    [expanded]="isSectionOpen('financial')" (toggle)="toggleSection('financial')"
+                    [isComplete]="isFinancialComplete">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Sum Insured (EGP) <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" [(ngModel)]="vehicleForm.sumInsured" min="0" step="1000"
+                                placeholder="e.g., 500000"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
+                                required>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Vehicle Condition" [(value)]="vehicleForm.vehicle_state"
+                                [options]="[{code: 'new', name: 'New', icon: '✨', description: 'Brand new vehicle'}, {code: 'used', name: 'Used', icon: '🚗', description: 'Pre-owned vehicle'}]"
+                                [title]="'Select Vehicle Condition'" [subtitle]="'Is the vehicle new or used?'"
+                                [placeholder]="'Choose condition'" [layout]="'list'">
+                            </app-selection-modal>
+                        </div>
                     </div>
-                    <div>
-                        <app-selection-modal label="Color" [(value)]="vehicleForm.color" [options]="colors"
-                            [title]="'Select Vehicle Color'" [subtitle]="'Choose the color'"
-                            [placeholder]="'Choose color'" [layout]="'grid'" [gridCols]="4" [required]="true">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <app-selection-modal label="Fuel Type" [(value)]="vehicleForm.fuelType" [options]="fuelTypes"
-                            [title]="'Select Fuel Type'" [subtitle]="'Choose the fuel type'"
-                            [placeholder]="'Choose fuel type'" [layout]="'list'" [required]="false">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <app-selection-modal label="Vehicle Usage" [(value)]="vehicleForm.usage" [options]="usages"
-                            [title]="'Select Vehicle Usage'" [subtitle]="'Choose how the vehicle is used'"
-                            [placeholder]="'Choose usage type'" [layout]="'list'" [required]="true">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <app-selection-modal label="Engine CC" [(value)]="vehicleForm.cc" [options]="ccs"
-                            [title]="'Select Engine CC'" [subtitle]="'Choose the engine capacity'"
-                            [placeholder]="'Choose engine CC'" [layout]="'grid'" [gridCols]="3" [required]="true">
-                        </app-selection-modal>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Number of Seats <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" [(ngModel)]="vehicleForm.seats" min="1" max="50"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
-                            required>
-                    </div>
-                </div>
-            </app-collapsible-section>
+                </app-collapsible-section>
+            </div>
 
-            <!-- Financial & Condition Section -->
-            <app-collapsible-section title="Financial & Condition" icon="dollar-sign"
-                [expanded]="isSectionOpen('financial')" (toggle)="toggleSection('financial')"
-                [isComplete]="isFinancialComplete">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Sum Insured (EGP) <span class="text-red-500">*</span>
-                        </label>
-                        <input type="number" [(ngModel)]="vehicleForm.sumInsured" min="0" step="1000"
-                            placeholder="e.g., 500000"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
-                            required>
+            <!-- Step 2: Coverage Selection -->
+            <div *ngIf="currentStep === 1" class="space-y-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Select Coverage Plan</h2>
+
+                    <div *ngIf="loading" class="flex justify-center py-12">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                     </div>
-                    <div>
-                        <app-selection-modal label="Vehicle Condition" [(value)]="vehicleForm.vehicle_state"
-                            [options]="[{code: 'new', name: 'New', icon: '✨', description: 'Brand new vehicle'}, {code: 'used', name: 'Used', icon: '🚗', description: 'Pre-owned vehicle'}]"
-                            [title]="'Select Vehicle Condition'" [subtitle]="'Is the vehicle new or used?'"
-                            [placeholder]="'Choose condition'" [layout]="'list'">
-                        </app-selection-modal>
+
+                    <div *ngIf="!loading && proposals.length === 0" class="text-center py-12">
+                        <i data-lucide="shield" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-300">No coverage plans available for the selected vehicle
+                            criteria.</p>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Kilometers Driven
-                        </label>
-                        <input type="number" [(ngModel)]="vehicleForm.kilometers" min="0" placeholder="e.g., 50000"
-                            class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary">
-                    </div>
-                </div>
-            </app-collapsible-section>
 
-            <!-- Additional Coverage Section -->
-            <app-collapsible-section title="Additional Coverage" icon="shield" [expanded]="isSectionOpen('coverage')"
-                (toggle)="toggleSection('coverage')" [isComplete]="false">
-                <app-program-selector [(includeRoadside)]="vehicleForm.hasRoadSide"
-                    [(selectedProgram)]="vehicleForm.roadSideProgram" (programSelected)="onProgramSelected($event)"
-                    (roadsideToggled)="onRoadsideToggled($event)">
-                </app-program-selector>
-            </app-collapsible-section>
-        </div>
-
-        <!-- Step 2: Coverage Selection -->
-        <div *ngIf="currentStep === 1" class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Select Coverage Plan</h2>
-
-                <div *ngIf="loading" class="flex justify-center py-12">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                </div>
-
-                <div *ngIf="!loading && proposals.length === 0" class="text-center py-12">
-                    <i data-lucide="shield" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                    <p class="text-gray-600 dark:text-gray-300">No coverage plans available for the selected vehicle
-                        criteria.</p>
-                </div>
-
-                <div *ngIf="!loading && proposals.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Proposal Cards -->
-                    <div *ngFor="let proposal of proposals"
-                        class="relative border rounded-xl p-6 cursor-pointer transition-all duration-200" [ngClass]="{
+                    <div *ngIf="!loading && proposals.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Proposal Cards -->
+                        <div *ngFor="let proposal of proposals"
+                            class="relative border rounded-xl p-6 cursor-pointer transition-all duration-200" [ngClass]="{
                             'border-blue-600 bg-blue-50 dark:bg-blue-900/20': selectedProposal?.id === proposal.id,
                             'border-gray-200 dark:border-gray-700': selectedProposal?.id !== proposal.id
                         }" (click)="selectProposal(proposal)">
 
-                        <div *ngIf="selectedProposal?.id === proposal.id"
-                            class="absolute -top-3 -right-3 bg-blue-600 text-white p-1 rounded-full shadow-md">
-                            <i data-lucide="check" class="w-4 h-4"></i>
-                        </div>
+                            <div *ngIf="selectedProposal?.id === proposal.id"
+                                class="absolute -top-3 -right-3 bg-blue-600 text-white p-1 rounded-full shadow-md">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                            </div>
 
-                        <!-- Proposal Header -->
-                        <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700/50">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Proposal
-                                Number</span>
-                            <h3 class="text-lg font-bold text-navy dark:text-white">
-                                {{ proposal.proposal_reference || 'N/A' }}
-                            </h3>
-                        </div>
+                            <!-- Proposal Header -->
+                            <div class="mb-4 pb-4 border-b border-gray-200 dark:border-gray-700/50">
+                                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Proposal
+                                    Number</span>
+                                <h3 class="text-lg font-bold text-navy dark:text-white">
+                                    {{ proposal.proposal_reference || 'N/A' }}
+                                </h3>
+                            </div>
 
-                        <!-- Main Price -->
-                        <div class="mb-4">
-                            <span class="text-xs text-gray-500">Gross Premium</span>
-                            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                {{ proposal.proposal_gross_premium | currency:'EGP ' }}
+                            <!-- Main Price -->
+                            <div class="mb-4">
+                                <span class="text-xs text-gray-500">Gross Premium</span>
+                                <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                                    {{ proposal.proposal_gross_premium | currency:'EGP ' }}
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Details Grid -->
-                        <div class="space-y-3 mb-6 bg-white/50 dark:bg-black/20 p-4 rounded-lg">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600 dark:text-gray-400">Net Premium</span>
-                                <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_net_premium |
-                                    currency:'EGP ' }}</span>
+                            <!-- Details Grid -->
+                            <div class="space-y-3 mb-6 bg-white/50 dark:bg-black/20 p-4 rounded-lg">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Net Premium</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_net_premium
+                                        |
+                                        currency:'EGP ' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Rate</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_net_rate
+                                        }}%</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Taxes</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_tax_amount
+                                        |
+                                        currency:'EGP ' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-600 dark:text-gray-400">Fees</span>
+                                    <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_issue_fees
+                                        |
+                                        currency:'EGP ' }}</span>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600 dark:text-gray-400">Rate</span>
-                                <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_net_rate
-                                    }}%</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600 dark:text-gray-400">Taxes</span>
-                                <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_tax_amount |
-                                    currency:'EGP ' }}</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-gray-600 dark:text-gray-400">Fees</span>
-                                <span class="font-medium text-navy dark:text-white">{{ proposal.proposal_issue_fees |
-                                    currency:'EGP ' }}</span>
-                            </div>
-                        </div>
 
-                        <app-button variant="outline" class="w-full"
-                            (click)="$event.stopPropagation(); downloadProposalPdf(proposal)"
-                            [disabled]="downloadingProposalId === proposal.id">
-                            <i-lucide *ngIf="downloadingProposalId !== proposal.id" name="download"
-                                class="w-4 h-4 mr-2"></i-lucide>
-                            <i-lucide *ngIf="downloadingProposalId === proposal.id" name="loader-2"
-                                class="w-4 h-4 mr-2 animate-spin"></i-lucide>
-                            {{ downloadingProposalId === proposal.id ? 'Downloading...' : 'Download PDF' }}
-                        </app-button>
+                            <app-button variant="outline" class="w-full"
+                                (click)="$event.stopPropagation(); downloadProposalPdf(proposal)"
+                                [disabled]="downloadingProposalId === proposal.id">
+                                <i-lucide *ngIf="downloadingProposalId !== proposal.id" name="download"
+                                    class="w-4 h-4 mr-2"></i-lucide>
+                                <i-lucide *ngIf="downloadingProposalId === proposal.id" name="loader-2"
+                                    class="w-4 h-4 mr-2 animate-spin"></i-lucide>
+                                {{ downloadingProposalId === proposal.id ? 'Downloading...' : 'Download PDF' }}
+                            </app-button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Step 3: Documents -->
-        <div *ngIf="currentStep === 2" class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Upload Required Documents</h2>
-
-                <div *ngIf="requiredDocuments.length === 0" class="text-center py-12">
-                    <i data-lucide="file-text" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
-                    <p class="text-gray-600 dark:text-gray-300">No documents required</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div *ngFor="let doc of requiredDocuments"
-                        class="p-5 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-300 dark:hover:border-blue-700 transition-colors bg-white dark:bg-gray-800">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <!-- Circled Icon -->
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                                    [ngClass]="uploadedDocuments.has(doc.id) ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'">
-                                    <i [attr.data-lucide]="uploadedDocuments.has(doc.id) ? 'check' : 'file-text'"
-                                        class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <span class="font-bold text-navy dark:text-white block text-sm">{{ doc.item ||
-                                        doc.document_name }}</span>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400"
-                                        *ngIf="doc.required_document && !uploadedDocuments.has(doc.id)">Required</span>
-                                    <span class="text-xs text-green-600 dark:text-green-400 font-medium"
-                                        *ngIf="uploadedDocuments.has(doc.id)">Uploaded</span>
-                                </div>
-                            </div>
-                            <!-- Required Asterisk (only if not uploaded) -->
-                            <span *ngIf="doc.required_document && !uploadedDocuments.has(doc.id)"
-                                class="text-red-500 font-bold text-lg" title="Required">*</span>
+            <!-- Step 3: Additional Details (NEW) -->
+            <div *ngIf="currentStep === 2" class="space-y-4">
+                <!-- Specifications Section -->
+                <app-collapsible-section title="Specifications" icon="file-text" [expanded]="true"
+                    [isComplete]="isSpecificationsComplete">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div>
+                            <app-selection-modal label="Category" [(value)]="vehicleForm.category"
+                                [options]="categories" [title]="'Select Vehicle Category'"
+                                [subtitle]="'Choose the category'"
+                                [placeholder]="!vehicleForm.model ? 'Select model first' : 'Choose category'"
+                                [layout]="'list'" [disabled]="!vehicleForm.model" [required]="true">
+                            </app-selection-modal>
                         </div>
+                        <div>
+                            <app-selection-modal label="Body Type" [(value)]="vehicleForm.bodyType"
+                                [options]="bodyTypes" [title]="'Select Body Type'"
+                                [subtitle]="'Choose the vehicle body type'" [placeholder]="'Choose body type'"
+                                [layout]="'grid'" [gridCols]="3" [required]="true">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Color" [(value)]="vehicleForm.color" [options]="colors"
+                                [title]="'Select Vehicle Color'" [subtitle]="'Choose the color'"
+                                [placeholder]="'Choose color'" [layout]="'grid'" [gridCols]="4" [required]="true">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Fuel Type" [(value)]="vehicleForm.fuelType"
+                                [options]="fuelTypes" [title]="'Select Fuel Type'" [subtitle]="'Choose the fuel type'"
+                                [placeholder]="'Choose fuel type'" [layout]="'list'" [required]="false">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Vehicle Usage" [(value)]="vehicleForm.usage" [options]="usages"
+                                [title]="'Select Vehicle Usage'" [subtitle]="'Choose how the vehicle is used'"
+                                [placeholder]="'Choose usage type'" [layout]="'list'" [required]="true">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <app-selection-modal label="Engine CC" [(value)]="vehicleForm.cc" [options]="ccs"
+                                [title]="'Select Engine CC'" [subtitle]="'Choose the engine capacity'"
+                                [placeholder]="'Choose engine CC'" [layout]="'grid'" [gridCols]="3" [required]="true">
+                            </app-selection-modal>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Number of Seats <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" [(ngModel)]="vehicleForm.seats" min="1" max="50"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Plate No <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" [(ngModel)]="vehicleForm.plateNo"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary"
+                                required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Kilometers Driven
+                            </label>
+                            <input type="number" [(ngModel)]="vehicleForm.kilometers" min="0" placeholder="e.g., 50000"
+                                class="block w-full h-11 px-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-primary">
+                        </div>
+                    </div>
+                </app-collapsible-section>
 
-                        <div class="relative">
-                            <input type="file" (change)="onFileSelected($event, doc.id)" accept=".pdf,.jpg,.jpeg,.png"
-                                id="file-{{doc.id}}" class="hidden">
-                            <label for="file-{{doc.id}}"
-                                class="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors text-sm font-medium"
-                                [ngClass]="uploadedDocuments.has(doc.id) 
+                <!-- Additional Coverage Section -->
+                <app-collapsible-section title="Additional Coverage" icon="shield" [expanded]="true"
+                    [isComplete]="false">
+                    <app-program-selector [(includeRoadside)]="vehicleForm.hasRoadSide"
+                        [(selectedProgram)]="vehicleForm.roadSideProgram" (programSelected)="onProgramSelected($event)"
+                        (roadsideToggled)="onRoadsideToggled($event)">
+                    </app-program-selector>
+                </app-collapsible-section>
+            </div>
+
+            <!-- Step 4: Documents -->
+            <div *ngIf="currentStep === 3" class="space-y-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Upload Required Documents</h2>
+
+                    <div *ngIf="requiredDocuments.length === 0" class="text-center py-12">
+                        <i data-lucide="file-text" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+                        <p class="text-gray-600 dark:text-gray-300">No documents required</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div *ngFor="let doc of requiredDocuments"
+                            class="p-5 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-blue-300 dark:hover:border-blue-700 transition-colors bg-white dark:bg-gray-800">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <!-- Circled Icon -->
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                                        [ngClass]="uploadedDocuments.has(doc.id) ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'">
+                                        <i [attr.data-lucide]="uploadedDocuments.has(doc.id) ? 'check' : 'file-text'"
+                                            class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-navy dark:text-white block text-sm">{{ doc.item ||
+                                            doc.document_name }}</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                                            *ngIf="doc.required_document && !uploadedDocuments.has(doc.id)">Required</span>
+                                        <span class="text-xs text-green-600 dark:text-green-400 font-medium"
+                                            *ngIf="uploadedDocuments.has(doc.id)">Uploaded</span>
+                                    </div>
+                                </div>
+                                <!-- Required Asterisk (only if not uploaded) -->
+                                <span *ngIf="doc.required_document && !uploadedDocuments.has(doc.id)"
+                                    class="text-red-500 font-bold text-lg" title="Required">*</span>
+                            </div>
+
+                            <div class="relative">
+                                <input type="file" (change)="onFileSelected($event, doc.id)"
+                                    accept=".pdf,.jpg,.jpeg,.png" id="file-{{doc.id}}" class="hidden">
+                                <label for="file-{{doc.id}}"
+                                    class="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed rounded-lg cursor-pointer transition-colors text-sm font-medium"
+                                    [ngClass]="uploadedDocuments.has(doc.id) 
                                     ? 'border-green-200 dark:border-green-700 bg-green-50/50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30' 
                                     : 'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400'">
-                                <span *ngIf="!uploadedDocuments.has(doc.id)">Select File</span>
-                                <span *ngIf="uploadedDocuments.has(doc.id)" class="truncate px-2">{{
-                                    uploadedDocuments.get(doc.id)?.file_name }}</span>
-                            </label>
+                                    <span *ngIf="!uploadedDocuments.has(doc.id)">Select File</span>
+                                    <span *ngIf="uploadedDocuments.has(doc.id)" class="truncate px-2">{{
+                                        uploadedDocuments.get(doc.id)?.file_name }}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Step 4: Review & Issue -->
+            <!-- Step 5: Review & Issue -->
+            <div *ngIf="currentStep === 4" class="space-y-6">
+                <div
+                    class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Review & Issue Policy</h2>
+
+                    <!-- Customer Summary -->
+                    <div class="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-4">Customer Information</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                                <p class="text-gray-500 mb-1">Name</p>
+                                <p class="font-medium">{{ selectedCustomer?.name || selectedCustomer?.full_name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">Email</p>
+                                <p class="font-medium">{{ selectedCustomer?.email }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">Phone</p>
+                                <p class="font-medium">{{ selectedCustomer?.phone }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">National ID</p>
+                                <p class="font-medium">{{ selectedCustomer?.nationalId ||
+                                    selectedCustomer?.identification_number ||
+                                    selectedCustomer?.national_id }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Summary -->
+                    <div class="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg mb-4">Vehicle Information</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div>
+                                <p class="text-gray-500 mb-1">Make & Model</p>
+                                <p class="font-medium">{{ makeName }} {{ modelName }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">Year</p>
+                                <p class="font-medium">{{ yearName }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">Chassis No</p>
+                                <p class="font-medium">{{ vehicleForm.chassisNo }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 mb-1">Sum Insured</p>
+                                <p class="font-medium">EGP {{ (+vehicleForm.sumInsured).toLocaleString() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coverage Summary -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-lg mb-4">Selected Coverage</h3>
+                        <div *ngIf="selectedProposal"
+                            class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-700">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h4 class="font-bold text-xl text-navy dark:text-white">{{
+                                        selectedProposal.proposal_reference }}</h4>
+                                    <p class="text-gray-600 dark:text-gray-300">Gross Premium</p>
+                                </div>
+                                <p class="text-3xl font-bold text-primary">
+                                    EGP {{ (selectedProposal.proposal_gross_premium || 0).toLocaleString() }}
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <p class="text-gray-500 mb-1">Net Premium</p>
+                                    <p class="font-medium">EGP {{ (selectedProposal.proposal_net_premium ||
+                                        0).toLocaleString() }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 mb-1">Taxes</p>
+                                    <p class="font-medium">EGP {{ (selectedProposal.proposal_tax_amount ||
+                                        0).toLocaleString() }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 mb-1">Fees</p>
+                                    <p class="font-medium">EGP {{ (selectedProposal.proposal_issue_fees ||
+                                        0).toLocaleString() }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Issue Button -->
+                    <div class="flex justify-center">
+                        <button (click)="issuePolicy()" [disabled]="loading"
+                            class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                            {{ loading ? 'Issuing Policy...' : 'Issue Policy' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- End Wizard Content Wrapper -->
         </div>
 
-        <!-- Step 4: Review & Issue -->
-        <div *ngIf="currentStep === 3" class="space-y-6">
-            <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 class="text-2xl font-bold text-navy dark:text-white mb-6">Review & Issue Policy</h2>
-
-                <!-- Customer Summary -->
-                <div class="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="font-bold text-lg mb-4">Customer Information</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                            <p class="text-gray-500 mb-1">Name</p>
-                            <p class="font-medium">{{ selectedCustomer?.name || selectedCustomer?.full_name }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">Email</p>
-                            <p class="font-medium">{{ selectedCustomer?.email }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">Phone</p>
-                            <p class="font-medium">{{ selectedCustomer?.phone }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">National ID</p>
-                            <p class="font-medium">{{ selectedCustomer?.nationalId ||
-                                selectedCustomer?.identification_number ||
-                                selectedCustomer?.national_id }}</p>
-                        </div>
+        <!-- Success View -->
+        <div *ngIf="issuanceSuccess" class="space-y-6">
+            <div
+                class="bg-white dark:bg-gray-800 p-12 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 text-center">
+                <!-- Success Icon -->
+                <div class="mb-8 flex justify-center">
+                    <div
+                        class="w-24 h-24 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center animate-bounce-short">
+                        <i data-lucide="check-circle" class="w-12 h-12 text-green-600 dark:text-green-400"></i>
                     </div>
                 </div>
 
-                <!-- Vehicle Summary -->
-                <div class="mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="font-bold text-lg mb-4">Vehicle Information</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                            <p class="text-gray-500 mb-1">Make & Model</p>
-                            <p class="font-medium">{{ vehicleForm.make }} {{ vehicleForm.model }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">Year</p>
-                            <p class="font-medium">{{ vehicleForm.year }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">Chassis No</p>
-                            <p class="font-medium">{{ vehicleForm.chassisNo }}</p>
-                        </div>
-                        <div>
-                            <p class="text-gray-500 mb-1">Sum Insured</p>
-                            <p class="font-medium">EGP {{ (+vehicleForm.sumInsured).toLocaleString() }}</p>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="text-3xl font-bold text-navy dark:text-white mb-4">Policy Issued Successfully!</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-lg mx-auto">
+                    The policy has been created and is now active. You can find it in the policies list.
+                </p>
 
-                <!-- Coverage Summary -->
-                <div class="mb-6">
-                    <h3 class="font-bold text-lg mb-4">Selected Coverage</h3>
-                    <div *ngIf="selectedProposal"
-                        class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-xl border border-blue-100 dark:border-blue-700">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="font-bold text-xl text-navy dark:text-white">{{
-                                    selectedProposal.proposal_reference }}</h4>
-                                <p class="text-gray-600 dark:text-gray-300">Gross Premium</p>
-                            </div>
-                            <p class="text-3xl font-bold text-primary">
-                                EGP {{ (selectedProposal.proposal_gross_premium || 0).toLocaleString() }}
+                <!-- Response Details Grid -->
+                <div *ngIf="issuanceResponseData"
+                    class="max-w-3xl mx-auto bg-gray-50 dark:bg-gray-700/30 rounded-xl p-8 mb-10 text-left">
+                    <h3
+                        class="font-bold text-lg text-navy dark:text-white mb-6 border-b border-gray-200 dark:border-gray-600 pb-2">
+                        Policy Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm">Policy Number</p>
+                            <p class="font-bold text-lg text-navy dark:text-white">{{
+                                issuanceResponseData.policy_number
+                                }}
                             </p>
                         </div>
-                        <div class="grid grid-cols-3 gap-4 text-sm">
-                            <div>
-                                <p class="text-gray-500 mb-1">Net Premium</p>
-                                <p class="font-medium">EGP {{ (selectedProposal.proposal_net_premium ||
-                                    0).toLocaleString() }}</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 mb-1">Taxes</p>
-                                <p class="font-medium">EGP {{ (selectedProposal.proposal_tax_amount ||
-                                    0).toLocaleString() }}</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-500 mb-1">Fees</p>
-                                <p class="font-medium">EGP {{ (selectedProposal.proposal_issue_fees ||
-                                    0).toLocaleString() }}</p>
-                            </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm">Status</p>
+                            <p
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                {{ issuanceResponseData.policy_state }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm">Opportunity Number</p>
+                            <p class="font-medium text-navy dark:text-white">{{
+                                issuanceResponseData.opportunity_number
+                                ||
+                                'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400 mb-1 text-sm">Policy ID</p>
+                            <p class="font-medium text-navy dark:text-white">{{ issuanceResponseData.policy_id }}
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Issue Button -->
+                <!-- Action Button -->
                 <div class="flex justify-center">
-                    <button (click)="issuePolicy()" [disabled]="loading"
-                        class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        {{ loading ? 'Issuing Policy...' : 'Issue Policy' }}
+                    <button [routerLink]="['/dashboard/broker/quotations']"
+                        class="px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center gap-3">
+                        <i data-lucide="list" class="w-5 h-5"></i>
+                        Back to Quote List
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="flex justify-between mt-8">
+        <div class="flex justify-between mt-8" *ngIf="!issuanceSuccess">
             <div class="flex gap-3">
                 <button *ngIf="currentStep > 0" (click)="previousStep()" [disabled]="loading"
                     class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">

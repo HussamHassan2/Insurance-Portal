@@ -1,400 +1,416 @@
 <app-dashboard-layout>
     <div class="space-y-6" *ngIf="!loading && survey">
         <!-- Header -->
-        <div class="mb-8 animate-fadeIn">
-            <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
-                <button (click)="goBack()" class="hover:text-primary transition-all duration-300">Surveys</button>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="w-4 h-4">
-                    <path d="m9 18 6-6-6-6" />
-                </svg>
-                <span class="text-navy dark:text-white font-medium">{{ survey.survey_number }}</span>
+        <div class="mb-8 animate-fadeIn relative overflow-hidden rounded-2xl p-4 -m-4">
+            <div class="absolute inset-0 pointer-events-none z-0"
+                style="background-image: url('/assets/img/backgrounds/survey-header.svg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
             </div>
-
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div class="flex items-start gap-4">
-                    <div
-                        class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <path d="M16 13H8" />
-                            <path d="M16 17H8" />
-                            <path d="M10 9H8" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-bold text-navy dark:text-white mb-1">{{ survey.surveyor_name }}</h1>
-                        <p class="text-lg text-gray-600 dark:text-gray-300 font-medium mb-2">Survey #{{
-                            survey.survey_number }}</p>
-
-                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-300">
-                            <span
-                                class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-xs font-semibold uppercase">
-                                {{ survey.survey_type }}
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                                </svg>
-                                {{ survey.product_name }}
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                </svg>
-                                Due: {{ survey.due_date | date:'mediumDate' }}
-                            </span>
-                        </div>
-                    </div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-2 text-sm text-gray-200 mb-4">
+                    <button (click)="goBack()" class="hover:text-white transition-all duration-300">Surveys</button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-4 h-4">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                    <span class="text-white font-medium">{{ survey.survey_number }}</span>
                 </div>
 
-                <!-- Actions -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <span class="px-4 py-2 rounded-full text-sm font-semibold capitalize flex items-center gap-2"
-                        [ngClass]="{
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center text-white shadow-lg border border-white/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <path d="M16 13H8" />
+                                <path d="M16 17H8" />
+                                <path d="M10 9H8" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold text-white mb-1">{{ survey.surveyor_name }}
+                            </h1>
+                            <p class="text-lg text-gray-200 font-medium mb-2">Survey #{{
+                                survey.survey_number }}</p>
+
+                            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-200">
+                                <span
+                                    class="flex items-center gap-1 bg-white/20 px-2 py-0.5 rounded text-xs font-semibold uppercase text-white">
+                                    {{ survey.survey_type }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                                    </svg>
+                                    {{ survey.product_name }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                        <line x1="16" y1="2" x2="16" y2="6" />
+                                        <line x1="8" y1="2" x2="8" y2="6" />
+                                        <line x1="3" y1="10" x2="21" y2="10" />
+                                    </svg>
+                                    Due: {{ survey.due_date | date:'mediumDate' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="px-4 py-2 rounded-full text-sm font-semibold capitalize flex items-center gap-2"
+                            [ngClass]="{
                             'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': survey.state === 'pending' || survey.state === 'surveyor assigned',
                             'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': survey.state === 'in_progress',
                             'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': survey.state === 'completed' || survey.state === 'accepted',
                             'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': survey.state === 'rejected' || survey.state === 'suspended'
                         }">
-                        {{ survey.state }}
-                    </span>
+                            {{ survey.state }}
+                        </span>
 
-                    <app-button *ngIf="survey.state === 'surveyor assigned'" variant="danger"
-                        (click)="onReject()">Reject</app-button>
-                    <app-button *ngIf="survey.state === 'surveyor assigned'" variant="secondary"
-                        (click)="onSuspend()">Suspend</app-button>
-                    <app-button *ngIf="survey.state === 'surveyor assigned'" variant="primary"
-                        (click)="onAccept()">Accept</app-button>
+                        <app-button *ngIf="survey.state === 'surveyor assigned'" variant="danger"
+                            (click)="onReject()">Reject</app-button>
+                        <app-button *ngIf="survey.state === 'surveyor assigned'" variant="secondary"
+                            (click)="onSuspend()">Suspend</app-button>
+                        <app-button *ngIf="survey.state === 'surveyor assigned'" variant="primary"
+                            (click)="onAccept()">Accept</app-button>
+                    </div>
                 </div>
             </div>
+
         </div>
+    </div>
 
-        <!-- Tabs -->
-        <div class="border-b border-gray-200 mb-6 animate-fadeIn" style="animation-delay: 100ms">
-            <nav class="flex gap-8 overflow-x-auto">
-                <button (click)="setActiveTab('overview')"
-                    [ngClass]="activeTab === 'overview' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
-                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
-                        <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    Overview
-                    <div *ngIf="activeTab === 'overview'"
-                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
-                    </div>
-                </button>
-                <button (click)="setActiveTab('risk')"
-                    [ngClass]="activeTab === 'risk' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
-                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="m18.8 13.9 1.1-1.1c.3-.3.3-.8 0-1.1l-6.8-6.8a1.5 1.5 0 0 0-2.1 0l-6.8 6.8c-.3.3-.3.8 0 1.1l1.1 1.1" />
-                        <path d="m8.3 11.4 1.4-2.8 5.7 5.7-2.8 1.4" />
-                        <path d="m11.1 8.6 2.8 1.4" />
-                        <path d="m9.7 7.2 2.8 1.4" />
-                    </svg>
-                    Risk Details
-                    <div *ngIf="activeTab === 'risk'"
-                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
-                    </div>
-                </button>
-                <button (click)="setActiveTab('documents')"
-                    *ngIf="survey.survey_documents && survey.survey_documents.length"
-                    [ngClass]="activeTab === 'documents' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
-                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                        <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    Documents
-                    <div *ngIf="activeTab === 'documents'"
-                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
-                    </div>
-                </button>
-                <button (click)="setActiveTab('actions')" *ngIf="survey.state !== 'completed'"
-                    [ngClass]="activeTab === 'actions' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
-                    class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                    </svg>
-                    Assessment
-                    <div *ngIf="activeTab === 'actions'"
-                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
-                    </div>
-                </button>
-            </nav>
-        </div>
-
-        <!-- Content -->
-        <div class="space-y-8 min-h-[400px]">
-            <!-- Overview Tab -->
-            <div *ngIf="activeTab === 'overview'" class="space-y-6 animate-fadeIn">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Survey Info -->
-                    <app-card title="Survey Information">
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Survey Number</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{ survey.survey_number }}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Sequence</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white">{{
-                                        survey.survey_type_sequence }}</p>
-                                </div>
-                            </div>
-                            <div class="border-t border-gray-100 dark:border-gray-700 py-2"></div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Assign Date</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{ survey.assign_date |
-                                    date:'mediumDate' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Due Date</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{ survey.due_date ?
-                                    (survey.due_date | date:'medium') : 'N/A' }}</p>
-                            </div>
-                        </div>
-                    </app-card>
-
-                    <!-- Customer Info -->
-                    <app-card title="Customer Information">
-                        <div class="space-y-4">
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Name</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{ survey.customer_name }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Contact</p>
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ survey.customer_phone }}
-                                </p>
-                                <p class="text-xs text-gray-500">{{ survey.customer_email }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Location</p>
-                                <p class="text-sm text-gray-900 dark:text-white">{{ survey.customer_street }} {{
-                                    survey.state_name }}</p>
-                            </div>
-                        </div>
-                    </app-card>
-
-                    <!-- Financials -->
-                    <app-card title="Financials">
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Zero Price</p>
-                                <p class="font-bold text-gray-900 dark:text-white">{{ survey.zero_price | currency }}
-                                </p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Market Value</p>
-                                <p class="font-bold text-gray-900 dark:text-white">{{ survey.market_value | currency }}
-                                </p>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Salvage Amount</p>
-                                <p class="font-bold text-gray-900 dark:text-white">{{ survey.salvage_amount | currency
-                                    }}</p>
-                            </div>
-                        </div>
-                    </app-card>
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6 animate-fadeIn" style="animation-delay: 100ms">
+        <nav class="flex gap-8 overflow-x-auto">
+            <button (click)="setActiveTab('overview')"
+                [ngClass]="activeTab === 'overview' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+                Overview
+                <div *ngIf="activeTab === 'overview'"
+                    class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
                 </div>
+            </button>
+            <button (click)="setActiveTab('risk')"
+                [ngClass]="activeTab === 'risk' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="m18.8 13.9 1.1-1.1c.3-.3.3-.8 0-1.1l-6.8-6.8a1.5 1.5 0 0 0-2.1 0l-6.8 6.8c-.3.3-.3.8 0 1.1l1.1 1.1" />
+                    <path d="m8.3 11.4 1.4-2.8 5.7 5.7-2.8 1.4" />
+                    <path d="m11.1 8.6 2.8 1.4" />
+                    <path d="m9.7 7.2 2.8 1.4" />
+                </svg>
+                Risk Details
+                <div *ngIf="activeTab === 'risk'"
+                    class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
+                </div>
+            </button>
+            <button (click)="setActiveTab('documents')"
+                *ngIf="survey.survey_documents && survey.survey_documents.length"
+                [ngClass]="activeTab === 'documents' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                    <polyline points="14 2 14 8 20 8" />
+                </svg>
+                Documents
+                <div *ngIf="activeTab === 'documents'"
+                    class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
+                </div>
+            </button>
+            <button (click)="setActiveTab('actions')" *ngIf="survey.state !== 'completed'"
+                [ngClass]="activeTab === 'actions' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
+                class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                Assessment
+                <div *ngIf="activeTab === 'actions'"
+                    class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full">
+                </div>
+            </button>
+        </nav>
+    </div>
 
-                <!-- Remarks -->
-                <app-card title="Conclusion & Recommendations" *ngIf="survey.conclusion || survey.recommendation">
+    <!-- Content -->
+    <div class="space-y-8 min-h-[400px]">
+        <!-- Overview Tab -->
+        <div *ngIf="activeTab === 'overview'" class="space-y-6 animate-fadeIn">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Survey Info -->
+                <app-card title="Survey Information">
                     <div class="space-y-4">
-                        <div *ngIf="survey.conclusion">
-                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1 uppercase">Conclusion</h4>
-                            <p
-                                class="text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg text-sm">
-                                {{ survey.conclusion }}</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Survey Number</p>
+                                <p class="font-semibold text-gray-900 dark:text-white">{{ survey.survey_number
+                                    }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Sequence</p>
+                                <p class="font-semibold text-gray-900 dark:text-white">{{
+                                    survey.survey_type_sequence }}</p>
+                            </div>
                         </div>
-                        <div *ngIf="survey.recommendation">
-                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1 uppercase">Recommendation
-                            </h4>
-                            <p
-                                class="text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg text-sm">
-                                {{ survey.recommendation }}</p>
+                        <div class="border-t border-gray-100 dark:border-gray-700 py-2"></div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Assign Date</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.assign_date |
+                                date:'mediumDate' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Due Date</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.due_date ?
+                                (survey.due_date | date:'medium') : 'N/A' }}</p>
+                        </div>
+                    </div>
+                </app-card>
+
+                <!-- Customer Info -->
+                <app-card title="Customer Information">
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Name</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.customer_name }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Contact</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{
+                                survey.customer_phone }}
+                            </p>
+                            <p class="text-xs text-gray-500">{{ survey.customer_email }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Location</p>
+                            <p class="text-sm text-gray-900 dark:text-white">{{ survey.customer_street }} {{
+                                survey.state_name }}</p>
+                        </div>
+                    </div>
+                </app-card>
+
+                <!-- Financials -->
+                <app-card title="Financials">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Zero Price</p>
+                            <p class="font-bold text-gray-900 dark:text-white">{{ survey.zero_price | currency
+                                }}
+                            </p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Market Value</p>
+                            <p class="font-bold text-gray-900 dark:text-white">{{ survey.market_value | currency
+                                }}
+                            </p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Salvage Amount</p>
+                            <p class="font-bold text-gray-900 dark:text-white">{{ survey.salvage_amount |
+                                currency
+                                }}</p>
                         </div>
                     </div>
                 </app-card>
             </div>
 
-            <!-- Risk Details Tab -->
-            <div *ngIf="activeTab === 'risk'" class="space-y-6 animate-fadeIn">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" *ngIf="survey.risk_info">
-                    <!-- Vehicle -->
-                    <app-card title="Vehicle Information">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Make & Model</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{
-                                    survey.risk_info.vehicle_make_name }} - {{ survey.risk_info.vehicle_model_name }}
-                                </p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Plate Number</p>
-                                <p
-                                    class="font-mono font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded inline-block">
-                                    {{ survey.risk_info.vehicle_plate_number || 'N/A' }}</p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Chassis Number</p>
-                                <p class="font-mono text-gray-900 dark:text-white">{{
-                                    survey.risk_info.vehicle_chassis_number }}</p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Motor Number</p>
-                                <p class="font-mono text-gray-900 dark:text-white">{{
-                                    survey.risk_info.vehicle_motor_number }}</p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Year</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{
-                                    survey.risk_info.vehicle_manufacture_year }}</p>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Color</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{
-                                    survey.risk_info.vehicle_color_name || 'N/A' }}</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-2">
-                            <span *ngIf="survey.risk_info.vehicle_has_radio"
-                                class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs dark:bg-green-900 dark:text-green-200">Radio</span>
-                            <span *ngIf="survey.risk_info.vehicle_has_conditioning"
-                                class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs dark:bg-blue-900 dark:text-blue-200">AC</span>
-                            <span *ngIf="survey.risk_info.vehicle_has_roadside"
-                                class="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs dark:bg-purple-900 dark:text-purple-200">Roadside</span>
-                        </div>
-                    </app-card>
-
-                    <!-- Driver -->
-                    <app-card title="Driver Information">
-                        <div class="space-y-4">
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Driver Name</p>
-                                <p class="font-semibold text-gray-900 dark:text-white">{{ survey.risk_info.driver_name
-                                    || 'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">License</p>
-                                <p class="font-medium text-gray-900 dark:text-white">{{
-                                    survey.risk_info.driver_license_number || 'N/A' }}</p>
-                                <p class="text-xs text-gray-500">Expires: {{ survey.risk_info.driver_license_expiry ||
-                                    'N/A' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Date of Birth</p>
-                                <p class="font-medium text-gray-900 dark:text-white">{{
-                                    survey.risk_info.driver_date_of_birth || 'N/A' }}</p>
-                            </div>
-                        </div>
-                    </app-card>
+            <!-- Remarks -->
+            <app-card title="Conclusion & Recommendations" *ngIf="survey.conclusion || survey.recommendation">
+                <div class="space-y-4">
+                    <div *ngIf="survey.conclusion">
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1 uppercase">Conclusion
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg text-sm">
+                            {{ survey.conclusion }}</p>
+                    </div>
+                    <div *ngIf="survey.recommendation">
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1 uppercase">
+                            Recommendation
+                        </h4>
+                        <p class="text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-3 rounded-lg text-sm">
+                            {{ survey.recommendation }}</p>
+                    </div>
                 </div>
-            </div>
+            </app-card>
+        </div>
 
-            <!-- Documents Tab -->
-            <div *ngIf="activeTab === 'documents'" class="animate-fadeIn">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div *ngFor="let doc of survey.survey_documents"
-                        class="bg-white dark:bg-gray-800 p-4 border border-gray-100 dark:border-gray-700 rounded-xl hover:shadow-md transition">
-                        <div class="flex items-start gap-3 mb-2">
-                            <div class="p-2 bg-blue-100 text-blue-600 rounded-lg dark:bg-blue-900 dark:text-blue-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                    <polyline points="14 2 14 8 20 8" />
-                                </svg>
-                            </div>
-                            <div class="flex-1 overflow-hidden">
-                                <p class="font-medium text-gray-900 dark:text-white truncate"
-                                    title="{{ doc.document_name }}">{{ doc.document_name }}</p>
-                                <p class="text-xs text-gray-500 truncate">{{ doc.document_code }}</p>
-                            </div>
+        <!-- Risk Details Tab -->
+        <div *ngIf="activeTab === 'risk'" class="space-y-6 animate-fadeIn">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" *ngIf="survey.risk_info">
+                <!-- Vehicle -->
+                <app-card title="Vehicle Information">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Make & Model</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                survey.risk_info.vehicle_make_name }} - {{ survey.risk_info.vehicle_model_name
+                                }}
+                            </p>
                         </div>
-                        <p *ngIf="doc.comment" class="text-xs text-gray-500 italic mt-2 line-clamp-2">"{{ doc.comment
-                            }}"</p>
-                        <div class="flex gap-2 mt-3" *ngIf="doc.files && doc.files.length">
-                            <span
-                                class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded dark:bg-blue-900/30 dark:text-blue-300">{{
-                                doc.files.length }} files</span>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Plate Number</p>
+                            <p
+                                class="font-mono font-medium bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded inline-block">
+                                {{ survey.risk_info.vehicle_plate_number || 'N/A' }}</p>
                         </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Chassis Number</p>
+                            <p class="font-mono text-gray-900 dark:text-white">{{
+                                survey.risk_info.vehicle_chassis_number }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Motor Number</p>
+                            <p class="font-mono text-gray-900 dark:text-white">{{
+                                survey.risk_info.vehicle_motor_number }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Year</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                survey.risk_info.vehicle_manufacture_year }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Color</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                survey.risk_info.vehicle_color_name || 'N/A' }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-2">
+                        <span *ngIf="survey.risk_info.vehicle_has_radio"
+                            class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs dark:bg-green-900 dark:text-green-200">Radio</span>
+                        <span *ngIf="survey.risk_info.vehicle_has_conditioning"
+                            class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs dark:bg-blue-900 dark:text-blue-200">AC</span>
+                        <span *ngIf="survey.risk_info.vehicle_has_roadside"
+                            class="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs dark:bg-purple-900 dark:text-purple-200">Roadside</span>
+                    </div>
+                </app-card>
+
+                <!-- Driver -->
+                <app-card title="Driver Information">
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Driver Name</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{
+                                survey.risk_info.driver_name
+                                || 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">License</p>
+                            <p class="font-medium text-gray-900 dark:text-white">{{
+                                survey.risk_info.driver_license_number || 'N/A' }}</p>
+                            <p class="text-xs text-gray-500">Expires: {{ survey.risk_info.driver_license_expiry
+                                ||
+                                'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Date of Birth</p>
+                            <p class="font-medium text-gray-900 dark:text-white">{{
+                                survey.risk_info.driver_date_of_birth || 'N/A' }}</p>
+                        </div>
+                    </div>
+                </app-card>
+            </div>
+        </div>
+
+        <!-- Documents Tab -->
+        <div *ngIf="activeTab === 'documents'" class="animate-fadeIn">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div *ngFor="let doc of survey.survey_documents"
+                    class="bg-white dark:bg-gray-800 p-4 border border-gray-100 dark:border-gray-700 rounded-xl hover:shadow-md transition">
+                    <div class="flex items-start gap-3 mb-2">
+                        <div class="p-2 bg-blue-100 text-blue-600 rounded-lg dark:bg-blue-900 dark:text-blue-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <p class="font-medium text-gray-900 dark:text-white truncate"
+                                title="{{ doc.document_name }}">{{ doc.document_name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ doc.document_code }}</p>
+                        </div>
+                    </div>
+                    <p *ngIf="doc.comment" class="text-xs text-gray-500 italic mt-2 line-clamp-2">"{{
+                        doc.comment
+                        }}"</p>
+                    <div class="flex gap-2 mt-3" *ngIf="doc.files && doc.files.length">
+                        <span
+                            class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded dark:bg-blue-900/30 dark:text-blue-300">{{
+                            doc.files.length }} files</span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Actions/Assessment Tab -->
-            <div *ngIf="activeTab === 'actions'" class="animate-fadeIn">
-                <app-card title="Submit Assessment">
-                    <form (ngSubmit)="submitAssessment()" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vehicle
-                                Condition</label>
-                            <app-selection-modal label="Vehicle Condition" [options]="[
+        <!-- Actions/Assessment Tab -->
+        <div *ngIf="activeTab === 'actions'" class="animate-fadeIn">
+            <app-card title="Submit Assessment">
+                <form (ngSubmit)="submitAssessment()" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vehicle
+                            Condition</label>
+                        <app-selection-modal label="Vehicle Condition" [options]="[
                                     {value: 'excellent', label: 'Excellent'},
                                     {value: 'good', label: 'Good'},
                                     {value: 'fair', label: 'Fair'},
                                     {value: 'poor', label: 'Poor'}
                                 ]" [(value)]="assessmentForm.condition" title="Select Vehicle Condition"
-                                subtitle="Choose the condition of the vehicle" placeholder="Select condition"
-                                [required]="true" valueKey="value" displayKey="label">
-                            </app-selection-modal>
-                        </div>
+                            subtitle="Choose the condition of the vehicle" placeholder="Select condition"
+                            [required]="true" valueKey="value" displayKey="label">
+                        </app-selection-modal>
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated
-                                Value</label>
-                            <input type="number" [(ngModel)]="assessmentForm.estimatedValue" name="estimatedValue"
-                                required
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="0.00" />
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Estimated
+                            Value</label>
+                        <input type="number" [(ngModel)]="assessmentForm.estimatedValue" name="estimatedValue" required
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="0.00" />
+                    </div>
 
-                        <div>
-                            <label
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recommendations</label>
-                            <textarea [(ngModel)]="assessmentForm.recommendations" name="recommendations" required
-                                rows="5"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter your recommendations..."></textarea>
-                        </div>
+                    <div>
+                        <label
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recommendations</label>
+                        <textarea [(ngModel)]="assessmentForm.recommendations" name="recommendations" required rows="5"
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter your recommendations..."></textarea>
+                    </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload
-                                Photos</label>
-                            <app-file-upload [accept]="'image/*'" [multiple]="true"
-                                (filesSelected)="onFilesSelected($event)">
-                            </app-file-upload>
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload
+                            Photos</label>
+                        <app-file-upload [accept]="'image/*'" [multiple]="true"
+                            (filesSelected)="onFilesSelected($event)">
+                        </app-file-upload>
+                    </div>
 
-                        <div class="flex justify-end">
-                            <app-button type="submit" variant="primary">Submit Assessment</app-button>
-                        </div>
-                    </form>
-                </app-card>
-            </div>
+                    <div class="flex justify-end">
+                        <app-button type="submit" variant="primary">Submit Assessment</app-button>
+                    </div>
+                </form>
+            </app-card>
         </div>
     </div>
 

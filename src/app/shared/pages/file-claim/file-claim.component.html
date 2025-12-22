@@ -1,192 +1,254 @@
 <app-dashboard-layout>
     <div *ngIf="!isComplete; else successView">
-        <app-wizard #wizard [title]="'File a New Claim'" [steps]="steps" [initialData]="formData"
-            (complete)="onWizardComplete($event)">
 
-            <ng-container *ngIf="wizard.currentStep === 0">
-                <!-- Step 1: Incident Details -->
-                <form #step1Form="ngForm" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <app-text-input label="Loss Date" type="date" [(ngModel)]="formData.loss_date" name="loss_date"
-                            [required]="true" icon="calendar"></app-text-input>
-                        <app-text-input label="Intimation Date" type="date" [(ngModel)]="formData.intimation_date"
-                            name="intimation_date" [required]="true" icon="calendar"></app-text-input>
+        <!-- Wizard Section -->
+        <div>
+            <app-wizard #wizard [title]="'New Claim Intimation'" [steps]="steps" [initialData]="formData"
+                (complete)="onWizardComplete($event)">
 
-                        <app-text-input label="Chassis Number" [(ngModel)]="formData.chassis_number"
-                            name="chassis_number" placeholder="e.g., 1111111111" [required]="true"
-                            icon="car"></app-text-input>
-                        <app-text-input label="Police Report Number" [(ngModel)]="formData.police_report_number"
-                            name="police_report_number" placeholder="Police report number" [required]="true"
-                            icon="file-text"></app-text-input>
+                <ng-container *ngIf="wizard.currentStep === 0">
+                    <!-- Step 1: Intimation Details -->
+                    <form #step1Form="ngForm" class="space-y-6">
 
-                        <div class="md:col-span-2">
-                            <app-selection-modal label="Severity" [(value)]="formData.severity" name="severity"
-                                [options]="severityOptions" [title]="'Select Severity Level'"
-                                [subtitle]="'Choose the incident severity'" [layout]="'list'"
-                                [required]="true"></app-selection-modal>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <app-textarea-input label="Initial Damage Description"
-                                [(ngModel)]="formData.initial_damage_description" name="initial_damage_description"
-                                placeholder="Describe the damage..." [required]="true"></app-textarea-input>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <app-textarea-input label="Accident Description" [(ngModel)]="formData.acc_desc"
-                                name="acc_desc" placeholder="Describe what happened..."
-                                [required]="true"></app-textarea-input>
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <app-text-input label="Accident Address" [(ngModel)]="formData.accident_address"
-                                name="accident_address" placeholder="Location of accident" [required]="true"
-                                icon="map-pin"></app-text-input>
-                        </div>
-
-                        <app-text-input label="Requested Survey Date" type="date"
-                            [(ngModel)]="formData.requested_survey_date" name="requested_survey_date" [required]="true"
-                            icon="calendar"></app-text-input>
-                    </div>
-
-                    <div class="flex justify-end">
-                        <button type="button" (click)="wizard.handleNext(formData)" [disabled]="!step1Form.valid"
-                            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                            Next Step
-                        </button>
-                    </div>
-                </form>
-            </ng-container>
-
-            <ng-container *ngIf="wizard.currentStep === 1">
-                <!-- Step 2: Vehicle Details -->
-                <form #step2Form="ngForm" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <app-text-input label="Vehicle Maker" [(ngModel)]="formData.vehicle_maker" name="vehicle_maker"
-                            placeholder="e.g., TOYOTA" [required]="true" icon="car"></app-text-input>
-                        <app-text-input label="Vehicle Model" [(ngModel)]="formData.vehcile_model" name="vehcile_model"
-                            placeholder="e.g., CAMRY" [required]="true" icon="car"></app-text-input>
-                        <app-text-input label="Vehicle Category" [(ngModel)]="formData.vechicle_category"
-                            name="vechicle_category" placeholder="e.g., SEDAN" [required]="true"></app-text-input>
-                        <app-text-input label="Engine Capacity" [(ngModel)]="formData.vechicle_engine_capacity"
-                            name="vechicle_engine_capacity" placeholder="e.g., From 1500 To 1600"
-                            [required]="true"></app-text-input>
-                        <app-text-input label="Manufacturing Year" [(ngModel)]="formData.vehicle_manufacturing_year"
-                            name="vehicle_manufacturing_year" placeholder="e.g., 2024"
-                            [required]="true"></app-text-input>
-                        <app-text-input label="Motor Number" [(ngModel)]="formData.vehicle_motor_number"
-                            name="vehicle_motor_number" placeholder="Motor/Engine number"
-                            [required]="true"></app-text-input>
-                        <app-text-input label="Plate Number" [(ngModel)]="formData.vehicle_plate_number"
-                            name="vehicle_plate_number" placeholder="Vehicle plate number"
-                            [required]="true"></app-text-input>
-
-                        <app-text-input label="License Start Date" type="date"
-                            [(ngModel)]="formData.vehicle_licence_start_date" name="vehicle_licence_start_date"
-                            icon="calendar"></app-text-input>
-                        <app-text-input label="License Expiration Date" type="date"
-                            [(ngModel)]="formData.vehicle_licence_expiration_date"
-                            name="vehicle_licence_expiration_date" icon="calendar"></app-text-input>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <button type="button" (click)="wizard.handleBack()"
-                            class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
-                            Back
-                        </button>
-                        <button type="button" (click)="wizard.handleNext(formData)" [disabled]="!step2Form.valid"
-                            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                            Next Step
-                        </button>
-                    </div>
-                </form>
-            </ng-container>
-
-            <ng-container *ngIf="wizard.currentStep === 2">
-                <!-- Step 3: Driver & Workshop Details -->
-                <form #step3Form="ngForm" class="space-y-6">
-                    <!-- Driver Information -->
-                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Driver Information</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2">
-                                <label class="flex items-center space-x-2">
-                                    <input type="checkbox" [(ngModel)]="formData.is_driver" name="is_driver"
-                                        class="rounded border-gray-300 text-primary focus:ring-primary">
-                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">I was the
-                                        driver</span>
-                                </label>
-                            </div>
-
-                            <ng-container *ngIf="!formData.is_driver">
-                                <app-text-input label="Driver Name" [(ngModel)]="formData.driver_name"
-                                    name="driver_name" placeholder="Driver's full name" [required]="true"
-                                    icon="user"></app-text-input>
-                                <app-text-input label="Driver Birth Date" type="date"
-                                    [(ngModel)]="formData.driver_birth_date" name="driver_birth_date" [required]="true"
-                                    icon="calendar"></app-text-input>
-
-                                <div>
-                                    <app-selection-modal label="Driver Gender" [(value)]="formData.driver_gender"
-                                        name="driver_gender" [options]="genderOptions" [title]="'Select Gender'"
-                                        [layout]="'list'" [required]="true"></app-selection-modal>
-                                </div>
-
-                                <app-text-input label="Driver License Start Date" type="date"
-                                    [(ngModel)]="formData.driver_licence_start_date" name="driver_licence_start_date"
-                                    icon="calendar"></app-text-input>
-                                <app-text-input label="Driver License Expiration Date" type="date"
-                                    [(ngModel)]="formData.driver_licence_expiration_date"
-                                    name="driver_licence_expiration_date" icon="calendar"></app-text-input>
-                            </ng-container>
-                        </div>
-                    </div>
-
-                    <!-- Workshop Information -->
-                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
-                        <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Workshop Information</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="md:col-span-2">
-                                <app-selection-modal label="Workshop Type" [(value)]="formData.workshop_type"
-                                    name="workshop_type" [options]="workshopTypeOptions"
-                                    [title]="'Select Workshop Type'" [subtitle]="'Choose internal or external workshop'"
-                                    [layout]="'list'" [required]="true"></app-selection-modal>
-                            </div>
-
-                            <ng-container *ngIf="formData.workshop_type === 'internal'">
+                        <!-- Intimator Details -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Intimator Details</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <app-text-input label="Intimator Name" [(ngModel)]="formData.intimator_name"
+                                    name="intimator_name" [required]="true"></app-text-input>
+                                <app-text-input label="Intimator Phone" [(ngModel)]="formData.intimator_phone"
+                                    name="intimator_phone" [required]="true"></app-text-input>
                                 <div class="md:col-span-2">
-                                    <app-text-input label="Internal Workshop Code"
-                                        [(ngModel)]="formData.internal_workshop_code" name="internal_workshop_code"
-                                        placeholder="e.g., 015000000284" [required]="true"
-                                        icon="wrench"></app-text-input>
+                                    <app-text-input label="Intimator Address" [(ngModel)]="formData.intimator_address"
+                                        name="intimator_address" [required]="true"></app-text-input>
                                 </div>
-                            </ng-container>
+                                <app-text-input label="Relationship to Insured" [(ngModel)]="formData.relative"
+                                    name="relative" placeholder="Self, Driver, etc."></app-text-input>
+                            </div>
+                        </div>
 
-                            <ng-container *ngIf="formData.workshop_type === 'external'">
-                                <app-text-input label="Workshop Address" [(ngModel)]="formData.workshop_address"
-                                    name="workshop_address" placeholder="Workshop address" [required]="true"
+                        <!-- Driver Information -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Driver Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" [(ngModel)]="formData.is_driver" name="is_driver"
+                                            class="rounded border-gray-300 text-primary focus:ring-primary">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">I was the
+                                            driver</span>
+                                    </label>
+                                </div>
+
+                                <ng-container *ngIf="false">
+                                    <!-- Hidden or Removed 'Always show' logic, relying on toggles -->
+                                </ng-container>
+
+                                <ng-container *ngIf="formData.is_driver">
+                                    <!-- Always show or conditional? 'is_driver' checked means user is driver. 
+                                         Usually if user is driver, we might auto-fill, but let's allow editing 
+                                         User requested 'Driver Section'. -->
+                                    <app-text-input label="Driver Name" [(ngModel)]="formData.driver_name"
+                                        name="driver_name" placeholder="Driver's full name" [required]="true"
+                                        icon="user"></app-text-input>
+                                    <app-text-input label="Driver Birth Date" type="date"
+                                        [(ngModel)]="formData.driver_birth_date" name="driver_birth_date"
+                                        icon="calendar"></app-text-input>
+
+                                    <div>
+                                        <app-selection-modal label="Driver Gender" [(value)]="formData.driver_gender"
+                                            name="driver_gender" [options]="genderOptions" [title]="'Select Gender'"
+                                            [layout]="'list'"></app-selection-modal>
+                                    </div>
+
+                                    <app-text-input label="License Start Date" type="date"
+                                        [(ngModel)]="formData.driver_licence_start_date"
+                                        name="driver_licence_start_date" icon="calendar"></app-text-input>
+                                    <app-text-input label="License Expiration Date" type="date"
+                                        [(ngModel)]="formData.driver_licence_expiration_date"
+                                        name="driver_licence_expiration_date" icon="calendar"></app-text-input>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <!-- Workshop Information -->
+                        <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Workshop Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <app-selection-modal label="Workshop Type" [(value)]="formData.workshop_type"
+                                        name="workshop_type" [options]="workshopTypeOptions"
+                                        [title]="'Select Workshop Type'"
+                                        [subtitle]="'Choose internal or external workshop'" [layout]="'list'"
+                                        [required]="true"></app-selection-modal>
+                                </div>
+
+                                <ng-container *ngIf="formData.workshop_type === 'internal'">
+                                    <div class="md:col-span-2">
+                                        <app-selection-modal label="Internal Workshop"
+                                            [(value)]="formData.internal_workshop_code" name="internal_workshop_code"
+                                            [options]="internalWorkshopOptions" [title]="'Select Workshop'"
+                                            [subtitle]="'Search by name or code'" [enableSearch]="true"
+                                            [required]="true" displayKey="name" valueKey="code"
+                                            descriptionKey="description">
+                                        </app-selection-modal>
+                                    </div>
+                                </ng-container>
+
+                                <ng-container *ngIf="formData.workshop_type === 'external'">
+                                    <app-text-input label="Workshop Address" [(ngModel)]="formData.workshop_address"
+                                        name="workshop_address" placeholder="Workshop address" [required]="true"
+                                        icon="map-pin"></app-text-input>
+                                    <app-text-input label="Workshop Number" [(ngModel)]="formData.workshop_number"
+                                        name="workshop_number" placeholder="Workshop contact number"
+                                        [required]="true"></app-text-input>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="button" (click)="wizard.handleNext(formData)" [disabled]="!step1Form.valid"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                Next Step
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+
+                <ng-container *ngIf="wizard.currentStep === 1">
+                    <!-- Step 2: Loss & Accident Details -->
+                    <form #step2Form="ngForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <app-text-input label="Loss Date" type="date" [(ngModel)]="formData.loss_date"
+                                name="loss_date_view" [disabled]="true" icon="calendar"></app-text-input>
+                            <app-text-input label="Intimation Date" type="date" [(ngModel)]="formData.intimation_date"
+                                name="intimation_date" [disabled]="true" icon="calendar"></app-text-input>
+
+                            <app-text-input label="Police Report Number" [(ngModel)]="formData.police_report_number"
+                                name="police_report_number" placeholder="Police report number"
+                                icon="file-text"></app-text-input>
+
+                            <div class="md:col-span-2">
+                                <app-selection-modal label="Severity" [(value)]="formData.severity" name="severity"
+                                    [options]="severityOptions" [title]="'Select Severity Level'"
+                                    [subtitle]="'Choose the incident severity'" [layout]="'list'"
+                                    [required]="true"></app-selection-modal>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <app-textarea-input label="Initial Damage Description"
+                                    [(ngModel)]="formData.initial_damage_description" name="initial_damage_description"
+                                    placeholder="Describe the damage..." [required]="true"></app-textarea-input>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <app-textarea-input label="Accident Description" [(ngModel)]="formData.acc_desc"
+                                    name="acc_desc" placeholder="Describe what happened..."
+                                    [required]="true"></app-textarea-input>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <app-text-input label="Accident Address" [(ngModel)]="formData.accident_address"
+                                    name="accident_address" placeholder="Location of accident" [required]="true"
                                     icon="map-pin"></app-text-input>
-                                <app-text-input label="Workshop Number" [(ngModel)]="formData.workshop_number"
-                                    name="workshop_number" placeholder="Workshop contact number"
-                                    [required]="true"></app-text-input>
-                            </ng-container>
+                            </div>
+
+                            <app-text-input label="Requested Survey Date" type="date"
+                                [(ngModel)]="formData.requested_survey_date" name="requested_survey_date"
+                                [required]="true" icon="calendar"></app-text-input>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <button type="button" (click)="wizard.handleBack()"
+                                class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                Back
+                            </button>
+                            <button type="button" (click)="wizard.handleNext(formData)" [disabled]="!step2Form.valid"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                Next Step
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+
+                <ng-container *ngIf="wizard.currentStep === 2">
+                    <!-- Step 3: Claim Documents -->
+                    <form #step3Form="ngForm" class="space-y-6">
+                        <div class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg text-center">
+                            <h3 class="text-lg font-semibold text-navy dark:text-white mb-4">Upload Documents</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-6">Please upload the following documents:</p>
+
+                            <!-- Required Documents List from API -->
+                            <div *ngIf="requiredDocuments?.length"
+                                class="mb-6 text-left max-w-lg mx-auto bg-blue-50 dark:bg-blue-900/10 p-4 rounded-lg">
+                                <h4 class="font-medium text-blue-700 dark:text-blue-300 mb-2">Required:</h4>
+                                <ul class="list-disc list-inside text-sm text-blue-600 dark:text-blue-400">
+                                    <li *ngFor="let doc of requiredDocuments">{{ doc.name || doc.label || doc }}</li>
+                                </ul>
+                            </div>
+
+                            <app-file-upload [multiple]="true" [maxSize]="10485760"
+                                (filesSelected)="onFilesSelected($event)">
+                            </app-file-upload>
+
+                            <div *ngIf="formData.claim_documents?.length" class="mt-4 text-left">
+                                <h4 class="font-medium text-gray-700 dark:text-gray-300 mb-2">Selected Files:</h4>
+                                <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400">
+                                    <li *ngFor="let file of formData.claim_documents">{{ file.name }} ({{ (file.size /
+                                        1024).toFixed(1) }} KB)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <button type="button" (click)="wizard.handleBack()"
+                                class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                Back
+                            </button>
+                            <button type="button" (click)="wizard.handleNext(formData)"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                Next Step
+                            </button>
+                        </div>
+                    </form>
+                </ng-container>
+
+                <ng-container *ngIf="wizard.currentStep === 3">
+                    <!-- Step 4: Review & Submit -->
+                    <div class="space-y-6">
+                        <div
+                            class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                            <h3 class="text-lg font-semibold text-navy dark:text-white mb-2">Review Claim Details</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Please review all information before
+                                submitting.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                            <div><span class="font-semibold">Loss Date:</span> {{ formData.loss_date }}</div>
+                            <div><span class="font-semibold">Chassis:</span> {{ formData.chassis_number }}</div>
+                            <div><span class="font-semibold">Intimator:</span> {{ formData.intimator_name }}</div>
+                            <div><span class="font-semibold">Driver:</span> {{ formData.driver_name }}</div>
+                            <div><span class="font-semibold">Vehicle:</span> {{ formData.vehicle_maker }} {{
+                                formData.vehcile_model }} ({{ formData.vehicle_plate_number }})</div>
+                            <!-- Add more summary fields as needed -->
+                        </div>
+
+                        <div class="flex justify-between mt-8">
+                            <button type="button" (click)="wizard.handleBack()"
+                                class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                Back
+                            </button>
+                            <button type="button" (click)="wizard.handleNext(formData)"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                {{ loading ? 'Submitting...' : 'Submit Claim Request' }}
+                            </button>
                         </div>
                     </div>
+                </ng-container>
 
-                    <div class="flex justify-between">
-                        <button type="button" (click)="wizard.handleBack()"
-                            class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
-                            Back
-                        </button>
-                        <button type="button" (click)="wizard.handleNext(formData)" [disabled]="!step3Form.valid"
-                            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                            {{ loading ? 'Submitting...' : 'Submit Claim' }}
-                        </button>
-                    </div>
-                </form>
-            </ng-container>
+            </app-wizard>
+        </div>
 
-        </app-wizard>
     </div>
 
     <!-- Success View -->

@@ -15,46 +15,54 @@
 
     <!-- Client Details -->
     <div *ngIf="!loading && !error && client" class="space-y-8">
-        <!-- Breadcrumb -->
-        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-            <a [routerLink]="['/dashboard/broker/clients']" class="hover:text-primary transition-colors">{{
-                'DETAILS.CLIENT.BREADCRUMB' | translate }}</a>
-            <span>/</span>
-            <span>{{ client.name }}</span>
-        </div>
-
         <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <div
-                    class="w-16 h-16 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-primary border-2 border-white shadow-sm">
-                    <i data-lucide="user" class="w-8 h-8"></i>
+        <div class="relative overflow-hidden rounded-2xl p-4 -m-4">
+            <div class="absolute inset-0 pointer-events-none z-0"
+                style="background-image: url('/assets/img/backgrounds/clients-header.svg'); background-repeat: no-repeat; background-position: center; background-size: cover;">
+            </div>
+            <div class="relative z-10 flex flex-col gap-4">
+                <!-- Breadcrumb -->
+                <div class="flex items-center gap-2 text-sm text-gray-200">
+                    <a [routerLink]="['/dashboard/broker/clients']" class="hover:text-white transition-colors">{{
+                        'DETAILS.CLIENT.BREADCRUMB' | translate }}</a>
+                    <span>/</span>
+                    <span class="text-white font-medium">{{ client.name }}</span>
                 </div>
-                <div>
-                    <h1 class="text-2xl font-bold text-navy dark:text-white">{{ client.name }}</h1>
-                    <p *ngIf="client.arabicName" class="text-lg text-gray-600 dark:text-gray-300 mt-1">{{
-                        client.arabicName }}</p>
-                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        <span class="flex items-center gap-1">
-                            <i data-lucide="mail" class="w-3 h-3"></i> {{ client.email }}
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <i data-lucide="phone" class="w-3 h-3"></i> {{ client.phone }}
-                        </span>
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white border-2 border-white/20 shadow-sm">
+                            <i data-lucide="user" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-white">{{ client.name }}</h1>
+                            <p *ngIf="client.arabicName" class="text-lg text-gray-200 mt-1">{{
+                                client.arabicName }}</p>
+                            <div class="flex items-center gap-4 text-sm text-gray-200 mt-1">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="mail" class="w-3 h-3"></i> {{ client.email }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="phone" class="w-3 h-3"></i> {{ client.phone }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button (click)="createClaim()"
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            Intimate Claim
+                        </button>
+                        <button (click)="createQuote()"
+                            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            New Quote
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <button (click)="createClaim()"
-                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
-                    <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                    Intimate Claim
-                </button>
-                <button (click)="createQuote()"
-                    class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    New Quote
-                </button>
+
             </div>
         </div>
 
@@ -66,7 +74,8 @@
                     class="pb-4 text-sm font-medium capitalize transition-all duration-300 relative">
                     {{ tab }}
                     <div *ngIf="activeTab === tab"
-                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full"></div>
+                        class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-full">
+                    </div>
                 </button>
             </div>
         </div>
@@ -119,7 +128,8 @@
                         <div class="col-span-2 md:col-span-3 lg:col-span-4">
                             <p class="text-gray-500 dark:text-gray-400">Address</p>
                             <p class="font-medium text-navy dark:text-white">{{ client.address }}<span
-                                    *ngIf="client.city">, {{ client.city }}</span><span *ngIf="client.stateName">,
+                                    *ngIf="client.city">,
+                                    {{ client.city }}</span><span *ngIf="client.stateName">,
                                     {{ client.stateName }}</span><span *ngIf="client.countryName">, {{
                                     client.countryName }}</span></p>
                         </div>
@@ -196,6 +206,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Customer Selection Modal -->

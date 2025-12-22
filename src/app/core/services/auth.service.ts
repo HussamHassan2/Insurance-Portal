@@ -182,10 +182,10 @@ export class AuthService {
    */
   changePasswordWithCurrent(currentPassword: string, newPassword: string): Observable<any> {
     const email = this.currentUserValue?.email;
-    return this.api.post('/v1/auth/change_password', {
+    return this.api.post('/v1/auth/change-password', {
       params: {
         email: email,
-        current_password: currentPassword,
+        old_password: currentPassword,
         new_password: newPassword
       }
     });

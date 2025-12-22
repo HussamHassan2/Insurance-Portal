@@ -45,8 +45,10 @@ export class DashboardLayoutComponent implements OnInit {
 
     ngOnInit(): void {
         this.authService.currentUser.subscribe(user => {
+            console.log('DashboardLayout: Current user:', user);
             this.user = user;
             this.navItems = this.getNavItems();
+            console.log('DashboardLayout: Generated navItems:', this.navItems);
             this.checkActiveSubmenu();
         });
         this.currentPath = this.router.url;

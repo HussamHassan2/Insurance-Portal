@@ -29,8 +29,9 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     steps: WizardStep[] = [
         { id: 1, title: 'Vehicle Details', description: 'Enter vehicle information' },
         { id: 2, title: 'Coverage Selection', description: 'Choose coverage plan' },
-        { id: 3, title: 'Documents', description: 'Upload required documents' },
-        { id: 4, title: 'Review & Issue', description: 'Review and issue policy' }
+        { id: 3, title: 'Additional Details', description: 'Complete vehicle specification' },
+        { id: 4, title: 'Documents', description: 'Upload required documents' },
+        { id: 5, title: 'Review & Issue', description: 'Review and issue policy' }
     ];
 
     // Customer Selection Modal (Removed from flow, handled by parent/overlay)
@@ -98,6 +99,10 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     lostLoading = false;
     downloadingProposalId: number | null = null;
 
+    // Issuance Success State
+    issuanceSuccess = false;
+    issuanceResponseData: any = null;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -157,12 +162,14 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
                 name: quotation.name,
                 email: quotation.email,
                 phone: quotation.phone,
-                nationalId: '', // Not provided by quotation API
+                nationalId: quotation.customer_national_id || '',
+                passportId: quotation.customer_passport_id || '',
+                taxId: quotation.customer_tax_id || '',
                 dateOfBirth: '',
                 gender: 'male'
             };
 
-            console.log('Customer data set (national_id not available):', this.selectedCustomer);
+            console.log('Customer data set:', this.selectedCustomer);
 
             // Set opportunity ID
             this.opportunityId = quotation.opportunity_id || Number(quotationId);
@@ -451,11 +458,11 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     }
 
     get isSelectionComplete(): boolean {
-        return !!(this.vehicleForm.make && this.vehicleForm.model && this.vehicleForm.year && this.vehicleForm.category);
+        return !!(this.vehicleForm.make && this.vehicleForm.model && this.vehicleForm.year);
     }
 
     get isIdentificationComplete(): boolean {
-        return !!(this.vehicleForm.chassisNo && this.vehicleForm.engineNo && this.vehicleForm.plateNo);
+        return !!(this.vehicleForm.chassisNo && this.vehicleForm.engineNo);
     }
 
     get isSpecificationsComplete(): boolean {
@@ -464,6 +471,35 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
 
     get isFinancialComplete(): boolean {
         return !!(this.vehicleForm.sumInsured && this.vehicleForm.vehicle_state);
+    }
+
+    get isAdditionalDetailsValid(): boolean {
+        return !!(this.vehicleForm.category &&
+            this.vehicleForm.bodyType &&
+            this.vehicleForm.color &&
+            this.vehicleForm.usage &&
+            this.vehicleForm.cc &&
+            this.vehicleForm.seats &&
+            this.vehicleForm.plateNo &&
+            this.vehicleForm.sumInsured); // Some might be redundant if checked in steps, but good for safety
+    }
+
+    get makeName(): string {
+        if (!this.vehicleForm.make) return '';
+        const item = this.makers.find(m => m.code === this.vehicleForm.make || m.id === this.vehicleForm.make);
+        return item ? item.name : this.vehicleForm.make;
+    }
+
+    get modelName(): string {
+        if (!this.vehicleForm.model) return '';
+        const item = this.models.find(m => m.code === this.vehicleForm.model || m.id === this.vehicleForm.model);
+        return item ? item.name : this.vehicleForm.model;
+    }
+
+    get yearName(): string {
+        if (!this.vehicleForm.year) return '';
+        const item = this.years.find(y => String(y.code) === String(this.vehicleForm.year) || String(y.id) === String(this.vehicleForm.year));
+        return item ? item.name : this.vehicleForm.year;
     }
 
     onCustomerSelected(customer: any): void {
@@ -517,6 +553,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
                     gender: this.selectedCustomer.gender || 'male',
                     is_foreign_customer: this.selectedCustomer.isForeignCustomer || this.selectedCustomer.is_foreign || false,
                     passport_id: this.selectedCustomer.passportId || this.selectedCustomer.passport_id || '',
+                    tax_id: this.selectedCustomer.taxId || '',
                     street: this.selectedCustomer.street || '',
                     city: this.selectedCustomer.city || '',
                     state_name: this.selectedCustomer.stateName || this.selectedCustomer.state || '',
@@ -577,6 +614,32 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             }
 
             this.loading = false;
+            // Extract Roadside Info if available
+            console.log('Checking for roadside info in response:', quotationResponse);
+            // Check in risks array or flat structure
+            const riskData = quotationResponse?.result?.data?.risks?.[0] ||
+                quotationResponse?.result?.risks?.[0] ||
+                quotationResponse?.data?.risks?.[0] ||
+                quotationResponse?.risks?.[0];
+
+            if (riskData) {
+                if (riskData.vehicle_has_road_side !== undefined) {
+                    this.vehicleForm.hasRoadSide = riskData.vehicle_has_road_side;
+                }
+                if (riskData.vehicle_road_side_program_name || riskData.vehicle_road_side_program) {
+                    // Extract program name or code
+                    const programName = String(riskData.vehicle_road_side_program_name || riskData.vehicle_road_side_program);
+
+                    // Normalize to match selector IDs (egy, egy-vip, euro, euro-vip)
+                    // Assumption: API returns "EGY", "EGY VIP", "EURO", "EURO VIP"
+                    this.vehicleForm.roadSideProgram = programName.toLowerCase().replace(/\s+/g, '-');
+                }
+                console.log('Updated roadside info from response:', {
+                    has: this.vehicleForm.hasRoadSide,
+                    program: this.vehicleForm.roadSideProgram
+                });
+            }
+
             this.loading = false;
             // Move to next step manually to avoid loop in nextStep()
             this.currentStep++;
@@ -705,14 +768,18 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
 
             const policyId = response?.result?.policy_id || response?.data?.policy_id;
 
-            this.notificationService.success('Policy issued successfully! Redirecting...');
+            this.notificationService.success('Policy issued successfully!');
 
-            if (policyId) {
-                this.router.navigate(['/dashboard/broker/policies', policyId]);
-            } else {
-                // Fallback if no policy ID returned but success
-                this.router.navigate(['/dashboard/broker/policies']);
-            }
+            // Show Success View instead of redirecting
+            this.issuanceSuccess = true;
+            this.issuanceResponseData = {
+                policy_id: policyId,
+                policy_number: response?.result?.policy_number || response?.data?.policy_number || 'Pending',
+                policy_state: response?.result?.state || response?.data?.state || 'Active',
+                opportunity_number: response?.result?.opportunity_number || response?.data?.opportunity_number
+            };
+
+            this.loading = false;
         } catch (err: any) {
             console.error('Failed to issue policy', err);
             const errorMessage = err?.response?.data?.result?.error ||
@@ -730,7 +797,14 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
         } else if (this.currentStep === 1 && !this.selectedProposal) {
             this.notificationService.warning('Please select a coverage plan');
         } else if (this.currentStep === 1) {
-            // Moving from Coverage to Documents
+            // Moving from Coverage to Additional Details
+            this.currentStep++;
+        } else if (this.currentStep === 2) {
+            // Moving from Additional Details to Documents
+            if (!this.isAdditionalDetailsValid) {
+                this.notificationService.warning('Please complete all required fields');
+                return;
+            }
             this.loadRequiredDocuments();
             this.currentStep++;
         } else if (this.currentStep < this.steps.length - 1) {
@@ -748,7 +822,6 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     isVehicleFormValid(): boolean {
         return this.isSelectionComplete &&
             this.isIdentificationComplete &&
-            this.isSpecificationsComplete &&
             this.isFinancialComplete;
     }
 
@@ -761,11 +834,14 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
                 // Coverage Step
                 return !!this.selectedProposal;
             case 2:
+                // Additional Details Step
+                return this.isAdditionalDetailsValid;
+            case 3:
                 // Documents Step
                 return this.requiredDocuments.every(doc =>
                     !doc.required_document || this.uploadedDocuments.has(doc.id)
                 );
-            case 3:
+            case 4:
                 // Review Step
                 return true;
             default:

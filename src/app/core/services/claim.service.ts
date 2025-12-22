@@ -66,4 +66,24 @@ export class ClaimService {
             }
         });
     }
+
+    /**
+     * Get Workshops List
+     */
+    getWorkshops(limit: number = 10, offset: number = 0, domain: any[] = []): Observable<any> {
+        return this.api.get('/v1/workshop/list-workshops', {
+            params: {
+                limit: limit,
+                offset: offset,
+                domain: JSON.stringify(domain)
+            }
+        });
+    }
+
+    /**
+     * Get Claim Documents List
+     */
+    getClaimDocuments(): Observable<any> {
+        return this.api.get('/v1/lov/crm-documents');
+    }
 }
