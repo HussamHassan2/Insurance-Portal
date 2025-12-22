@@ -78,16 +78,25 @@
                             'border-gray-200 dark:border-gray-600 hover:border-blue-300 hover:bg-gray-50 dark:hover:bg-gray-700': !isSelected(option)
                         }">
 
-                        <!-- Selected Checkmark Badge -->
+                        <!-- Selected Checkmark Badge (Moved to Left) -->
                         <div *ngIf="isSelected(option)"
-                            class="absolute top-2 right-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-md">
+                            class="absolute top-2 left-2 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-md z-10">
                             <i-lucide name="check" class="h-4 w-4 text-white"></i-lucide>
                         </div>
 
                         <!-- Icon -->
-                        <span *ngIf="showIcons && option.icon" class="text-4xl mb-3">
+                        <span *ngIf="showIcons && option.icon && !option.image" class="text-4xl mb-3 text-gray-400">
                             {{ option.icon }}
                         </span>
+
+                        <!-- Image (Logo in Top Right) -->
+                        <div *ngIf="option.image"
+                            class="absolute top-2 right-2 h-8 w-8 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden">
+                            <img [src]="option.image" [alt]="option.name" class="h-6 w-6 object-contain">
+                        </div>
+
+                        <!-- Spacer for Top Right Image layout if needed, or just center content -->
+                        <div class="mt-4"></div>
 
                         <!-- Name -->
                         <div class="font-semibold text-gray-800 dark:text-gray-200 text-sm">
@@ -111,9 +120,13 @@
                         }">
 
                         <div class="flex items-center gap-3">
-                            <span *ngIf="showIcons && option.icon" class="text-2xl">
+                            <span *ngIf="showIcons && option.icon && !option.image" class="text-2xl">
                                 {{ option.icon }}
                             </span>
+                            <div *ngIf="option.image" class="h-8 w-8 flex-shrink-0 flex items-center justify-center">
+                                <img [src]="option.image" [alt]="option.name"
+                                    class="max-h-full max-w-full object-contain">
+                            </div>
                             <div>
                                 <div class="font-medium">{{ option.name }}</div>
                                 <div *ngIf="option.description" class="text-sm text-gray-500 dark:text-gray-400">

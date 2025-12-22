@@ -1,13 +1,14 @@
 <div class="max-w-2xl mx-auto">
     <h2 class="text-2xl font-semibold text-gray-900 mb-6">Vehicle Details</h2>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Complete the details below to get your quote.</p>
 
-    <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="mt-6 space-y-6">
         <!-- Maker -->
         <div>
             <app-selection-modal label="Vehicle Maker" [options]="makers" [value]="vehicleForm.get('maker_code')?.value"
                 (valueChange)="vehicleForm.get('maker_code')?.setValue($event)" title="Select Vehicle Maker"
                 subtitle="Choose the manufacturer" placeholder="Select Maker" [required]="true" valueKey="code"
-                displayKey="name" layout="grid" [gridCols]="4">
+                displayKey="name" layout="grid" [gridCols]="4" [imageKey]="'risk_image'">
             </app-selection-modal>
         </div>
 

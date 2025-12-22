@@ -36,7 +36,16 @@
         "CLIENTS": "العملاء",
         "USERS": "المستخدمين",
         "REPORTS": "التقارير",
-        "PENDING_SURVEYS": "استطلاعات معلقة"
+        "PENDING_SURVEYS": "استطلاعات معلقة",
+        "ALL_POLICIES": "جميع الوثائق",
+        "DUE_RENEWAL": "تجديد مستحق",
+        "ALL_QUOTATIONS": "جميع عروض الأسعار",
+        "RENEWAL_REQUESTS": "طلبات التجديد",
+        "ENDORSEMENT_REQUESTS": "طلبات التعديل",
+        "LOST_REQUESTS": "طلبات مفقودة",
+        "SURVEYS": "الاستطلاعات",
+        "IN_PROGRESS": "قيد التنفيذ",
+        "SUSPENDED": "معلقة"
     },
     "BUTTON": {
         "SAVE": "حفظ",
@@ -607,14 +616,21 @@
         "REJECTED": "مرفوضة",
         "LOST": "خسارة",
         "EXPIRED": "منتهية الصلاحية",
-        "OUTSTANDING": "معلق"
+        "OUTSTANDING": "معلق",
+        "REVIEW": "مراجعة"
     },
     "TYPES": {
         "NEW": "جديد",
         "ENDORSEMENT": "تعديل",
         "RENEWAL": "تجديد",
         "CANCELLATION": "إلغاء",
-        "MODIFICATION": "تغيير"
+        "MODIFICATION": "تغيير",
+        "NON_TECHNICAL": "غير فني",
+        "TECHNICAL_REFUND": "استرداد فني",
+        "TECHNICAL_ADD": "إضافة فنية",
+        "TECHNICAL_BORNDEAD": "إلغاء فني",
+        "END": "تعديل",
+        "CANCEL": "إلغاء"
     },
     "GREETING": "مرحبا {{name}}، أهلا بعودتك!",
     "BROKER": {

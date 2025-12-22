@@ -22,7 +22,7 @@
                         <app-selection-modal label="Make" [(value)]="vehicleForm.make" [options]="makers"
                             [title]="'Select Vehicle Make'" [subtitle]="'Choose the manufacturer'"
                             [placeholder]="'Choose vehicle make'" [layout]="'grid'" [gridCols]="4" [required]="true"
-                            (valueChange)="onMakeChange()">
+                            (valueChange)="onMakeChange()" [imageKey]="'risk_image'">
                         </app-selection-modal>
                     </div>
                     <div>

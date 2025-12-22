@@ -44,6 +44,18 @@ export class CustomerSelectionModalComponent implements OnInit {
   hasSearched: boolean = false;
   // error: string = ''; // Removed as we use toasts
   searchQuery: string = '';
+  searchCustomerType: 'individual' | 'company' = 'individual';
+  searchIsForeign: boolean = false;
+
+  get searchPlaceholder(): string {
+    if (this.searchCustomerType === 'company') {
+      return 'Search with Tax ID';
+    }
+    if (this.searchIsForeign) {
+      return 'Search with Passport Number';
+    }
+    return 'Search with National ID';
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -202,11 +214,14 @@ export class CustomerSelectionModalComponent implements OnInit {
 
     try {
       const user = this.authService.currentUserValue;
-      const response = await this.customerService.searchPartners({
+      const searchParams: any = {
         identification_number: this.searchQuery,
         user_id: user?.id || 2,
-        user_type: 'broker'
-      }).toPromise();
+        user_type: 'broker',
+        is_foreign_customer: this.searchIsForeign
+      };
+
+      const response = await this.customerService.searchPartners(searchParams).toPromise();
 
       const rawData = response?.result?.data || response?.data || response;
 
@@ -277,6 +292,9 @@ export class CustomerSelectionModalComponent implements OnInit {
       isForeignCustomer: false,
       countryName: 'Egypt'
     });
+    // Reset search filters
+    this.searchCustomerType = 'individual';
+    this.searchIsForeign = false;
     this.close.emit();
   }
 

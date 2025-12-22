@@ -54,48 +54,135 @@
                         <div *ngFor="let item of column.items" (click)="onRowClick(item)"
                             class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary/50 cursor-pointer transition-all duration-200 group">
 
-                            <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-xs font-medium rounded text-gray-600 dark:text-gray-300">
-                                    {{ item.survey_number }}
-                                </span>
-                                <span class="text-xs text-gray-500 dark:text-gray-400">
-                                    {{ item.assigned_date | date }}
-                                </span>
-                            </div>
-
-                            <h4
-                                class="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
-                                {{ item.customer_name }}
-                            </h4>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">{{ item.survey_type | titlecase }}
-                                Inspection</p>
-
-                            <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <div [innerHTML]="getPriorityBadge(item.priority)" class="text-sm"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                <!-- Col 1: Customer & Basic Info -->
+                                <div
+                                    class="md:col-span-4 border-b md:border-b-0 md:border-r border-gray-100 dark:border-gray-700 pb-3 md:pb-0 md:pr-3">
+                                    <!-- Header -->
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span
+                                            class="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-[10px] font-mono font-medium rounded text-gray-600 dark:text-gray-300">
+                                            {{ item.survey_number }}
+                                        </span>
+                                        <span class="text-[10px] text-gray-400 dark:text-gray-500">
+                                            {{ item.assigned_date | date:'mediumDate' }}
+                                        </span>
                                     </div>
-                                    <div class="text-xs font-medium text-primary">
-                                        View Details →
+
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-0.5 group-hover:text-primary transition-colors line-clamp-2"
+                                        title="{{ item.customer_name }}">
+                                        {{ item.customer_name }}
+                                    </h4>
+                                    <p
+                                        class="text-[10px] font-medium text-primary/80 dark:text-primary/70 uppercase tracking-wide mb-3">
+                                        {{ item.survey_type }} Inspection
+                                    </p>
+
+                                    <!-- Contact Info -->
+                                    <div class="space-y-1.5">
+                                        <div *ngIf="item.customer_phone"
+                                            class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                            <span
+                                                class="w-4 h-4 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-full text-[10px]">📞</span>
+                                            {{ item.customer_phone }}
+                                        </div>
+                                        <div *ngIf="item.customer_street"
+                                            class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                            <span
+                                                class="w-4 h-4 flex-shrink-0 flex items-center justify-center bg-gray-50 dark:bg-gray-700 rounded-full text-[10px] mt-0.5">📍</span>
+                                            <span class="line-clamp-2 leading-tight">{{ item.customer_street }}</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Action Buttons for Pending State -->
-                                <div *ngIf="column.id === 'pending'"
-                                    class="flex gap-2 mt-3 pt-3 border-t border-gray-50 dark:border-gray-700/50">
-                                    <button (click)="onAccept($event, item)"
-                                        class="flex-1 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded text-xs font-medium transition-colors dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/40">
-                                        Accept
-                                    </button>
-                                    <button (click)="onSuspend($event, item)"
-                                        class="flex-1 py-1.5 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded text-xs font-medium transition-colors dark:bg-yellow-900/20 dark:text-yellow-400 dark:hover:bg-yellow-900/40">
-                                        Suspend
-                                    </button>
-                                    <button (click)="onReject($event, item)"
-                                        class="flex-1 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded text-xs font-medium transition-colors dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40">
-                                        Reject
-                                    </button>
+                                <!-- Col 2: Vehicle & Risk Details -->
+                                <div
+                                    class="md:col-span-5 border-b md:border-b-0 md:border-r border-gray-100 dark:border-gray-700 pb-3 md:pb-0 md:px-3">
+                                    <p
+                                        class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase mb-2">
+                                        Vehicle & Risk</p>
+
+                                    <!-- Vehicle Box -->
+                                    <div *ngIf="item.risk_info"
+                                        class="bg-gray-50/50 dark:bg-gray-700/20 rounded-lg p-2.5 mb-3 border border-gray-100 dark:border-gray-700/50">
+                                        <div class="grid grid-cols-2 gap-2 text-xs">
+                                            <div class="col-span-2">
+                                                <span class="text-gray-900 dark:text-gray-100 font-medium">{{
+                                                    item.risk_info.vehicle_make_name }} {{
+                                                    item.risk_info.vehicle_model_name }}</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] text-gray-400">Chassis</p>
+                                                <p
+                                                    class="font-mono text-[11px] text-gray-600 dark:text-gray-400 truncate">
+                                                    {{ item.risk_info.vehicle_chassis_number || 'N/A' }}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] text-gray-400">Motor</p>
+                                                <p
+                                                    class="font-mono text-[11px] text-gray-600 dark:text-gray-400 truncate">
+                                                    {{ item.risk_info.vehicle_motor_number || 'N/A' }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- IDs Chips -->
+                                    <div class="flex flex-wrap gap-1.5">
+                                        <span *ngIf="item.crm_risk_id"
+                                            class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
+                                            CRM: {{ item.crm_risk_id }}
+                                        </span>
+                                        <span *ngIf="item.policy_risk_id"
+                                            class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border border-purple-100 dark:border-purple-800">
+                                            Pol: {{ item.policy_risk_id }}
+                                        </span>
+                                        <span *ngIf="item.claim_id"
+                                            class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 border border-amber-100 dark:border-amber-800">
+                                            Clm: {{ item.claim_id }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Col 3: Actions & Status -->
+                                <div class="md:col-span-3 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <div [innerHTML]="getPriorityBadge(item.priority)"
+                                                class="text-xs scale-90 origin-left"></div>
+                                            <div class="text-[10px] font-medium text-primary hover:underline flex items-center gap-0.5 cursor-pointer"
+                                                (click)="onRowClick(item); $event.stopPropagation()">
+                                                Details <span>→</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Claim Repair Center -->
+                                        <div *ngIf="(item.survey_type === 'Claim' || item.survey_type === 'claim' || item.claim_id) && (item.repair_center_name || item.repair_center)"
+                                            class="mb-3 p-1.5 bg-red-50 dark:bg-red-900/10 rounded border border-red-100 dark:border-red-800/30 text-center">
+                                            <p class="text-[9px] text-red-500 uppercase font-bold">Repair At</p>
+                                            <p
+                                                class="text-[10px] font-semibold text-gray-800 dark:text-gray-200 line-clamp-1">
+                                                {{ item.repair_center_name || item.repair_center }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div *ngIf="column.id === 'pending'" class="flex flex-col gap-1.5 mt-auto">
+                                        <button (click)="onAccept($event, item)"
+                                            class="w-full py-1 bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 rounded text-xs font-semibold transition-all dark:bg-green-900/20 dark:text-green-400 dark:border-green-800">
+                                            Accept
+                                        </button>
+                                        <div class="flex gap-1.5">
+                                            <button (click)="onSuspend($event, item)"
+                                                class="flex-1 py-1 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200 rounded text-xs font-semibold transition-all dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800">
+                                                Suspend
+                                            </button>
+                                            <button (click)="onReject($event, item)"
+                                                class="flex-1 py-1 bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 rounded text-xs font-semibold transition-all dark:bg-red-900/20 dark:text-red-400 dark:border-red-800">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

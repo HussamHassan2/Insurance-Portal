@@ -324,11 +324,32 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             }
         }
 
-        return list.map(item => ({
-            code: item.sequence_number || item.code || item.id || item.value || item.year,
-            name: item.item || item.name || item.value || item.display || item.label || item.year || item,
-            id: item.id
-        }));
+        return list.map(item => {
+            // Process risk_image if present - assume base64 if no prefix
+            let image = item.risk_image || item.image;
+            if (image) {
+                // Ensure it's a string and strip whitespace/newlines which break base64
+                let imageStr = String(image).replace(/\s/g, '');
+
+                if (!imageStr.startsWith('data:image') && !imageStr.startsWith('http')) {
+                    image = `data:image/png;base64,${imageStr}`;
+                } else {
+                    image = imageStr;
+                }
+            }
+
+            // DEBUG: Log the first image to see what we're sending
+            if (list.indexOf(item) === 0 && image) {
+                console.log('QuoteFlow: First processed image starts with:', String(image).substring(0, 100) + '...');
+            }
+
+            return {
+                code: item.sequence_number || item.code || item.id || item.value || item.year,
+                name: item.item || item.name || item.value || item.display || item.label || item.year || item,
+                id: item.id,
+                risk_image: image
+            };
+        });
     }
 
     async onMakeChange(): Promise<void> {

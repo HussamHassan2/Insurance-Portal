@@ -4,6 +4,7 @@ export interface SelectOption {
     code: string;
     name: string;
     icon?: string;
+    image?: string;
     description?: string;
 }
 
@@ -35,6 +36,7 @@ export class SelectionModalComponent implements OnInit, OnChanges {
     @Input() displayKey: string = 'name';
     @Input() valueKey: string = 'code';
     @Input() iconKey: string = 'icon';
+    @Input() imageKey: string = 'image';
     @Input() descriptionKey: string = 'description';
 
     // Feature flags
@@ -74,6 +76,7 @@ export class SelectionModalComponent implements OnInit, OnChanges {
 
     // Normalize options to standard format
     private normalizeOptions(): void {
+        console.log(`SelectionModal [${this.label}]: Normalizing options with imageKey:`, this.imageKey); // DEBUG
         this.normalizedOptions = this.options.map(opt => {
             // If it's a string
             if (typeof opt === 'string') {
@@ -81,17 +84,21 @@ export class SelectionModalComponent implements OnInit, OnChanges {
                     code: opt,
                     name: opt,
                     icon: '',
+                    image: '',
                     description: ''
                 };
             }
             // If it's already an object
-            return {
+            const normalized = {
                 code: opt[this.valueKey] || opt.code || opt.value || '',
                 name: opt[this.displayKey] || opt.name || opt.label || '',
                 icon: opt[this.iconKey] || opt.icon || '',
+                image: opt[this.imageKey] || opt.image || '',
                 description: opt[this.descriptionKey] || opt.description || ''
             };
+            return normalized;
         });
+        console.log(`SelectionModal [${this.label}]: Normalized Options Sample:`, this.normalizedOptions.slice(0, 2)); // DEBUG
     }
 
     // Determine layout based on option count

@@ -48,7 +48,15 @@ export class MotorDetailsComponent implements OnInit {
     this.loading = true;
     this.quoteService.getVehicleMakers().subscribe({
       next: (res) => {
-        this.makers = res || [];
+        console.log('API Response - Vehicle Makers:', res); // DEBUG LOG
+        this.makers = (res || []).map((maker: any) => {
+          if (maker.risk_image && !maker.risk_image.startsWith('data:image')) {
+            // Assume PNG if not specified, mostly likely for logos
+            maker.risk_image = `data:image/png;base64,${maker.risk_image}`;
+          }
+          return maker;
+        });
+        console.log('Processed Makers:', this.makers); // DEBUG LOG
         this.loading = false;
       },
       error: (err) => {
