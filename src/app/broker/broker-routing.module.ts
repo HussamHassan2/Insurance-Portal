@@ -16,15 +16,20 @@ import { ProfileComponent } from '../shared/pages/profile/profile.component';
 import { SettingsComponent } from '../shared/pages/settings/settings.component';
 import { BrokerQuotationDetailsComponent } from './pages/quotation-details/broker-quotation-details.component';
 import { BrokerEndorsementComponent } from './pages/endorsement/broker-endorsement.component';
+import { DueRenewalPoliciesComponent } from './pages/due-renewal-policies/due-renewal-policies.component';
 
 const routes: Routes = [
     { path: '', component: BrokerDashboardComponent },
     { path: 'clients', component: BrokerClientsComponent },
     { path: 'clients/:id', component: ClientDetailsComponent },
     { path: 'policies', component: BrokerPoliciesComponent },
+    { path: 'due-renewal-policies', component: DueRenewalPoliciesComponent },
     { path: 'policies/:id', component: BrokerPolicyDetailsComponent },
     { path: 'endorsement/:id', component: BrokerEndorsementComponent },
-    { path: 'quotations', component: BrokerQuotationsComponent },
+    { path: 'quotations', component: BrokerQuotationsComponent }, // Default (All)
+    { path: 'quotations/renewal-requests', component: BrokerQuotationsComponent, data: { filterType: 'renewal' } },
+    { path: 'quotations/endorsement-requests', component: BrokerQuotationsComponent, data: { filterType: 'endorsement' } },
+    { path: 'quotations/lost-requests', component: BrokerQuotationsComponent, data: { filterType: 'lost' } },
     { path: 'quotations/:id', component: BrokerQuotationDetailsComponent },
     { path: 'quote/new', component: QuoteFlowComponent },
     { path: 'commissions', component: CommissionsComponent },

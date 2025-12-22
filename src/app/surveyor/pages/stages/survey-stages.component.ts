@@ -63,14 +63,19 @@ export class SurveyStagesComponent implements OnInit {
         }).subscribe({
             next: (response) => {
                 let surveys: any[] = [];
-                if (response.data?.surveys) {
+                // Handle different response structures
+                if (response.surveys) {
+                    surveys = response.surveys;
+                } else if (response.data && response.data.surveys) {
                     surveys = response.data.surveys;
-                } else if (response.data?.result?.data) {
+                } else if (response.data && response.data.result && response.data.result.data) {
                     surveys = response.data.result.data;
-                } else if (response.data?.data) {
+                } else if (response.data && response.data.data) {
                     surveys = response.data.data;
-                } else if (Array.isArray(response.data)) {
+                } else if (response.data && Array.isArray(response.data)) {
                     surveys = response.data;
+                } else if (Array.isArray(response)) {
+                    surveys = response;
                 }
 
                 const statusCounts = {

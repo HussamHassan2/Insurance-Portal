@@ -8,6 +8,8 @@ interface NavItem {
     name: string;
     path: string;
     icon: string;
+    children?: NavItem[];
+    expanded?: boolean;
 }
 
 import { SurveyorService } from '../../../core/services/surveyor.service';
@@ -37,6 +39,7 @@ export class DashboardLayoutComponent implements OnInit {
             filter(event => event instanceof NavigationEnd)
         ).subscribe((event: any) => {
             this.currentPath = event.url;
+            this.checkActiveSubmenu();
         });
     }
 
@@ -44,6 +47,7 @@ export class DashboardLayoutComponent implements OnInit {
         this.authService.currentUser.subscribe(user => {
             this.user = user;
             this.navItems = this.getNavItems();
+            this.checkActiveSubmenu();
         });
         this.currentPath = this.router.url;
     }
@@ -70,8 +74,26 @@ export class DashboardLayoutComponent implements OnInit {
                 return [
                     { name: 'SIDEBAR.OVERVIEW', path: '/dashboard/broker', icon: 'layout-dashboard' },
                     { name: 'SIDEBAR.ANALYTICS', path: '/dashboard/analytics', icon: 'bar-chart-3' },
-                    { name: 'SIDEBAR.QUOTATIONS', path: '/dashboard/broker/quotations', icon: 'scroll-text' },
-                    { name: 'SIDEBAR.BROKER_POLICIES', path: '/dashboard/broker/policies', icon: 'shield' },
+                    {
+                        name: 'SIDEBAR.QUOTATIONS',
+                        path: '/dashboard/broker/quotations',
+                        icon: 'scroll-text',
+                        children: [
+                            { name: 'SIDEBAR.ALL_QUOTATIONS', path: '/dashboard/broker/quotations', icon: 'list' },
+                            { name: 'SIDEBAR.RENEWAL_REQUESTS', path: '/dashboard/broker/quotations/renewal-requests', icon: 'refresh-cw' },
+                            { name: 'SIDEBAR.ENDORSEMENT_REQUESTS', path: '/dashboard/broker/quotations/endorsement-requests', icon: 'edit' },
+                            { name: 'SIDEBAR.LOST_REQUESTS', path: '/dashboard/broker/quotations/lost-requests', icon: 'x-circle' }
+                        ]
+                    },
+                    {
+                        name: 'SIDEBAR.BROKER_POLICIES',
+                        path: '/dashboard/broker/policies',
+                        icon: 'shield',
+                        children: [
+                            { name: 'SIDEBAR.ALL_POLICIES', path: '/dashboard/broker/policies', icon: 'list' },
+                            { name: 'SIDEBAR.DUE_RENEWAL', path: '/dashboard/broker/due-renewal-policies', icon: 'refresh-cw' }
+                        ]
+                    },
                     { name: 'SIDEBAR.CLAIMS', path: '/dashboard/broker/claims', icon: 'file-text' },
                     { name: 'SIDEBAR.PAYMENTS', path: '/dashboard/broker/premiums', icon: 'credit-card' },
                     { name: 'SIDEBAR.COMMISSIONS', path: '/dashboard/broker/commissions', icon: 'pie-chart' },
@@ -160,5 +182,23 @@ export class DashboardLayoutComponent implements OnInit {
                 queryParams: { wizard: 'true' }
             });
         }
+    }
+
+    toggleSubmenu(item: NavItem): void {
+        if (item.children) {
+            item.expanded = !item.expanded;
+        }
+    }
+
+    checkActiveSubmenu(): void {
+        this.navItems.forEach(item => {
+            if (item.children) {
+                // Check if any child matches current path
+                const hasActiveChild = item.children.some(child => child.path === this.currentPath);
+                if (hasActiveChild) {
+                    item.expanded = true;
+                }
+            }
+        });
     }
 }

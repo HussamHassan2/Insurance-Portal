@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewChecked } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CrmService } from '../../../core/services/crm.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { TableColumn } from '../../../shared/models/table-column.interface';
@@ -27,18 +27,51 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
     pageSize: number = 25;
     totalRecords: number = 1000; // Initial estimate, will be updated after fetch
 
+    currentDomain: string | any[] = [];
+    pageTitle: string = 'SIDEBAR.QUOTATIONS';
+
     constructor(
         private crmService: CrmService,
         private authService: AuthService,
         private router: Router,
+        private route: ActivatedRoute,
         private appTranslate: AppTranslateService
     ) {
         this.setupColumns();
+
+        // Listen to route data changes to update title and filter
+        this.route.data.subscribe(data => {
+            const filterType = data['filterType'];
+            this.currentDomain = this.getDomainFromFilterType(filterType);
+
+            if (filterType === 'renewal') this.pageTitle = 'SIDEBAR.RENEWAL_REQUESTS';
+            else if (filterType === 'endorsement') this.pageTitle = 'SIDEBAR.ENDORSEMENT_REQUESTS';
+            else if (filterType === 'lost') this.pageTitle = 'SIDEBAR.LOST_REQUESTS';
+            else this.pageTitle = 'SIDEBAR.ALL_QUOTATIONS';
+
+            // Reset pagination and reload when route changes (if component is reused)
+            this.currentPage = 1;
+            this.fetchTotalCount();
+            this.loadQuotations();
+        });
     }
 
     ngOnInit(): void {
-        this.fetchTotalCount();
-        this.loadQuotations();
+        // Initial load handled in constructor subscription or here if preferred
+        // We leave it in constructor subscription to catch route changes if re-using component
+    }
+
+    getDomainFromFilterType(type: string): string | any[] {
+        switch (type) {
+            case 'renewal':
+                return `[('policy_services_type', '=', 'renewal')]`;
+            case 'endorsement':
+                return `[('policy_services_type', '=', 'end')]`;
+            case 'lost':
+                return `[('active', '=', False)]`;
+            default:
+                return [];
+        }
     }
 
     fetchTotalCount(): void {
@@ -48,8 +81,9 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
         this.crmService.listOpportunities({
             user_id: user.id,
             user_type: 'broker',
-            limit: 10000,  // High limit to get all records
-            offset: 0
+            limit: 10000,
+            offset: 0,
+            domain: this.currentDomain
         }).subscribe({
             next: (response) => {
                 const quotes = Array.isArray(response) ? response : (response.data || []);
@@ -204,7 +238,8 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
             user_id: user.id,
             user_type: 'broker',
             limit: this.pageSize,
-            offset: offset
+            offset: offset,
+            domain: this.currentDomain
         }).subscribe({
             next: (response) => {
                 // Response is directly an array, not wrapped in data property

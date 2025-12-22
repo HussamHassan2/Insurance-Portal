@@ -7,7 +7,7 @@ export interface PolicyListParams {
     user_type: string;
     limit?: number;
     offset?: number;
-    domain?: any[];
+    domain?: any[] | string;
 }
 
 @Injectable({

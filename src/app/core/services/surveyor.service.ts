@@ -38,8 +38,12 @@ export class SurveyorService {
      */
     private getIdentificationCodes(): string {
         const user = this.authService.currentUserValue;
-        if (user && user.id) {
-            return JSON.stringify([user.id.toString()]);
+        if (user) {
+            if (user.identification_code) {
+                return JSON.stringify([user.identification_code]);
+            } else if (user.id) {
+                return JSON.stringify([user.id.toString()]);
+            }
         }
         return '[]';
     }

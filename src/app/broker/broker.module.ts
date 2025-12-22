@@ -28,6 +28,7 @@ import {
 
 import { BrokerQuotationDetailsComponent } from './pages/quotation-details/broker-quotation-details.component';
 import { BrokerEndorsementComponent } from './pages/endorsement/broker-endorsement.component';
+import { DueRenewalPoliciesComponent } from './pages/due-renewal-policies/due-renewal-policies.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { BrokerEndorsementComponent } from './pages/endorsement/broker-endorseme
         BrokerClaimsComponent,
         BrokerClaimDetailsComponent,
         BrokerPremiumsComponent,
-        BrokerEndorsementComponent
+        BrokerEndorsementComponent,
+        DueRenewalPoliciesComponent
     ],
     imports: [
         CommonModule,

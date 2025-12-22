@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SurveyorService } from '../../../core/services/surveyor.service';
 import { TableConfig } from '../../../shared/components/data-table/data-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
     selector: 'app-surveyor-pending',
@@ -57,7 +58,7 @@ export class SurveyorPendingComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.route.queryParams.subscribe(params => {
+        this.route.queryParams.pipe(debounceTime(50)).subscribe(params => {
             if (params['view']) {
                 this.viewMode = params['view'];
             }
@@ -110,36 +111,50 @@ export class SurveyorPendingComponent implements OnInit {
             if (this.statusFilter === 'suspended') {
                 params.status = 'suspended';
             } else if (this.statusFilter === 'pending') {
-                // Fetch pending items.
-                // IF the API doesn't support multiple statuses via 'status' param automatically,
-                // we might need to rely on the backend default or client-side filtering.
-                // However, we want 'pending' and 'surveyor' to show up.
-                // Let's pass 'pending' as the primary filter as requested, assuming backend handles the rest 
-                // OR don't filter strictly if we want to show board movement.
-                params.status = 'pending';
+                // Map 'pending' filter to 'surveyor' status for API
+                params.status = 'surveyor';
             }
         } else if (this.viewMode !== 'board') {
-            params.status = 'pending';
+            // Default to 'surveyor' (pending) status for table view if no filter
+            params.status = 'surveyor';
         }
 
         this.surveyorService.listSurveys(params).subscribe({
             next: (response) => {
-                let data = response.data || [];
+                console.log('SurveyorPendingComponent listSurveys response:', response);
+                let rawData: any[] = [];
                 // Handle different response structures
-                if (response.data && response.data.surveys) {
-                    data = response.data.surveys;
+                if (response.surveys) {
+                    rawData = response.surveys;
+                } else if (response.data && response.data.surveys) {
+                    rawData = response.data.surveys;
                 } else if (response.data && response.data.result && response.data.result.data) {
-                    data = response.data.result.data;
+                    rawData = response.data.result.data;
                 } else if (response.data && response.data.data) {
-                    data = response.data.data;
-                } else if (Array.isArray(response.data)) {
-                    data = response.data;
+                    rawData = response.data.data;
+                } else if (response.data && Array.isArray(response.data)) {
+                    rawData = response.data;
+                } else if (Array.isArray(response)) {
+                    rawData = response;
                 }
 
-                this.tableConfig.data = data;
+                console.log('SurveyorPendingComponent Extracted Data:', rawData);
+
+                // Map API fields to Table columns
+                const mappedData = rawData.map(item => ({
+                    ...item,
+                    assigned_date: item.assign_date, // Map assign_date to assigned_date
+                    status: item.state || item.status, // Map state to status
+                    priority: item.priority || 'Medium', // Default priority if missing
+                    claim_number: item.claim_number || (item.claim_id ? item.claim_id : 'N/A')
+                }));
+
+                console.log('SurveyorPendingComponent Mapped Data:', mappedData);
+
+                this.tableConfig.data = mappedData;
 
                 if (this.viewMode === 'board') {
-                    this.organizeBoardData(data);
+                    this.organizeBoardData(mappedData);
                 }
 
                 this.tableConfig.loading = false;
@@ -188,6 +203,8 @@ export class SurveyorPendingComponent implements OnInit {
     getStatusBadge(status: string): string {
         const badges: any = {
             'pending': '🟡 Pending',
+            'surveyor': '🟡 Pending',
+            'suspended': '🔴 Suspended',
             'in_progress': '🔵 In Progress',
             'completed': '🟢 Completed'
         };

@@ -36,7 +36,13 @@
         "CLIENTS": "العملاء",
         "USERS": "المستخدمين",
         "REPORTS": "التقارير",
-        "PENDING_SURVEYS": "استطلاعات معلقة"
+        "PENDING_SURVEYS": "استطلاعات معلقة",
+        "ALL_POLICIES": "جميع الوثائق",
+        "DUE_RENEWAL": "تجديد مستحق",
+        "ALL_QUOTATIONS": "جميع عروض الأسعار",
+        "RENEWAL_REQUESTS": "طلبات التجديد",
+        "ENDORSEMENT_REQUESTS": "طلبات التعديل",
+        "LOST_REQUESTS": "طلبات مفقودة"
     },
     "BUTTON": {
         "SAVE": "حفظ",

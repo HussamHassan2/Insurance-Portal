@@ -36,7 +36,13 @@
         "CLIENTS": "Clients",
         "USERS": "Users",
         "REPORTS": "Reports",
-        "PENDING_SURVEYS": "Pending Surveys"
+        "PENDING_SURVEYS": "Pending Surveys",
+        "ALL_POLICIES": "All Policies",
+        "DUE_RENEWAL": "Due Renewal",
+        "ALL_QUOTATIONS": "All Quotations",
+        "RENEWAL_REQUESTS": "Renewal Requests",
+        "ENDORSEMENT_REQUESTS": "Endorsement Requests",
+        "LOST_REQUESTS": "Lost Requests"
     },
     "BUTTON": {
         "SAVE": "Save",

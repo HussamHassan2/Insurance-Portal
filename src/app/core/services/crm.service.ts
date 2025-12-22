@@ -10,7 +10,7 @@ export interface OpportunityListParams {
     user_type: string;
     limit?: number;
     offset?: number;
-    domain?: any[];
+    domain?: any[] | string;
 }
 
 export interface ChatterAttachment {

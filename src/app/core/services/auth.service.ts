@@ -17,6 +17,7 @@ export interface User {
   state?: string;
   zip?: string;
   image?: string;
+  identification_code?: string;
 }
 
 export interface LoginResponse {
@@ -76,6 +77,7 @@ export class AuthService {
           throw new Error(errorMessage);
         }
 
+
         const token = response.result?.data?.token;
         if (token) {
           localStorage.setItem('authToken', token);
@@ -97,7 +99,8 @@ export class AuthService {
               country: data.country,
               state: data.state,
               zip: data.zip,
-              image: data.image
+              image: data.image,
+              identification_code: data.identification_code
             };
 
             localStorage.setItem('currentUser', JSON.stringify(userData));
