@@ -17,6 +17,15 @@ export class BrokerClaimDetailsComponent implements OnInit {
     status: string = 'under_assessment';
     activeTab: string = 'overview';
 
+    // Section collapse states
+    isClaimantExpanded = false;
+    isIntimatorExpanded = false;
+    isPolicyExpanded = false;
+    isDriverExpanded = false;
+    isVehicleExpanded = false;
+    isIncidentExpanded = false;
+    isWorkshopExpanded = false;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,

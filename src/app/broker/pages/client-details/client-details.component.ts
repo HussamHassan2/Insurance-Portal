@@ -77,6 +77,7 @@ export class ClientDetailsComponent implements OnInit, AfterViewChecked {
 
                 // Map customer data
                 this.client = {
+                    dbId: customerData.id,
                     id: customerData.national_id || customerData.id || this.clientId,
                     name: customerData.english_name || customerData.name || customerData.partner_name || 'Unknown Name',
                     arabicName: customerData.arabic_name || '',

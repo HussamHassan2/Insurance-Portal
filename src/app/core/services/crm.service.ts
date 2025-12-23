@@ -195,7 +195,7 @@ export class CrmService {
                 is_external_message: true,
                 record_id: parseInt(recordId.toString()),
                 model_name: "crm.lead",
-                message: `<b>Message</b>: ${message}`,
+                message: message,
                 attachments: attachments
             }
         });

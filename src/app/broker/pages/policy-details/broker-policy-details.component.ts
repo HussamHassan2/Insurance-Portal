@@ -164,7 +164,7 @@ export class BrokerPolicyDetailsComponent implements OnInit {
             };
 
             // Fetch renewal requests
-            await this.loadRenewalRequests();
+            // await this.loadRenewalRequests();
 
             this.loading = false;
         } catch (err: any) {

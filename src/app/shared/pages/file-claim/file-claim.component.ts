@@ -122,6 +122,8 @@ export class FileClaimComponent implements OnInit {
     claimId: string | null = null;
     isComplete = false;
 
+    submittedPolicyInfo: any = null;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -409,11 +411,19 @@ export class FileClaimComponent implements OnInit {
 
     onDriverToggle(): void {
         if (this.formData.is_driver && this.customerInfo) {
-            this.formData.driver_name = this.customerInfo.customer_name || '';
-            this.formData.driver_birth_date = this.customerInfo.customer_birth_date || null;
-            this.formData.driver_gender = this.customerInfo.customer_gender?.toLowerCase() || '';
-            this.formData.driver_licence_start_date = this.customerInfo.customer_licence_start_date || null;
-            this.formData.driver_licence_expiration_date = this.customerInfo.customer_licence_expiration_date || null;
+            this.formData.driver_name = this.formData.driver_name || this.customerInfo.customer_name || '';
+            this.formData.driver_birth_date = this.formData.driver_birth_date || this.customerInfo.customer_birth_date || null;
+            this.formData.driver_gender = this.formData.driver_gender || this.customerInfo.customer_gender?.toLowerCase() || '';
+
+            // For license dates, also check if not set
+            if (!this.formData.driver_licence_start_date) {
+                this.formData.driver_licence_start_date = this.customerInfo.customer_licence_start_date || null;
+            }
+
+            if (!this.formData.driver_licence_expiration_date) {
+                this.formData.driver_licence_expiration_date = this.customerInfo.customer_licence_expiration_date || null;
+            }
+
             // License info might not be in customerInfo, check API response structure if needed
             this.calculateDriverLicenseExpiration();
         }
@@ -482,60 +492,90 @@ export class FileClaimComponent implements OnInit {
     }
 
 
-    submitClaim(): void {
+    async submitClaim(): Promise<void> {
         this.loading = true;
-        const user = this.authService.currentUserValue;
-        const userId = this.formData.user_id || user?.id;
 
-        const formData = new FormData();
+        try {
+            const user = this.authService.currentUserValue;
+            const userId = this.formData.user_id || user?.id;
 
-        // Append simple fields
-        Object.keys(this.formData).forEach(key => {
-            if (key !== 'damagedParts' && key !== 'claim_documents') {
-                const value = this.formData[key];
-                if (value !== null && value !== undefined) {
-                    formData.append(key, value);
+            // Construct JSON payload
+            const payload: any = { ...this.formData };
+
+            // Explicitly set some fields
+            payload.is_insured = this.formData.is_insured; // JSON supports boolean
+
+            // Fix claim_source mapping based on user rule
+            // Use type assertion for user_type as it might not be in the strict User interface
+            if ((user as any)?.user_type === 'broker' || user?.role === 'broker') {
+                payload.claim_source = 'broker';
+            } else {
+                payload.claim_source = 'customer';
+            }
+
+            if (userId) payload.user_id = userId;
+
+            // Remove internal/UI-only fields if necessary, or let backend ignore them.
+            // For safety, let's keep most.
+            // 'damagedParts' is already an array in formData, perfect for JSON.
+
+            // Process Files
+            // Iterate over uploadedFiles map and convert to Base64
+            for (const docKey of Object.keys(this.uploadedFiles)) {
+                const files = this.uploadedFiles[docKey];
+                if (files && files.length > 0) {
+                    // Convert all files for this key
+                    const filePromises = files.map(file => this.fileToBase64(file));
+                    const base64Files = await Promise.all(filePromises);
+
+                    // Logic: If list has 1 item, send simple string if that's what backend typically wants for singleton fields,
+                    // but if it's a generic "documents" container it might need list.
+                    // Given 'onFileSelectForDoc' uses specific IDs/codes, these are likely specific fields.
+                    // We'll send single string if 1 file, array if multiple.
+                    if (base64Files.length === 1) {
+                        payload[docKey] = base64Files[0];
+                        // Optionally send filename if backend looks for it (convention: key_filename)
+                        // payload[docKey + '_filename'] = files[0].name;
+                    } else {
+                        payload[docKey] = base64Files;
+                    }
                 }
             }
-        });
 
-        // Append calculated/system fields
-        formData.append('is_insured', String(this.formData.is_insured));
-        formData.append('claim_source', user?.role === 'broker' ? 'broker' : 'customer');
-        if (userId) formData.append('user_id', String(userId));
-
-        // Append damaged parts as JSON string if it's an array
-        if (this.formData.damagedParts && this.formData.damagedParts.length) {
-            formData.append('damagedParts', JSON.stringify(this.formData.damagedParts));
-        }
-
-        // Append Files
-        // Iterate over uploadedFiles map
-        Object.keys(this.uploadedFiles).forEach(docKey => {
-            const files = this.uploadedFiles[docKey];
-            files.forEach(file => {
-                // The key should probably be the document ID or code expected by the backend
-                // Standard key for generic docs or specific key?
-                // If the backend expects dynamic keys based on doc ID:
-                formData.append(docKey, file);
-
-                // OR if backend expects a single array 'claim_documents' with metadata?
-                // The requirement implies mapping "API with UI fields". 
-                // Usually means backend expects specific fields. 
+            this.claimService.createClaimIntimation(payload).subscribe({
+                next: (response: any) => {
+                    this.claimId = response.result?.claim_id || response.result?.id || 'N/A';
+                    this.submittedPolicyInfo = response.result?.policy_info || null; // Capture policy info
+                    this.isComplete = true;
+                    this.loading = false;
+                },
+                error: (error: any) => {
+                    console.error('Failed to create claim:', error);
+                    let msg = error.message || 'Unknown error';
+                    if (error.error && error.error.message) msg = error.error.message;
+                    this.notificationService.error('Failed to submit claim. ' + msg);
+                    this.loading = false;
+                }
             });
-        });
 
-        this.claimService.createClaimIntimation(formData).subscribe({
-            next: (response: any) => {
-                this.claimId = response.result?.claim_id || response.result?.id || 'N/A';
-                this.isComplete = true;
-                this.loading = false;
-            },
-            error: (error: any) => {
-                console.error('Failed to create claim:', error);
-                this.notificationService.error('Failed to submit claim. ' + (error.message || ''));
-                this.loading = false;
-            }
+        } catch (e: any) {
+            console.error('Error preparing claim submission', e);
+            this.notificationService.error('Error preparing request: ' + e.message);
+            this.loading = false;
+        }
+    }
+
+    private fileToBase64(file: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const result = reader.result as string;
+                // Remove data URL prefix (e.g. "data:image/png;base64,")
+                const base64 = result.split(',')[1] || result;
+                resolve(base64);
+            };
+            reader.onerror = error => reject(error);
         });
     }
 

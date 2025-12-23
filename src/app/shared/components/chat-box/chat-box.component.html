@@ -1,0 +1,43 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6 p-4">
+    <div class="flex items-center gap-2 mb-4">
+        <lucide-icon name="message-circle" class="w-5 h-5 text-gray-500"></lucide-icon>
+        <h3 class="text-lg font-medium text-gray-900">Add Note / Message</h3>
+    </div>
+
+    <div class="space-y-4">
+        <div class="relative">
+            <textarea [(ngModel)]="message" rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                placeholder="Type your message here..." [disabled]="isSending"></textarea>
+        </div>
+
+        <div *ngIf="selectedFile" class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+            <lucide-icon name="paperclip" class="w-4 h-4 text-gray-500"></lucide-icon>
+            <span class="text-sm text-gray-700 truncate max-w-[200px]">{{ selectedFile.name }}</span>
+            <button (click)="removeFile()" class="ml-auto text-gray-400 hover:text-red-500 transition-colors"
+                [disabled]="isSending">
+                <lucide-icon name="x" class="w-4 h-4"></lucide-icon>
+            </button>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <div class="relative">
+                <input type="file" id="chat-attachment" class="hidden" (change)="onFileSelected($event)"
+                    [disabled]="isSending">
+                <label for="chat-attachment"
+                    class="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition-colors"
+                    [class.opacity-50]="isSending" [class.cursor-not-allowed]="isSending">
+                    <lucide-icon name="paperclip" class="w-4 h-4"></lucide-icon>
+                    Attach File
+                </label>
+            </div>
+
+            <button (click)="sendMessage()" [disabled]="(!message && !selectedFile) || isSending"
+                class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <lucide-icon *ngIf="!isSending" name="send" class="w-4 h-4"></lucide-icon>
+                <lucide-icon *ngIf="isSending" name="loader-2" class="w-4 h-4 animate-spin"></lucide-icon>
+                {{ isSending ? 'Sending...' : 'Send Message' }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -28,7 +28,33 @@ export class CarDamageSelectorComponent implements OnInit {
         { id: 'top', name: 'Top View', icon: 'Top' },
     ];
 
+    zoomLevel: number = 1;
+    readonly MIN_ZOOM = 1;
+    readonly MAX_ZOOM = 3;
+    readonly ZOOM_STEP = 0.5;
+
     constructor() { }
+
+    zoomIn(): void {
+        if (this.zoomLevel < this.MAX_ZOOM) {
+            this.zoomLevel = Math.min(this.zoomLevel + this.ZOOM_STEP, this.MAX_ZOOM);
+        }
+    }
+
+    zoomOut(): void {
+        if (this.zoomLevel > this.MIN_ZOOM) {
+            this.zoomLevel = Math.max(this.zoomLevel - this.ZOOM_STEP, this.MIN_ZOOM);
+        }
+    }
+
+    resetZoom(): void {
+        this.zoomLevel = 1;
+    }
+
+    changeView(viewId: string): void {
+        this.currentView = viewId;
+        this.resetZoom(); // Reset zoom when changing views
+    }
 
     ngOnInit(): void {
     }
@@ -41,11 +67,6 @@ export class CarDamageSelectorComponent implements OnInit {
             this.selectedParts.push(partId);
         }
         this.partsSelected.emit(this.selectedParts);
-    }
-
-    // Change view
-    changeView(viewId: string): void {
-        this.currentView = viewId;
     }
 
     // Clear all selections

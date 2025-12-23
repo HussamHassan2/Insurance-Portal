@@ -207,6 +207,11 @@
             </div>
         </div>
 
+        <!-- Chat Box -->
+        <div *ngIf="!loading && !error && client" class="mt-8">
+            <app-chat-box [modelName]="'res.partner'" [recordId]="client.dbId"></app-chat-box>
+        </div>
+
     </div>
 
     <!-- Customer Selection Modal -->

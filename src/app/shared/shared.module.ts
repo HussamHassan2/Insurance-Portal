@@ -37,6 +37,8 @@ import { DateRangePickerComponent } from './components/date-range-picker/date-ra
 import { ColumnToggleComponent } from './components/column-toggle/column-toggle.component';
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ChatBoxModule } from './components/chat-box/chat-box.module';
+// import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 
 // Pages
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -76,7 +78,8 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         SettingsComponent,
         FileClaimComponent,
         DynamicTranslatePipe,
-        LanguageSwitcherComponent
+        LanguageSwitcherComponent,
+        // ChatBoxComponent
     ],
     imports: [
         CommonModule,
@@ -92,7 +95,8 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
             Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
             ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle
         }),
-        CarDamageSelectorComponent
+        CarDamageSelectorComponent,
+        ChatBoxModule
     ],
     exports: [
         NavbarComponent,
@@ -128,9 +132,9 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         TranslateModule,
         LucideAngularModule,
         DynamicTranslatePipe,
-        LanguageSwitcherComponent
+        LanguageSwitcherComponent,
+        ChatBoxModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-// Shared components and pages
 export class SharedModule { }

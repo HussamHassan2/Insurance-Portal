@@ -8,7 +8,7 @@
             <div class="relative z-10">
                 <div class="flex items-center gap-2 text-sm text-gray-200 mb-4">
                     <button (click)="goBack()" class="hover:text-white transition-all duration-300">
-                        Claims
+                        {{ 'CLAIMS.DETAILS.BACK' | translate }}
                     </button>
                     <i-lucide name="chevron-right" class="w-4 h-4"></i-lucide>
                     <span class="text-white font-medium">{{ claim.claimNumber }}</span>
@@ -21,7 +21,8 @@
                         </div>
                         <div>
                             <!-- Primary Header -->
-                            <h1 class="text-3xl font-bold text-white mb-1">Claim #{{ claim.claimNumber }}
+                            <h1 class="text-3xl font-bold text-white mb-1">{{ 'CLAIMS.DETAILS.TITLE' | translate }}{{
+                                claim.claimNumber }}
                             </h1>
                             <p class="text-lg text-gray-200 font-medium mb-2">{{ claim.claimType }}
                             </p>
@@ -74,7 +75,7 @@
                 [ngClass]="activeTab === 'overview' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
                 class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
                 <i-lucide name="file-text" class="w-4 h-4"></i-lucide>
-                Overview
+                {{ 'CLAIMS.DETAILS.OVERVIEW' | translate }}
                 <div *ngIf="activeTab === 'overview'"
                     class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
                 </div>
@@ -83,7 +84,7 @@
                 [ngClass]="activeTab === 'documents' ? 'text-primary' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'"
                 class="pb-4 px-2 text-sm font-medium capitalize transition-all relative whitespace-nowrap flex items-center gap-2">
                 <i-lucide name="paperclip" class="w-4 h-4"></i-lucide>
-                Documents ({{ claim.documents.length }})
+                {{ 'CLAIMS.DETAILS.DOCUMENTS' | translate }} ({{ claim.documents.length }})
                 <div *ngIf="activeTab === 'documents'"
                     class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-t-full animate-slideIn">
                 </div>
@@ -108,8 +109,9 @@
                                 <i-lucide name="info" class="w-5 h-5"></i-lucide>
                             </div>
                             <div>
-                                <h3 class="font-bold text-gray-900 dark:text-white">Claim Highlights</h3>
-                                <p class="text-sm text-gray-500">Key information about this claim</p>
+                                <h3 class="font-bold text-gray-900 dark:text-white">{{ 'CLAIMS.DETAILS.HIGHLIGHTS.TITLE'
+                                    | translate }}</h3>
+                                <p class="text-sm text-gray-500">{{ 'CLAIMS.DETAILS.HIGHLIGHTS.DESC' | translate }}</p>
                             </div>
                         </div>
                         <i-lucide name="chevron-down"
@@ -120,18 +122,20 @@
                         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <!-- Status Card -->
                             <div class="space-y-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">Status &
-                                    Payment
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                    'CLAIMS.DETAILS.HIGHLIGHTS.STATUS_PAYMENT' | translate }}
                                 </h4>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-600 dark:text-gray-300 text-xs">Current State</span>
+                                    <span class="text-gray-600 dark:text-gray-300 text-xs">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.CURRENT_STATE' | translate }}</span>
                                     <span [ngClass]="getStatusClass(claim.state)"
                                         class="px-2 py-0.5 rounded-full text-xs font-semibold">
                                         {{ claim.state }}
                                     </span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-600 dark:text-gray-300 text-xs">Paid On</span>
+                                    <span class="text-gray-600 dark:text-gray-300 text-xs">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.PAID_ON' | translate }}</span>
                                     <span class="font-medium text-xs">{{ claim.paidOn }}</span>
                                 </div>
                                 <div class="relative pt-1">
@@ -145,55 +149,67 @@
 
                             <!-- Financials -->
                             <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">Financials</h4>
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                    'CLAIMS.DETAILS.HIGHLIGHTS.FINANCIALS' | translate }}</h4>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Sum Insured</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.SUM_INSURED' | translate }}</span>
                                     <span class="font-medium">{{ claim.policy.currency }} {{
                                         claim.policy.sumInsured
                                         | number }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Estimated Cost</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.ESTIMATED_COST' | translate }}</span>
                                     <span class="font-medium text-red-600">{{ claim.policy.currency }} {{
                                         claim.incident.estimatedCost | number }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Calculation Type</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.CALCULATION_TYPE' | translate }}</span>
                                     <span class="font-medium">{{ claim.calculationType }}</span>
                                 </div>
                             </div>
 
                             <!-- Dates -->
                             <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">Important Dates
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                    'CLAIMS.DETAILS.HIGHLIGHTS.IMPORTANT_DATES' | translate }}
                                 </h4>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Intimated</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.INTIMATED' | translate }}</span>
                                     <span class="font-medium">{{ claim.claimDate }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Loss Date</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.LOSS_DATE' | translate }}</span>
                                     <span class="font-medium text-primary">{{ claim.lossDate }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Survey Requested</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.SURVEY_REQUESTED' | translate }}</span>
                                     <span class="font-medium">{{ claim.incident.surveyDate }}</span>
                                 </div>
                             </div>
 
                             <!-- Claim Info -->
                             <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">Claim Info</h4>
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2">{{
+                                    'CLAIMS.DETAILS.HIGHLIGHTS.CLAIM_INFO' | translate }}</h4>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Source</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{ 'CLAIMS.DETAILS.HIGHLIGHTS.SOURCE'
+                                        | translate }}</span>
                                     <span class="font-medium">{{ claim.source }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Received Inv.</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.RECEIVED_INV' | translate }}</span>
                                     <span class="font-medium">{{ claim.invoiceDate }}</span>
                                 </div>
                                 <div class="flex justify-between text-xs">
-                                    <span class="text-gray-600 dark:text-gray-300">Inimation Mode</span>
+                                    <span class="text-gray-600 dark:text-gray-300">{{
+                                        'CLAIMS.DETAILS.HIGHLIGHTS.INTIMATION_MODE' | translate }}</span>
                                     <span class="font-medium">{{ claim.intimationMode }}</span>
                                 </div>
                             </div>
@@ -202,155 +218,216 @@
                 </details>
             </div>
 
+            <!-- Alert Info -->
+            <div *ngIf="claim.withoutObligation"
+                class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg flex items-center gap-3">
+                <i-lucide name="alert-circle" class="w-5 h-5 text-yellow-600"></i-lucide>
+                <div>
+                    <p class="font-semibold text-yellow-800 dark:text-yellow-200">{{
+                        'CLAIMS.DETAILS.OBLIGATION_PROCESSING' | translate }}
+                    </p>
+                </div>
+            </div>
+
             <!-- Main Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                 <!-- Claimant Information -->
                 <div
-                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
-                        Claimant Details
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Name</p>
-                            <p class="font-medium text-gray-900 dark:text-white truncate"
-                                title="{{ claim.claimant.name }}">{{ claim.claimant.name }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Code</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.code }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Mobile</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.phone }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Beneficiary</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.beneficiary
-                                }}
-                            </p>
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isClaimantExpanded = !isClaimantExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.CLAIMANT.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isClaimantExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isClaimantExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm pt-6">
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.CLAIMANT.NAME' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white truncate"
+                                    title="{{ claim.claimant.name }}">{{ claim.claimant.name }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.CLAIMANT.CODE' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.code }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.CLAIMANT.MOBILE' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.phone }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.CLAIMANT.BENEFICIARY' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.claimant.beneficiary
+                                    }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Intimator Info (if different) -->
                 <div *ngIf="!claim.intimator.isInsured"
-                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="user-check" class="w-5 h-5 text-primary"></i-lucide>
-                        Intimator Details
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Name</p>
-                            <p class="font-medium text-gray-900 dark:text-white truncate">{{
-                                claim.intimator.name }}
-                            </p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Contact</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.intimator.phone }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Relation</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.intimator.relation }}
-                            </p>
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isIntimatorExpanded = !isIntimatorExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="user-check" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.INTIMATOR.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isIntimatorExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isIntimatorExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm pt-6">
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.INTIMATOR.NAME' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white truncate">{{
+                                    claim.intimator.name }}
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.INTIMATOR.CONTACT' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.intimator.phone }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.INTIMATOR.RELATION' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.intimator.relation }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Policy Information -->
                 <div
-                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="shield" class="w-5 h-5 text-primary"></i-lucide>
-                        Policy Details
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Policy Number</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.id }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Product / LOB</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.type }} / {{
-                                claim.policy.lob }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Broker</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.brokerName }}
-                                ({{
-                                claim.policy.brokerCode }})</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Payment Status</p>
-                            <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">{{
-                                claim.policy.status }}</span>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Effective Dates</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.effectiveFrom
-                                }} -
-                                {{ claim.policy.effectiveTo }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Source of Business</p>
-                            <p class="font-medium text-gray-900 dark:text-white capitalize">{{
-                                claim.policy.sourceOfBusiness }}</p>
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isPolicyExpanded = !isPolicyExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="shield" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.POLICY.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isPolicyExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isPolicyExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm pt-6">
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.NUMBER' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.id }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.PRODUCT_LOB' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.type }} / {{
+                                    claim.policy.lob }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.BROKER' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.brokerName }}
+                                    ({{
+                                    claim.policy.brokerCode }})</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.PAYMENT_STATUS' | translate }}</p>
+                                <span
+                                    class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">{{
+                                    claim.policy.status }}</span>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.EFFECTIVE_DATES' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.policy.effectiveFrom
+                                    }} -
+                                    {{ claim.policy.effectiveTo }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.POLICY.SOURCE_BUSINESS' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white capitalize">{{
+                                    claim.policy.sourceOfBusiness }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Driver Info -->
                 <div
-                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
-                        Driver Details
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Name</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.name }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Birth Date</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.birthDate }}
-                            </p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Licence Type</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.licenceType }}
-                            </p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Licence Period</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.licenceStart }}
-                                -
-                                {{ claim.driver.licenceExpiry }}</p>
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isDriverExpanded = !isDriverExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="user" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.DRIVER.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isDriverExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isDriverExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm pt-6">
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.DRIVER.NAME' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.name }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.DRIVER.BIRTH_DATE' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.birthDate }}
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.DRIVER.LICENSE_TYPE' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.licenceType }}
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.DRIVER.LICENSE_PERIOD' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.driver.licenceStart }}
+                                    -
+                                    {{ claim.driver.licenceExpiry }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -358,47 +435,67 @@
 
             <!-- Vehicle Information -->
             <div
-                class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                <h3
-                    class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                    <i-lucide name="car" class="w-5 h-5 text-primary"></i-lucide>
-                    Vehicle Details
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 text-sm">
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Make & Model</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">{{ claim.vehicle.make }} {{
-                            claim.vehicle.model }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Plate Number</p>
-                        <p
-                            class="font-bold text-gray-900 dark:text-white bg-gray-50 px-2 py-0.5 rounded inline-block border border-gray-200">
-                            {{ claim.vehicle.plateNumber }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Year</p>
-                        <p class="font-semibold text-gray-900 dark:text-white">{{ claim.vehicle.year }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Chassis Number</p>
-                        <p class="font-mono text-xs font-medium text-gray-900 dark:text-white">{{
-                            claim.vehicle.chassisNumber }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Motor Number</p>
-                        <p class="font-mono text-xs font-medium text-gray-900 dark:text-white">{{
-                            claim.vehicle.motorNumber }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Category</p>
-                        <p class="font-medium text-gray-900 dark:text-white">{{ claim.vehicle.category }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Licence Validity</p>
-                        <p class="font-medium text-gray-900 dark:text-white">{{ claim.vehicle.licenceStart }} -
-                            {{
-                            claim.vehicle.licenceExpiry }}</p>
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                <div (click)="isVehicleExpanded = !isVehicleExpanded"
+                    class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i-lucide name="car" class="w-5 h-5 text-primary"></i-lucide>
+                        {{ 'CLAIMS.DETAILS.VEHICLE.TITLE' | translate }}
+                    </h3>
+                    <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                        [ngClass]="{'rotate-180': isVehicleExpanded}"></i-lucide>
+                </div>
+
+                <div *ngIf="isVehicleExpanded"
+                    class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 text-sm pt-6">
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ 'CLAIMS.DETAILS.VEHICLE.MAKE_MODEL' |
+                                translate }}</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ claim.vehicle.make }} {{
+                                claim.vehicle.model }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ 'CLAIMS.DETAILS.VEHICLE.PLATE_NUMBER'
+                                |
+                                translate }}</p>
+                            <p
+                                class="font-bold text-gray-900 dark:text-white bg-gray-50 px-2 py-0.5 rounded inline-block border border-gray-200">
+                                {{ claim.vehicle.plateNumber }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ 'CLAIMS.DETAILS.VEHICLE.YEAR' |
+                                translate
+                                }}</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ claim.vehicle.year }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{
+                                'CLAIMS.DETAILS.VEHICLE.CHASSIS_NUMBER' |
+                                translate }}</p>
+                            <p class="font-mono text-xs font-medium text-gray-900 dark:text-white">{{
+                                claim.vehicle.chassisNumber }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ 'CLAIMS.DETAILS.VEHICLE.MOTOR_NUMBER'
+                                |
+                                translate }}</p>
+                            <p class="font-mono text-xs font-medium text-gray-900 dark:text-white">{{
+                                claim.vehicle.motorNumber }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ 'CLAIMS.DETAILS.VEHICLE.CATEGORY' |
+                                translate }}</p>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.vehicle.category }}</p>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{
+                                'CLAIMS.DETAILS.VEHICLE.LICENSE_VALIDITY'
+                                | translate }}</p>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.vehicle.licenceStart }} -
+                                {{
+                                claim.vehicle.licenceExpiry }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -406,58 +503,78 @@
             <!-- Incident and Workshop Report -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div
-                    class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="alert-circle" class="w-5 h-5 text-primary"></i-lucide>
-                        Incident Report
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                        <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                            <div class="flex justify-between">
-                                <span class="text-xs text-gray-500">Location</span>
-                                <span class="text-sm font-medium text-navy dark:text-white">{{
-                                    claim.incident.location }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-xs text-gray-500">Nature of Loss</span>
-                                <span class="text-sm font-medium text-navy dark:text-white">{{
-                                    claim.incident.natureOfLoss }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-xs text-gray-500">Cause of Loss</span>
-                                <span class="text-sm font-medium text-navy dark:text-white">{{
-                                    claim.incident.causeOfLoss }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-xs text-gray-500">Severity</span>
-                                <span class="text-sm font-medium text-navy dark:text-white">{{
-                                    claim.incident.severity }}</span>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Description</p>
-                            <div
-                                class="p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 leading-relaxed min-h-[100px]">
-                                {{ claim.incident.description }}
-                            </div>
-                        </div>
-                        <!-- Police Report -->
-                        <div class="md:col-span-2 mt-4 border-t border-gray-100 pt-4">
-                            <h4 class="font-semibold text-sm text-navy dark:text-white mb-2">Police Report</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                <div>
-                                    <p class="text-xs text-gray-500">Report Number</p>
-                                    <p class="font-medium">{{ claim.incident.policeReportNumber }}</p>
+                    class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isIncidentExpanded = !isIncidentExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="alert-circle" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.INCIDENT_REPORT.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isIncidentExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isIncidentExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4 pt-6">
+                            <div class="space-y-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                                <div class="flex justify-between">
+                                    <span class="text-xs text-gray-500">{{ 'CLAIMS.DETAILS.INCIDENT_REPORT.LOCATION' |
+                                        translate }}</span>
+                                    <span class="text-sm font-medium text-navy dark:text-white">{{
+                                        claim.incident.location }}</span>
                                 </div>
-                                <div>
-                                    <p class="text-xs text-gray-500">City</p>
-                                    <p class="font-medium">{{ claim.incident.policeReportCity }}</p>
+                                <div class="flex justify-between">
+                                    <span class="text-xs text-gray-500">{{
+                                        'CLAIMS.DETAILS.INCIDENT_REPORT.NATURE_OF_LOSS' |
+                                        translate }}</span>
+                                    <span class="text-sm font-medium text-navy dark:text-white">{{
+                                        claim.incident.natureOfLoss }}</span>
                                 </div>
-                                <div>
-                                    <p class="text-xs text-gray-500">Description</p>
-                                    <p class="font-medium truncate">{{ claim.incident.policeReportDescription }}
-                                    </p>
+                                <div class="flex justify-between">
+                                    <span class="text-xs text-gray-500">{{
+                                        'CLAIMS.DETAILS.INCIDENT_REPORT.CAUSE_OF_LOSS' |
+                                        translate }}</span>
+                                    <span class="text-sm font-medium text-navy dark:text-white">{{
+                                        claim.incident.causeOfLoss }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-xs text-gray-500">{{ 'CLAIMS.DETAILS.INCIDENT_REPORT.SEVERITY' |
+                                        translate }}</span>
+                                    <span class="text-sm font-medium text-navy dark:text-white">{{
+                                        claim.incident.severity }}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{{
+                                    'CLAIMS.DETAILS.INCIDENT_REPORT.DESCRIPTION' | translate }}</p>
+                                <div
+                                    class="p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-700 rounded-lg text-sm text-gray-700 dark:text-gray-300 leading-relaxed min-h-[100px]">
+                                    {{ claim.incident.description }}
+                                </div>
+                            </div>
+                            <!-- Police Report -->
+                            <div class="md:col-span-2 mt-4 border-t border-gray-100 pt-4">
+                                <h4 class="font-semibold text-sm text-navy dark:text-white mb-2">{{
+                                    'CLAIMS.DETAILS.POLICE_REPORT.TITLE' | translate }}</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <p class="text-xs text-gray-500">{{ 'CLAIMS.DETAILS.POLICE_REPORT.NUMBER' |
+                                            translate }}</p>
+                                        <p class="font-medium">{{ claim.incident.policeReportNumber }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">{{ 'CLAIMS.DETAILS.POLICE_REPORT.CITY' |
+                                            translate
+                                            }}</p>
+                                        <p class="font-medium">{{ claim.incident.policeReportCity }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500">{{ 'CLAIMS.DETAILS.POLICE_REPORT.DESCRIPTION' |
+                                            translate }}</p>
+                                        <p class="font-medium truncate">{{ claim.incident.policeReportDescription }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -466,42 +583,49 @@
 
                 <!-- Workshop Info -->
                 <div
-                    class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group">
-                    <h3
-                        class="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
-                        <i-lucide name="tool" class="w-5 h-5 text-primary"></i-lucide>
-                        Workshop
-                    </h3>
-                    <div class="space-y-4 text-sm">
-                        <div
-                            class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Assigned Workshop</p>
-                            <p class="font-bold text-navy dark:text-white text-lg">{{ claim.workshop.name }}</p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Address</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.workshop.address }}
-                            </p>
-                        </div>
-                        <div class="space-y-1">
-                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                Contact</p>
-                            <p class="font-medium text-gray-900 dark:text-white">{{ claim.workshop.phone }}</p>
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-300 group overflow-hidden">
+                    <div (click)="isWorkshopExpanded = !isWorkshopExpanded"
+                        class="p-6 cursor-pointer flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <h3 class="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <i-lucide name="tool" class="w-5 h-5 text-primary"></i-lucide>
+                            {{ 'CLAIMS.DETAILS.WORKSHOP.TITLE' | translate }}
+                        </h3>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [ngClass]="{'rotate-180': isWorkshopExpanded}"></i-lucide>
+                    </div>
+
+                    <div *ngIf="isWorkshopExpanded"
+                        class="p-6 pt-0 border-t border-gray-100 dark:border-gray-700 animate-fadeIn">
+                        <div class="space-y-4 text-sm pt-6">
+                            <div
+                                class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{{
+                                    'CLAIMS.DETAILS.WORKSHOP.ASSIGNED' |
+                                    translate }}</p>
+                                <p class="font-bold text-navy dark:text-white text-lg">{{ claim.workshop.name }}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.WORKSHOP.ADDRESS' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.workshop.address }}
+                                </p>
+                            </div>
+                            <div class="space-y-1">
+                                <p
+                                    class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    {{ 'CLAIMS.DETAILS.WORKSHOP.CONTACT' | translate }}</p>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ claim.workshop.phone }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer Info -->
-            <div *ngIf="claim.withoutObligation"
-                class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg flex items-center gap-3">
-                <i-lucide name="alert-circle" class="w-5 h-5 text-yellow-600"></i-lucide>
-                <div>
-                    <p class="font-semibold text-yellow-800 dark:text-yellow-200">Processing without obligation
-                    </p>
-                </div>
-            </div>
+
+
+            <!-- Chat Box -->
+            <app-chat-box [modelName]="'insurance.claim'" [recordId]="claim.id"></app-chat-box>
 
         </div>
 
@@ -510,7 +634,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <h3 class="font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
                     <i-lucide name="paperclip" class="w-5 h-5 text-primary"></i-lucide>
-                    Attached Documents ({{ claim.documents.length }})
+                    {{ 'CLAIMS.DETAILS.ATTACHED_DOCUMENTS.TITLE' | translate }} ({{ claim.documents.length }})
                 </h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div *ngFor="let doc of claim.documents"
@@ -522,7 +646,8 @@
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-navy dark:text-white truncate" title="{{ doc.name }}">
                                 {{ doc.name }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Last updated: {{ doc.lastUpdated
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{
+                                'CLAIMS.DETAILS.ATTACHED_DOCUMENTS.LAST_UPDATED' | translate }}: {{ doc.lastUpdated
                                 |
                                 date }}</p>
                         </div>
@@ -537,18 +662,18 @@
 
     <!-- Loading -->
     <div *ngIf="loading" class="flex items-center justify-center h-96">
-        <app-loading-spinner [loading]="true" message="Loading Claim Details..."></app-loading-spinner>
+        <app-loading-spinner [loading]="true" [message]="'CLAIMS.DETAILS.LOADING' | translate"></app-loading-spinner>
     </div>
 
     <!-- Error -->
     <div *ngIf="error && !loading" class="flex items-center justify-center h-96">
         <div class="text-center">
             <i-lucide name="alert-circle" class="h-12 w-12 text-red-500 mx-auto mb-4"></i-lucide>
-            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">Error Loading Claim</h2>
+            <h2 class="text-2xl font-bold text-navy dark:text-white mb-2">{{ 'CLAIMS.DETAILS.ERROR' | translate }}</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-4">{{ error }}</p>
             <app-button (click)="goBack()">
                 <i-lucide name="chevron-left" class="w-4 h-4 mr-2"></i-lucide>
-                Back to Claims
+                {{ 'CLAIMS.DETAILS.BACK_TO_CLAIMS' | translate }}
             </app-button>
         </div>
     </div>

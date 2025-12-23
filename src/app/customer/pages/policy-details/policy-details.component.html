@@ -123,6 +123,10 @@
                 </div>
             </div>
         </app-card>
+
+
+        <!-- Chat Box -->
+        <app-chat-box [modelName]="'insurance.policy'" [recordId]="policy.id"></app-chat-box>
     </div>
 
     <div *ngIf="loading" class="flex items-center justify-center h-96">

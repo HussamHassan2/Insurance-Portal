@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ClaimService } from '../../../core/services/claim.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { TableColumn } from '../../../shared/models/table-column.interface';
+import { AppTranslateService } from '../../../core/services/app-translate.service';
 
 declare var lucide: any;
 
@@ -21,9 +22,14 @@ export class CustomerClaimsComponent implements OnInit, AfterViewChecked {
     constructor(
         private claimService: ClaimService,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private appTranslate: AppTranslateService
     ) {
         this.setupColumns();
+        // Re-setup columns on language change
+        this.appTranslate.get('CUSTOMER.CLAIMS.COLUMNS').subscribe(() => {
+            this.setupColumns();
+        });
     }
 
     ngOnInit(): void {
@@ -38,23 +44,23 @@ export class CustomerClaimsComponent implements OnInit, AfterViewChecked {
 
     setupColumns(): void {
         this.columns = [
-            { key: 'claimNumber', label: 'Claim No', filterable: true, filterType: 'text' },
-            { key: 'policyNumber', label: 'Policy No', filterable: true, filterType: 'text' },
-            { key: 'vehiclePlate', label: 'Vehicle Plate', filterable: true, filterType: 'text' },
-            { key: 'vehicleMaker', label: 'Vehicle Maker', filterable: true, filterType: 'text' },
-            { key: 'type', label: 'LOB', filterable: true },
-            { key: 'productName', label: 'Product', filterable: true },
+            { key: 'claimNumber', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.CLAIM_NUMBER'), filterable: true, filterType: 'text' },
+            { key: 'policyNumber', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.POLICY'), filterable: true, filterType: 'text' },
+            { key: 'vehiclePlate', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.VEHICLE_PLATE'), filterable: true, filterType: 'text' },
+            { key: 'vehicleMaker', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.VEHICLE_MAKER'), filterable: true, filterType: 'text' },
+            { key: 'type', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.TYPE'), filterable: true },
+            { key: 'productName', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.PRODUCT'), filterable: true },
             {
                 key: 'status',
-                label: 'Status',
+                label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.STATUS'),
                 filterable: true,
                 render: (row: any) => this.renderStatus(row.status)
             },
-            { key: 'amount', label: 'Amount', filterable: false },
-            { key: 'date', label: 'Intimation Date', filterable: true, filterType: 'date' },
+            { key: 'amount', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.AMOUNT'), filterable: false },
+            { key: 'date', label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.DATE'), filterable: true, filterType: 'date' },
             {
                 key: 'actions',
-                label: 'Actions',
+                label: this.appTranslate.instant('CUSTOMER.CLAIMS.COLUMNS.ACTIONS'),
                 filterable: false,
                 render: (row: any) => `
                     <div class="flex items-center gap-2">
@@ -79,7 +85,8 @@ export class CustomerClaimsComponent implements OnInit, AfterViewChecked {
             classes = 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
         }
 
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${status.replace(/_/g, ' ')}</span>`;
+        const translatedStatus = this.appTranslate.instant(`STATUS.${s.toUpperCase()}`);
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedStatus}</span>`;
     }
 
     loadClaims(): void {
@@ -126,7 +133,7 @@ export class CustomerClaimsComponent implements OnInit, AfterViewChecked {
             },
             error: (err) => {
                 console.error('Error loading claims:', err);
-                this.error = 'Failed to load claims';
+                this.error = this.appTranslate.instant('CUSTOMER.CLAIMS.ERROR_LOADING');
                 this.isLoading = false;
             }
         });
