@@ -14,6 +14,8 @@ import { CAR_PARTS } from '../../../components/car-damage-selector/models/car-pa
 export class FileClaimComponent implements OnInit {
     @ViewChild('wizard') wizard!: WizardComponent;
 
+    minSurveyDate: string = new Date().toISOString().split('T')[0];
+
     steps: WizardStep[] = [
         { title: 'Customer & Policy Info', component: null },
         { title: 'Loss & Accident Details', component: null },
@@ -47,7 +49,7 @@ export class FileClaimComponent implements OnInit {
         damagedParts: [] as any[], // Store full damage selection objects
         acc_desc: '',
         accident_address: '',
-        requested_survey_date: '',
+        requested_survey_date: this.minSurveyDate,
 
         // Driver & Workshop & Intimator
         is_driver: false,
@@ -100,6 +102,7 @@ export class FileClaimComponent implements OnInit {
 
     internalWorkshopOptions: any[] = [];
     requiredDocuments: any[] = [];
+    uploadedFiles: { [key: string]: File[] } = {};
 
     loading = false;
 
@@ -323,7 +326,11 @@ export class FileClaimComponent implements OnInit {
     loadClaimDocuments(): void {
         this.claimService.getClaimDocuments().subscribe({
             next: (response: any) => {
-                this.requiredDocuments = response.result || response.data || [];
+                console.log('Full API Response:', response);
+                // Check multiple possible response locations
+                this.requiredDocuments = response.claim_documents || response.crm_documents || response.result || response.data || [];
+                console.log('Parsed Required Documents:', this.requiredDocuments);
+                console.log('Document Items:', this.requiredDocuments.map(d => `id: ${d.id}, item: "${d.item}", name: "${d.name}"`));
             },
             error: (err: any) => {
                 console.error('Failed to load claim documents', err);
@@ -332,7 +339,49 @@ export class FileClaimComponent implements OnInit {
     }
 
     onFilesSelected(files: File[]): void {
-        this.formData.claim_documents = files;
+        // Legacy handler: if we have a generic "other" bucket or similar
+        // For now, we are moving to specific handlers.
+        // We might need to handle the case where "generalDocuments" upload calls this?
+        // Let's assume the template will call onFileSelectForDoc for loop items.
+    }
+
+    onFileSelectForDoc(files: File[], doc: any): void {
+        const key = doc.id || doc.code || doc.name;
+        if (key) {
+            this.uploadedFiles[key] = files;
+        }
+    }
+
+    get driverLicenseDoc(): any {
+        const doc = this.requiredDocuments.find(d => {
+            const val = (d.name || d.item || '').toLowerCase().trim();
+            return val.includes('driver') && val.includes('license');
+            // Matches "Driver License", "Driver Licence", "رخصة القيادة" logic is different but let's stick to English/Arabic keyword checks if needed
+            // For now, let's verify English first.
+        }) || this.requiredDocuments.find(d => (d.name || d.item || '') === 'رخصة القيادة');
+
+        // Console log only if not found to reduce noise, or once per change
+        // console.log('Driver License Doc Found:', doc); 
+        return doc;
+    }
+
+    get carLicenseDoc(): any {
+        const doc = this.requiredDocuments.find(d => {
+            const val = (d.name || d.item || '').toLowerCase().trim();
+            return (val.includes('car') || val.includes('vehicle')) && val.includes('license');
+        }) || this.requiredDocuments.find(d => (d.name || d.item || '') === 'رخصة السيارة');
+
+        // console.log('Car License Doc Found:', doc);
+        return doc;
+    }
+
+    get generalDocuments(): any[] {
+        return this.requiredDocuments.filter(d => {
+            const val = (d.name || d.item || '').toLowerCase().trim();
+            const isDriver = (val.includes('driver') && val.includes('license')) || (d.name || d.item) === 'رخصة القيادة';
+            const isCar = ((val.includes('car') || val.includes('vehicle')) && val.includes('license')) || (d.name || d.item) === 'رخصة السيارة';
+            return !isDriver && !isCar;
+        });
     }
 
     onPartsSelected(parts: string[]): void {
@@ -436,15 +485,47 @@ export class FileClaimComponent implements OnInit {
     submitClaim(): void {
         this.loading = true;
         const user = this.authService.currentUserValue;
+        const userId = this.formData.user_id || user?.id;
 
-        const claimData = {
-            ...this.formData,
-            is_insured: this.formData.is_insured,
-            claim_source: user?.role === 'broker' ? 'broker' : 'customer',
-            user_id: this.formData.user_id || user?.id
-        };
+        const formData = new FormData();
 
-        this.claimService.createClaimIntimation(claimData).subscribe({
+        // Append simple fields
+        Object.keys(this.formData).forEach(key => {
+            if (key !== 'damagedParts' && key !== 'claim_documents') {
+                const value = this.formData[key];
+                if (value !== null && value !== undefined) {
+                    formData.append(key, value);
+                }
+            }
+        });
+
+        // Append calculated/system fields
+        formData.append('is_insured', String(this.formData.is_insured));
+        formData.append('claim_source', user?.role === 'broker' ? 'broker' : 'customer');
+        if (userId) formData.append('user_id', String(userId));
+
+        // Append damaged parts as JSON string if it's an array
+        if (this.formData.damagedParts && this.formData.damagedParts.length) {
+            formData.append('damagedParts', JSON.stringify(this.formData.damagedParts));
+        }
+
+        // Append Files
+        // Iterate over uploadedFiles map
+        Object.keys(this.uploadedFiles).forEach(docKey => {
+            const files = this.uploadedFiles[docKey];
+            files.forEach(file => {
+                // The key should probably be the document ID or code expected by the backend
+                // Standard key for generic docs or specific key?
+                // If the backend expects dynamic keys based on doc ID:
+                formData.append(docKey, file);
+
+                // OR if backend expects a single array 'claim_documents' with metadata?
+                // The requirement implies mapping "API with UI fields". 
+                // Usually means backend expects specific fields. 
+            });
+        });
+
+        this.claimService.createClaimIntimation(formData).subscribe({
             next: (response: any) => {
                 this.claimId = response.result?.claim_id || response.result?.id || 'N/A';
                 this.isComplete = true;

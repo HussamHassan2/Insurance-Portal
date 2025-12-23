@@ -26,7 +26,6 @@ export class CarDamageSelectorComponent implements OnInit {
         { id: 'left', name: 'Left Side', icon: 'Left' },
         { id: 'right', name: 'Right Side', icon: 'Right' },
         { id: 'top', name: 'Top View', icon: 'Top' },
-        { id: 'interior', name: 'Interior', icon: 'Inside' },
     ];
 
     constructor() { }
@@ -62,14 +61,16 @@ export class CarDamageSelectorComponent implements OnInit {
     }
 
     // Get part style (for SVG styling)
+    // Get part style (for SVG styling)
     getPartStyle(partId: string): object {
         const isSelected = this.selectedParts.includes(partId);
         const isHovered = this.hoveredPart === partId;
 
         return {
-            fill: isSelected ? '#ef4444' : (isHovered ? '#60a5fa' : 'rgba(255, 255, 255, 0.4)'),
-            stroke: isSelected ? '#dc2626' : (isHovered ? '#2563eb' : '#1e40af'),
-            'stroke-width': isSelected ? '3' : (isHovered ? '2.5' : '2'),
+            // If selected: Red transparent. If hovered: Blue transparent. If inactive: Almost fully transparent to show image.
+            fill: isSelected ? 'rgba(239, 68, 68, 0.6)' : (isHovered ? 'rgba(96, 165, 250, 0.5)' : 'rgba(255, 255, 255, 0.01)'),
+            stroke: isSelected ? '#dc2626' : (isHovered ? '#2563eb' : 'transparent'),
+            'stroke-width': isSelected ? '3' : (isHovered ? '2' : '0'),
             cursor: 'pointer',
             transition: 'all 0.2s'
         };

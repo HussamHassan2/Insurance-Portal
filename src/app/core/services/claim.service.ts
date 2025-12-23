@@ -49,6 +49,9 @@ export class ClaimService {
      * Create Claim Intimation - Matches React app's createClaimIntimation method
      */
     createClaimIntimation(claimData: any): Observable<any> {
+        if (claimData instanceof FormData) {
+            return this.api.post('/v1/claim/create-claim-intimation', claimData);
+        }
         return this.api.post('/v1/claim/create-claim-intimation', {
             params: claimData
         });
@@ -84,6 +87,6 @@ export class ClaimService {
      * Get Claim Documents List
      */
     getClaimDocuments(): Observable<any> {
-        return this.api.get('/v1/lov/crm-documents');
+        return this.api.get('/v1/lov/claim-documents');
     }
 }
