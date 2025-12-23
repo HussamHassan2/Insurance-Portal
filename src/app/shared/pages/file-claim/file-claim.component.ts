@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { WizardStep, WizardComponent } from '../../components/wizard/wizard.component';
 import { NotificationService } from '../../../core/services/notification.service';
 import { CAR_PARTS } from '../../../components/car-damage-selector/models/car-parts.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-file-claim',
@@ -124,12 +125,49 @@ export class FileClaimComponent implements OnInit {
 
     submittedPolicyInfo: any = null;
 
+    // Hardcoded Arabic mapping for car parts (always available)
+    private readonly carPartsArabicMap: { [key: string]: string } = {
+        'front-bumper': 'الصدام الأمامي',
+        'hood': 'غطاء المحرك',
+        'windshield': 'الزجاج الأمامي',
+        'front-windshield': 'الزجاج الأمامي',
+        'left-headlight': 'الكشاف الأيسر الأمامي',
+        'right-headlight': 'الكشاف الأيمن الأمامي',
+        'grille': 'الشبك الأمامي',
+        'left-front-door': 'الباب الأمامي الأيسر',
+        'left-rear-door': 'الباب الخلفي الأيسر',
+        'right-front-door': 'الباب الأمامي الأيمن',
+        'right-rear-door': 'الباب الخلفي الأيمن',
+        'left-front-fender': 'الرفرف الأمامي الأيسر',
+        'left-rear-fender': 'الرفرف الخلفي الأيسر',
+        'right-front-fender': 'الرفرف الأمامي الأيمن',
+        'right-rear-fender': 'الرفرف الخلفي الأيمن',
+        'left-mirror': 'المرآة الجانبية اليسرى',
+        'right-mirror': 'المرآة الجانبية اليمنى',
+        'rear-bumper': 'الصدام الخلفي',
+        'trunk': 'صندوق الأمتعة',
+        'rear-windshield': 'الزجاج الخلفي',
+        'left-taillight': 'الكشاف الأيسر الخلفي',
+        'right-taillight': 'الكشاف الأيمن الخلفي',
+        'roof': 'السقف',
+        'left-front-wheel': 'العجلة الأمامية اليسرى',
+        'left-rear-wheel': 'العجلة الخلفية اليسرى',
+        'right-front-wheel': 'العجلة الأمامية اليمنى',
+        'right-rear-wheel': 'العجلة الخلفية اليمنى',
+        'dashboard': 'لوحة القيادة',
+        'steering': 'عجلة القيادة',
+        'front-seats': 'المقاعد الأمامية',
+        'rear-seats': 'المقاعد الخلفية',
+        'center-console': 'الكونسول الأوسط'
+    };
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private claimService: ClaimService,
         private authService: AuthService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private translate: TranslateService
     ) {
         // Read state from navigation
         const navigation = this.router.getCurrentNavigation();
@@ -389,10 +427,10 @@ export class FileClaimComponent implements OnInit {
     onPartsSelected(parts: string[]): void {
         this.formData.damagedParts = parts;
 
-        // Auto-populate description
+        // Auto-populate description with Arabic part names using hardcoded mapping
         const partNames = parts.map(id => {
-            const part = CAR_PARTS.find(p => p.id === id);
-            return part ? part.name : id;
+            // Use hardcoded Arabic mapping
+            return this.carPartsArabicMap[id] || id;
         });
 
         if (partNames.length > 0) {

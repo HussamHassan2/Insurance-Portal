@@ -1090,7 +1090,41 @@
             "COVERAGE_BENEFITS": "مزايا التغطية",
             "WHATS_COVERED": "ما تغطيه الوثيقة",
             "READY_TO_PROTECT": "هل أنت مستعد للحصول على الحماية؟",
-            "GET_PERSONALIZED_QUOTE": "احصل على عرض أسعار مخصص في دقائق"
+            "GET_PERSONALIZED_QUOTE": "احصل على عرض سعر مخصص في دقائق"
         }
+    },
+    "CAR_PARTS": {
+        "FRONT_BUMPER": "الصدام الأمامي",
+        "HOOD": "غطاء المحرك",
+        "WINDSHIELD": "الزجاج الأمامي",
+        "FRONT_WINDSHIELD": "الزجاج الأمامي",
+        "LEFT_HEADLIGHT": "الكشاف الأيسر الأمامي",
+        "RIGHT_HEADLIGHT": "الكشاف الأيمن الأمامي",
+        "GRILLE": "الشبك الأمامي",
+        "LEFT_FRONT_DOOR": "الباب الأمامي الأيسر",
+        "LEFT_REAR_DOOR": "الباب الخلفي الأيسر",
+        "RIGHT_FRONT_DOOR": "الباب الأمامي الأيمن",
+        "RIGHT_REAR_DOOR": "الباب الخلفي الأيمن",
+        "LEFT_FRONT_FENDER": "الرفرف الأمامي الأيسر",
+        "LEFT_REAR_FENDER": "الرفرف الخلفي الأيسر",
+        "RIGHT_FRONT_FENDER": "الرفرف الأمامي الأيمن",
+        "RIGHT_REAR_FENDER": "الرفرف الخلفي الأيمن",
+        "LEFT_MIRROR": "المرآة الجانبية اليسرى",
+        "RIGHT_MIRROR": "المرآة الجانبية اليمنى",
+        "REAR_BUMPER": "الصدام الخلفي",
+        "TRUNK": "صندوق الأمتعة",
+        "REAR_WINDSHIELD": "الزجاج الخلفي",
+        "LEFT_TAILLIGHT": "الكشاف الأيسر الخلفي",
+        "RIGHT_TAILLIGHT": "الكشاف الأيمن الخلفي",
+        "ROOF": "السقف",
+        "LEFT_FRONT_WHEEL": "العجلة الأمامية اليسرى",
+        "LEFT_REAR_WHEEL": "العجلة الخلفية اليسرى",
+        "RIGHT_FRONT_WHEEL": "العجلة الأمامية اليمنى",
+        "RIGHT_REAR_WHEEL": "العجلة الخلفية اليمنى",
+        "DASHBOARD": "لوحة القيادة",
+        "STEERING": "عجلة القيادة",
+        "FRONT_SEATS": "المقاعد الأمامية",
+        "REAR_SEATS": "المقاعد الخلفية",
+        "CENTER_CONSOLE": "الكونسول الأوسط"
     }
 }
