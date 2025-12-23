@@ -1,5 +1,6 @@
 export const environment = {
-    production: false,
-    apiUrl: '/api',
-    googleClientId: 'YOUR_GOOGLE_CLIENT_ID_PLACEHOLDER'
+  production: false,
+  clientId: 'orient',
+  apiUrl: '/api',
+  googleClientId: 'YOUR_GOOGLE_CLIENT_ID_PLACEHOLDER'
 };

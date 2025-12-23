@@ -335,13 +335,31 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             // Process risk_image if present - assume base64 if no prefix
             let image = item.risk_image || item.image;
             if (image) {
-                // Ensure it's a string and strip whitespace/newlines which break base64
-                let imageStr = String(image).replace(/\s/g, '');
+                let imageStr = String(image).trim();
 
-                if (!imageStr.startsWith('data:image') && !imageStr.startsWith('http')) {
-                    image = `data:image/png;base64,${imageStr}`;
-                } else {
+                // 1. Check for standard prefixes/schemes
+                if (imageStr.startsWith('data:') || imageStr.startsWith('http') || imageStr.startsWith('https')) {
                     image = imageStr;
+                }
+                // 2. Check for path-like strings
+                else if (imageStr.startsWith('/') || imageStr.startsWith('./') || imageStr.startsWith('assets/')) {
+                    image = imageStr;
+                }
+                // 3. Check for specific image extensions
+                else if (/\.(png|jpg|jpeg|svg|gif|webp)(\?.*)?$/i.test(imageStr)) {
+                    image = imageStr;
+                }
+                // 4. Fallback for raw Base64 (must be long enough to be an image)
+                else if (imageStr.length > 50) {
+                    // Strip whitespace
+                    // Assume it's base64 if it's long. 
+                    // The template (error) handler will hide it if it's invalid.
+                    // We strip whitespace just in case.
+                    const cleanStr = imageStr.replace(/\s/g, '');
+                    image = `data:image/png;base64,${cleanStr}`;
+                } else {
+                    // Too short to be a base64 image, likely a name or code
+                    image = '';
                 }
             }
 

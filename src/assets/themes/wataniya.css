@@ -1,0 +1,11 @@
+:root {
+  --color-primary: #F40808;
+  --color-primary-rgb: 244, 8, 8;
+  --color-secondary: #000000;
+  --color-secondary-rgb: 0, 0, 0;
+  --color-accent: #1d1d1d;
+  --color-accent-rgb: 29, 29, 29;
+
+  --font-family-body: 'Poppins', 'Almarai', sans-serif;
+  --font-family-heading: 'Poppins', 'Almarai', sans-serif;
+}

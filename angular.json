@@ -55,7 +55,90 @@
                             "vendorChunk": true,
                             "extractLicenses": false,
                             "sourceMap": true,
-                            "namedChunks": true
+                            "namedChunks": true,
+                            "assets": [
+                                "src/favicon.ico",
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/orient",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/common",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/themes",
+                                    "output": "assets/themes"
+                                },
+                                "src/assets"
+                            ]
+                        },
+                        "orient": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.orient.prod.ts"
+                                }
+                            ],
+                            "assets": [
+                                "src/favicon.ico",
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/orient",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/common",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/themes",
+                                    "output": "assets/themes"
+                                }
+                            ],
+                            "buildOptimizer": true,
+                            "optimization": true,
+                            "vendorChunk": false,
+                            "extractLicenses": true,
+                            "sourceMap": false,
+                            "namedChunks": false
+                        },
+                        "wataniya": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.wataniya.prod.ts"
+                                }
+                            ],
+                            "assets": [
+                                "src/favicon.ico",
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/wataniya",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/common",
+                                    "output": "assets"
+                                },
+                                {
+                                    "glob": "**/*",
+                                    "input": "src/assets/themes",
+                                    "output": "assets/themes"
+                                }
+                            ],
+                            "buildOptimizer": true,
+                            "optimization": true,
+                            "vendorChunk": false,
+                            "extractLicenses": true,
+                            "sourceMap": false,
+                            "namedChunks": false
                         }
                     },
                     "defaultConfiguration": "production"
@@ -71,6 +154,12 @@
                         },
                         "development": {
                             "buildTarget": "insurance-portal:build:development"
+                        },
+                        "orient": {
+                            "buildTarget": "insurance-portal:build:orient"
+                        },
+                        "wataniya": {
+                            "buildTarget": "insurance-portal:build:wataniya"
                         }
                     },
                     "defaultConfiguration": "development"

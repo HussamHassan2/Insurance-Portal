@@ -4,7 +4,11 @@
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
+        "start:orient": "ng serve --configuration=orient",
+        "start:wataniya": "ng serve --configuration=wataniya --port 4201",
         "build": "ng build",
+        "build:orient": "ng build --configuration=orient",
+        "build:wataniya": "ng build --configuration=wataniya",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },

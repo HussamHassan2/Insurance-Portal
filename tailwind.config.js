@@ -8,16 +8,24 @@ module.exports = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: '#0056b3', // Deep Corporate Blue
-                    light: '#007bff',   // Bright Action Blue
-                    dark: '#004494',
+                    DEFAULT: 'var(--color-primary)',
+                    light: 'rgba(var(--color-primary-rgb), 0.1)',
+                    dark: 'rgba(var(--color-primary-rgb), 0.9)',
+                },
+                secondary: {
+                    DEFAULT: 'var(--color-secondary)',
+                    light: 'rgba(var(--color-secondary-rgb), 0.1)',
+                    dark: 'rgba(var(--color-secondary-rgb), 0.9)',
+                },
+                accent: {
+                    DEFAULT: 'var(--color-accent)',
+                    light: 'rgba(var(--color-accent-rgb), 0.1)',
+                    dark: 'rgba(var(--color-accent-rgb), 0.9)',
                 },
                 navy: {
                     DEFAULT: '#0D1B2A',
                     light: '#1B2A3D',
                 },
-                secondary: '#6c757d',
-
             },
             fontFamily: {
                 sans: ['Roboto', 'sans-serif'],

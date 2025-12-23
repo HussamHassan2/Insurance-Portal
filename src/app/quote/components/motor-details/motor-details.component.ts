@@ -50,9 +50,31 @@ export class MotorDetailsComponent implements OnInit {
       next: (res) => {
         console.log('API Response - Vehicle Makers:', res); // DEBUG LOG
         this.makers = (res || []).map((maker: any) => {
-          if (maker.risk_image && !maker.risk_image.startsWith('data:image')) {
-            // Assume PNG if not specified, mostly likely for logos
-            maker.risk_image = `data:image/png;base64,${maker.risk_image}`;
+          if (maker.risk_image) {
+            let imageStr = String(maker.risk_image).trim();
+
+            // 1. Check for standard prefixes/schemes
+            if (imageStr.startsWith('data:') || imageStr.startsWith('http') || imageStr.startsWith('https')) {
+              maker.risk_image = imageStr;
+            }
+            // 2. Check for path-like strings
+            else if (imageStr.startsWith('/') || imageStr.startsWith('./') || imageStr.startsWith('assets/')) {
+              maker.risk_image = imageStr;
+            }
+            // 3. Check for specific image extensions
+            else if (/\.(png|jpg|jpeg|svg|gif|webp)(\?.*)?$/i.test(imageStr)) {
+              maker.risk_image = imageStr;
+            }
+            // 4. Fallback for raw Base64 (must be long enough)
+            else if (imageStr.length > 50) {
+              // Strip whitespace
+              const cleanStr = imageStr.replace(/\s/g, '');
+              // Relaxed check - template handles error
+              maker.risk_image = `data:image/png;base64,${cleanStr}`;
+            } else {
+              // Too short, assuming text/code - hide it
+              maker.risk_image = '';
+            }
           }
           return maker;
         });

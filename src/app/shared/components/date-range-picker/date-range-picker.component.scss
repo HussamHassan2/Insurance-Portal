@@ -13,10 +13,10 @@
 
         &.today {
             @apply font-semibold;
-            
+
             span {
                 @apply relative;
-                
+
                 &::after {
                     content: '';
                     @apply absolute -bottom-0.5 left-1/2 transform -translate-x-1/2;
@@ -29,7 +29,7 @@
             @apply bg-primary text-white font-medium;
 
             &:hover {
-                @apply bg-primary/90;
+                @apply bg-primary-dark;
             }
         }
 

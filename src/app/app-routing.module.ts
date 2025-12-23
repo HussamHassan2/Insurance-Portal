@@ -13,6 +13,10 @@ const routes: Routes = [
         path: 'quote',
         loadChildren: () => import('./quote/quote.module').then(m => m.QuoteModule)
     },
+    {
+        path: 'client-dashboard',
+        loadComponent: () => import('./tenant-dashboard/dashboard.component').then(m => m.DashboardComponent)
+    },
 
     // Dashboard redirect based on role
     {
