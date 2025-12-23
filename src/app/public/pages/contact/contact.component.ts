@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { NotificationService } from '../../../core/services/notification.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html'
 })
 export class ContactComponent {
+    clientId = environment.clientId;
     loading = false;
     formData = {
         name: '',

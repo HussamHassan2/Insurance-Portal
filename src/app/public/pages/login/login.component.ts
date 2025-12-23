@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
     formError = '';
+    showPassword = false;
+    clientId = environment.clientId;
 
     constructor(
         private fb: FormBuilder,
@@ -25,6 +28,20 @@ export class LoginComponent {
             password: ['', Validators.required],
             rememberMe: [false]
         });
+    }
+
+    ngOnInit(): void {
+        const rememberedEmail = localStorage.getItem('rememberedEmail');
+        if (rememberedEmail) {
+            this.loginForm.patchValue({
+                email: rememberedEmail,
+                rememberMe: true
+            });
+        }
+    }
+
+    togglePasswordVisibility(): void {
+        this.showPassword = !this.showPassword;
     }
 
     get email() { return this.loginForm.get('email'); }

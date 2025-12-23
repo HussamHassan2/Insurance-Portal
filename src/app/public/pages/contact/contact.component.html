@@ -1,148 +1,157 @@
-<app-navbar></app-navbar>
+<ng-container *ngIf="clientId === 'wataniya'; else orientTemplate">
+    <app-wataniya-contact></app-wataniya-contact>
+</ng-container>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- Hero Section -->
-    <section class="bg-navy text-white py-24 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold mb-6">{{ 'CONTACT.HERO.TITLE' | translate }}</h1>
-                <p class="text-xl text-blue-100 max-w-2xl mx-auto opacity-90">
-                    {{ 'CONTACT.HERO.DESC' | translate }}
-                </p>
+<ng-template #orientTemplate>
+    <app-navbar></app-navbar>
+
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <!-- Hero Section -->
+        <section class="bg-navy text-white py-24 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center">
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-6">{{ 'CONTACT.HERO.TITLE' | translate }}</h1>
+                    <p class="text-xl text-blue-100 max-w-2xl mx-auto opacity-90">
+                        {{ 'CONTACT.HERO.DESC' | translate }}
+                    </p>
+                </div>
             </div>
-        </div>
-        <!-- Decorative Elements -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
-    </section>
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
+        </section>
 
-    <!-- Contact Info Cards -->
-    <section class="py-12 -mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div *ngFor="let info of contactInfo"
-                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border border-gray-100 dark:border-gray-700">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 duration-300"
-                        [ngClass]="info.color">
-                        <i-lucide [name]="info.icon" class="w-6 h-6"></i-lucide>
-                    </div>
-                    <h3 class="text-lg font-bold text-navy dark:text-white mb-3">{{ info.title | translate }}</h3>
-                    <div class="space-y-1">
-                        <p *ngFor="let detail of info.details"
-                            class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{{ detail | translate }}
-                        </p>
+        <!-- Contact Info Cards -->
+        <section class="py-12 -mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div *ngFor="let info of contactInfo"
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border border-gray-100 dark:border-gray-700">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 duration-300"
+                            [ngClass]="info.color">
+                            <i-lucide [name]="info.icon" class="w-6 h-6"></i-lucide>
+                        </div>
+                        <h3 class="text-lg font-bold text-navy dark:text-white mb-3">{{ info.title | translate }}</h3>
+                        <div class="space-y-1">
+                            <p *ngFor="let detail of info.details"
+                                class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{{ detail | translate
+                                }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Form & Map -->
-    <section class="py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Contact Form -->
-                <div
-                    class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 dark:border-gray-700">
-                    <h2 class="text-2xl font-bold text-navy dark:text-white mb-8">{{ 'CONTACT.FORM.TITLE' | translate }}
-                    </h2>
-                    <form (ngSubmit)="onSubmit()" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
-                                    'CONTACT.FORM.NAME_LABEL' | translate }}</label>
-                                <input type="text" [(ngModel)]="formData.name" name="name" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                    [placeholder]="'CONTACT.FORM.NAME_PLACEHOLDER' | translate">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
-                                    'CONTACT.FORM.EMAIL_LABEL' | translate }}</label>
-                                <input type="email" [(ngModel)]="formData.email" name="email" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                    [placeholder]="'CONTACT.FORM.EMAIL_PLACEHOLDER' | translate">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
-                                    'CONTACT.FORM.PHONE_LABEL' | translate }}</label>
-                                <input type="tel" [(ngModel)]="formData.phone" name="phone"
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                    [placeholder]="'CONTACT.FORM.PHONE_PLACEHOLDER' | translate">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
-                                    'CONTACT.FORM.SUBJECT_LABEL' | translate }}</label>
-                                <input type="text" [(ngModel)]="formData.subject" name="subject" required
-                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                    [placeholder]="'CONTACT.FORM.SUBJECT_PLACEHOLDER' | translate">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
-                                'CONTACT.FORM.MESSAGE_LABEL' | translate }}</label>
-                            <textarea [(ngModel)]="formData.message" name="message" rows="5" required
-                                class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none resize-none"
-                                [placeholder]="'CONTACT.FORM.MESSAGE_PLACEHOLDER' | translate"></textarea>
-                        </div>
-
-                        <button type="submit" [disabled]="loading"
-                            class="w-full py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 group">
-                            <i-lucide *ngIf="loading" name="loader-2" class="w-5 h-5 animate-spin"></i-lucide>
-                            <i-lucide *ngIf="!loading" name="send"
-                                class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i-lucide>
-                            {{ loading ? ('CONTACT.FORM.SENDING' | translate) : ('CONTACT.FORM.SUBMIT' | translate) }}
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Map & Why Us -->
-                <div class="space-y-8">
+        <!-- Contact Form & Map -->
+        <section class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden h-72 border border-gray-100 dark:border-gray-700">
-                        <iframe title="Office Location"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.970177!2d55.27!3d25.20!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0!2zMjXCsDEyJzAwLjAiTiA1NcKwMTYnMTIuMCJF!5e0!3m2!1sen!2sae!4v1234567890"
-                            width="100%" height="100%" style="border: 0;" allowfullscreen="" loading="lazy"
-                            class="grayscale hover:grayscale-0 transition-all duration-500"></iframe>
+                        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 dark:border-gray-700">
+                        <h2 class="text-2xl font-bold text-navy dark:text-white mb-8">{{ 'CONTACT.FORM.TITLE' |
+                            translate }}
+                        </h2>
+                        <form (ngSubmit)="onSubmit()" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'CONTACT.FORM.NAME_LABEL' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.name" name="name" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                        [placeholder]="'CONTACT.FORM.NAME_PLACEHOLDER' | translate">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'CONTACT.FORM.EMAIL_LABEL' | translate }}</label>
+                                    <input type="email" [(ngModel)]="formData.email" name="email" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                        [placeholder]="'CONTACT.FORM.EMAIL_PLACEHOLDER' | translate">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'CONTACT.FORM.PHONE_LABEL' | translate }}</label>
+                                    <input type="tel" [(ngModel)]="formData.phone" name="phone"
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                        [placeholder]="'CONTACT.FORM.PHONE_PLACEHOLDER' | translate">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                                        'CONTACT.FORM.SUBJECT_LABEL' | translate }}</label>
+                                    <input type="text" [(ngModel)]="formData.subject" name="subject" required
+                                        class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                        [placeholder]="'CONTACT.FORM.SUBJECT_PLACEHOLDER' | translate">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">{{
+                                    'CONTACT.FORM.MESSAGE_LABEL' | translate }}</label>
+                                <textarea [(ngModel)]="formData.message" name="message" rows="5" required
+                                    class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none resize-none"
+                                    [placeholder]="'CONTACT.FORM.MESSAGE_PLACEHOLDER' | translate"></textarea>
+                            </div>
+
+                            <button type="submit" [disabled]="loading"
+                                class="w-full py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 group">
+                                <i-lucide *ngIf="loading" name="loader-2" class="w-5 h-5 animate-spin"></i-lucide>
+                                <i-lucide *ngIf="!loading" name="send"
+                                    class="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i-lucide>
+                                {{ loading ? ('CONTACT.FORM.SENDING' | translate) : ('CONTACT.FORM.SUBMIT' | translate)
+                                }}
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="bg-navy rounded-3xl shadow-xl p-8 md:p-10 text-white relative overflow-hidden">
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-bold mb-6">{{ 'CONTACT.WHY_US.TITLE' | translate }}</h3>
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-4">
-                                    <div
-                                        class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
-                                    </div>
-                                    <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_1' | translate }}</span>
-                                </li>
-                                <li class="flex items-start gap-4">
-                                    <div
-                                        class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
-                                    </div>
-                                    <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_2' | translate }}</span>
-                                </li>
-                                <li class="flex items-start gap-4">
-                                    <div
-                                        class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
-                                    </div>
-                                    <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_3' | translate }}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Decorative Circle -->
+                    <!-- Map & Why Us -->
+                    <div class="space-y-8">
                         <div
-                            class="absolute bottom-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-2xl -mr-10 -mb-10">
+                            class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden h-72 border border-gray-100 dark:border-gray-700">
+                            <iframe title="Office Location"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3609.970177!2d55.27!3d25.20!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0!2zMjXCsDEyJzAwLjAiTiA1NcKwMTYnMTIuMCJF!5e0!3m2!1sen!2sae!4v1234567890"
+                                width="100%" height="100%" style="border: 0;" allowfullscreen="" loading="lazy"
+                                class="grayscale hover:grayscale-0 transition-all duration-500"></iframe>
+                        </div>
+
+                        <div class="bg-navy rounded-3xl shadow-xl p-8 md:p-10 text-white relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h3 class="text-2xl font-bold mb-6">{{ 'CONTACT.WHY_US.TITLE' | translate }}</h3>
+                                <ul class="space-y-4">
+                                    <li class="flex items-start gap-4">
+                                        <div
+                                            class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                            <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
+                                        </div>
+                                        <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_1' | translate }}</span>
+                                    </li>
+                                    <li class="flex items-start gap-4">
+                                        <div
+                                            class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                            <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
+                                        </div>
+                                        <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_2' | translate }}</span>
+                                    </li>
+                                    <li class="flex items-start gap-4">
+                                        <div
+                                            class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                            <i-lucide name="check" class="w-3.5 h-3.5 text-primary"></i-lucide>
+                                        </div>
+                                        <span class="text-blue-100">{{ 'CONTACT.WHY_US.REASON_3' | translate }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- Decorative Circle -->
+                            <div
+                                class="absolute bottom-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-2xl -mr-10 -mb-10">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
+</ng-template>

@@ -13,6 +13,7 @@ import {
 } from 'lucide-angular';
 
 // Components
+import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardLayoutComponent } from './components/dashboard-layout/dashboard-layout.component';
 import { ButtonComponent } from './components/button/button.component';
@@ -79,6 +80,7 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         FileClaimComponent,
         DynamicTranslatePipe,
         LanguageSwitcherComponent,
+        FooterComponent,
         // ChatBoxComponent
     ],
     imports: [
@@ -133,7 +135,8 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         LucideAngularModule,
         DynamicTranslatePipe,
         LanguageSwitcherComponent,
-        ChatBoxModule
+        ChatBoxModule,
+        FooterComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

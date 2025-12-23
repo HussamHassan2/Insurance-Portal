@@ -23,7 +23,7 @@ module.exports = {
                     dark: 'rgba(var(--color-accent-rgb), 0.9)',
                 },
                 navy: {
-                    DEFAULT: '#0D1B2A',
+                    DEFAULT: 'var(--color-brand-dark)',
                     light: '#1B2A3D',
                 },
             },

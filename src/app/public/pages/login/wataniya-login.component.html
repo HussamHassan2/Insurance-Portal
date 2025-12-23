@@ -1,0 +1,140 @@
+<div
+    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Abstract Background -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-blue-50 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-full bg-gradient-to-tr from-gray-100 to-transparent"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/5 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-md w-full space-y-8 relative z-10">
+        <div class="text-center">
+            <a routerLink="/" class="inline-block mb-6">
+                <!-- Use strict Wataniya Logo or Text -->
+                <div class="flex items-center justify-center gap-2">
+                    <div class="bg-primary text-white p-2 rounded-lg font-bold text-2xl">W</div>
+                    <span class="text-2xl font-bold text-navy">Al Wataniya</span>
+                </div>
+            </a>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                {{ 'AUTH.LOGIN.TITLE' | translate }}
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                {{ 'AUTH.LOGIN.SUBTITLE' | translate }}
+                <a routerLink="/register" class="font-medium text-primary hover:text-primary-dark transition-colors">
+                    {{ 'AUTH.LOGIN.CREATE_ACCOUNT' | translate }}
+                </a>
+            </p>
+        </div>
+
+        <div class="bg-white py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
+            <form class="space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        {{ 'AUTH.LOGIN.EMAIL' | translate }}
+                    </label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i-lucide name="mail" class="h-5 w-5 text-gray-400"></i-lucide>
+                        </div>
+                        <input id="email" type="email" formControlName="email"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary sm:text-sm"
+                            [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">
+                        {{ 'AUTH.LOGIN.PASSWORD' | translate }}
+                    </label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i-lucide name="lock" class="h-5 w-5 text-gray-400"></i-lucide>
+                        </div>
+                        <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                            class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary sm:text-sm"
+                            [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate">
+                        <button type="button" (click)="togglePasswordVisibility()"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer hover:text-gray-600">
+                            <i-lucide [name]="showPassword ? 'eye-off' : 'eye'"
+                                class="h-5 w-5 text-gray-400"></i-lucide>
+                        </button>
+                    </div>
+                    <div class="mt-1 text-right">
+                        <a routerLink="/forgot-password"
+                            class="text-sm font-medium text-primary hover:text-primary-dark">
+                            {{ 'AUTH.LOGIN.FORGOT_PASSWORD' | translate }}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" formControlName="rememberMe"
+                            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                            {{ 'AUTH.LOGIN.REMEMBER_ME' | translate }}
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div>
+                    <button type="submit" [disabled]="loading"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed">
+                        <i-lucide *ngIf="loading" name="loader-2" class="animate-spin -ml-1 mr-2 h-5 w-5"></i-lucide>
+                        {{ loading ? ('AUTH.LOGIN.SIGNING_IN' | translate) : ('AUTH.LOGIN.SIGN_IN' | translate) }}
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div *ngIf="formError" class="rounded-md bg-red-50 p-4 animate-fade-in">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i-lucide name="alert-circle" class="h-5 w-5 text-red-400"></i-lucide>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">{{ formError }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">
+                            {{ 'AUTH.LOGIN.OR_SIGN_IN_WITH' | translate }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <button type="button" (click)="onGoogleLogin()"
+                        class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+                        <img class="h-5 w-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+                        <span class="ml-2">{{ 'AUTH.LOGIN.CONTINUE_WITH_GOOGLE' | translate }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Branding Text - Distinct for Wataniya -->
+            <div class="mt-8 text-center border-t border-gray-100 pt-6">
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    {{ 'AUTH.LOGIN.BRANDING.WATANIYA.DESCRIPTION' | translate }}
+                </p>
+                <div class="mt-4 flex justify-center gap-4 text-xs text-gray-400">
+                    <a href="#" class="hover:text-primary">{{ 'AUTH.LOGIN.BRANDING.WATANIYA.PRIVACY' | translate }}</a>
+                    <a href="#" class="hover:text-primary">{{ 'AUTH.LOGIN.BRANDING.WATANIYA.TERMS' | translate }}</a>
+                </div>
+                <p class="mt-4 text-xs text-gray-400">{{ 'AUTH.LOGIN.BRANDING.WATANIYA.COPYRIGHT' | translate }}</p>
+            </div>
+        </div>
+    </div>
+</div>

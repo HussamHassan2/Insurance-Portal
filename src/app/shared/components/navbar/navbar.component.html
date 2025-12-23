@@ -1,17 +1,24 @@
-<nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
+<nav class="bg-white shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
             <!-- Logo -->
             <div class="flex items-center">
                 <a routerLink="/" class="flex items-center gap-2">
-                    <img src="assets/logo.png" alt="Orient Insurance" class="h-12 object-contain" />
+                    <ng-container *ngIf="clientId === 'wataniya'; else orientLogo">
+                        <!-- Wataniya Logo -->
+                        <img src="assets/wataniya-logo.png" alt="Al Wataniya" class="h-12 w-auto object-contain" />
+                        <span class="ml-2 font-bold text-xl text-navy">Al Wataniya</span>
+                    </ng-container>
+                    <ng-template #orientLogo>
+                        <img src="assets/logo.png" alt="Orient Insurance" class="h-12 object-contain" />
+                    </ng-template>
                 </a>
             </div>
 
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center space-x-8">
                 <a *ngFor="let link of navLinks" [routerLink]="link.path" routerLinkActive="text-primary"
-                    class="text-gray-600 dark:text-gray-300 hover:text-primary font-medium transition-colors">
+                    class="text-navy hover:text-primary font-semibold transition-colors text-base">
                     {{ link.name | translate }}
                 </a>
             </div>
@@ -19,7 +26,7 @@
             <!-- Desktop Actions -->
             <div class="hidden md:flex items-center space-x-4">
                 <app-language-switcher class="mr-4"></app-language-switcher>
-                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300 mr-4">
+                <div class="flex items-center gap-2 text-navy mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                         class="h-4 w-4">
@@ -33,7 +40,7 @@
                 <ng-container *ngIf="!user; else loggedInMenu">
                     <a routerLink="/login">
                         <button
-                            class="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 text-navy hover:bg-gray-100 rounded-lg transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="h-4 w-4">
@@ -48,7 +55,7 @@
                 <ng-template #loggedInMenu>
                     <a [routerLink]="getDashboardLink()">
                         <button
-                            class="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            class="flex items-center gap-2 px-4 py-2 text-navy hover:bg-gray-100 rounded-lg transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="h-4 w-4">

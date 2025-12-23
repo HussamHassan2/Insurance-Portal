@@ -540,11 +540,20 @@
             "BROKER": "Broker",
             "SURVEYOR": "Surveyor (Odoo)",
             "BRANDING": {
-                "TAGLINE": "Protecting What Matters Most Since 1980",
-                "DESCRIPTION": "Join thousands of satisfied customers who trust Orient Insurance for their protection needs. Experience seamless claims and comprehensive coverage.",
-                "COPYRIGHT": "© 2025 Orient Insurance",
-                "PRIVACY": "Privacy Policy",
-                "TERMS": "Terms of Service"
+                "ORIENT": {
+                    "TAGLINE": "Protecting What Matters Most Since 1980",
+                    "DESCRIPTION": "Join thousands of satisfied customers who trust Orient Insurance for their protection needs. Experience seamless claims and comprehensive coverage.",
+                    "COPYRIGHT": "© 2025 Orient Insurance",
+                    "PRIVACY": "Privacy Policy",
+                    "TERMS": "Terms of Service"
+                },
+                "WATANIYA": {
+                    "TAGLINE": "Innovative Solutions for Your Lifestyle",
+                    "DESCRIPTION": "The National Insurance Company offers innovative insurance solutions for individuals and businesses. Join us to experience protection that improves your quality of life.",
+                    "COPYRIGHT": "© 2025 Al Wataniya Insurance",
+                    "PRIVACY": "Privacy Policy",
+                    "TERMS": "Terms of Service"
+                }
             }
         },
         "REGISTER": {
@@ -583,12 +592,22 @@
     },
     "HOME": {
         "HERO": {
-            "BADGE": "Trusted by over 2 million customers",
-            "TITLE": "Secure Your Future with",
-            "TITLE_HIGHLIGHT": "Confidence",
-            "DESCRIPTION": "Experience the highest rated insurance services in Egypt. From motor to medical, we've got you covered with innovative solutions tailored to your needs.",
-            "GET_QUOTE": "Get a Quote Now",
-            "EXPLORE_SERVICES": "Explore Services",
+            "ORIENT": {
+                "BADGE": "Trusted by over 2 million customers",
+                "TITLE": "Secure Your Future with",
+                "TITLE_HIGHLIGHT": "Confidence",
+                "DESCRIPTION": "Experience the highest rated insurance services in Egypt. From motor to medical, we've got you covered with innovative solutions tailored to your needs.",
+                "GET_QUOTE": "Get a Quote Now",
+                "EXPLORE_SERVICES": "Explore Services"
+            },
+            "WATANIYA": {
+                "BADGE": "EST. 2020 - Cairo, Egypt",
+                "TITLE": "Innovative Solutions for Your",
+                "TITLE_HIGHLIGHT": "Lifestyle",
+                "DESCRIPTION": "The National Insurance Company offers innovative insurance solutions for individuals and businesses. We create solutions that become part of your lifestyle.",
+                "GET_QUOTE": "Get a Quote",
+                "EXPLORE_SERVICES": "Our Coverages"
+            },
             "ACTIVE_POLICY": "Active Policy",
             "COMPREHENSIVE_MOTOR": "Comprehensive Motor",
             "ACTIVE": "ACTIVE",
@@ -598,9 +617,16 @@
             "VIEW_DETAILS": "View Details"
         },
         "FEATURES": {
-            "SECTION_LABEL": "Our Expertise",
-            "TITLE": "Comprehensive Insurance Solutions",
-            "DESCRIPTION": "We offer a wide range of insurance products designed to meet the diverse needs of individuals and businesses.",
+            "ORIENT": {
+                "SECTION_LABEL": "Our Expertise",
+                "TITLE": "Comprehensive Insurance Solutions",
+                "DESCRIPTION": "We offer a wide range of insurance products designed to meet the diverse needs of individuals and businesses."
+            },
+            "WATANIYA": {
+                "SECTION_LABEL": "Why Choose Us?",
+                "TITLE": "Insurance That Fits Your Life",
+                "DESCRIPTION": "To find innovative solutions that become part of people's lifestyle and improve company performance."
+            },
             "LEARN_MORE": "Learn More →"
         },
         "PRODUCTS": {

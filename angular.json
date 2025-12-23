@@ -156,10 +156,12 @@
                             "buildTarget": "insurance-portal:build:development"
                         },
                         "orient": {
-                            "buildTarget": "insurance-portal:build:orient"
+                            "buildTarget": "insurance-portal:build:orient",
+                            "proxyConfig": "src/proxy.conf.orient.json"
                         },
                         "wataniya": {
-                            "buildTarget": "insurance-portal:build:wataniya"
+                            "buildTarget": "insurance-portal:build:wataniya",
+                            "proxyConfig": "src/proxy.conf.wataniya.json"
                         }
                     },
                     "defaultConfiguration": "development"

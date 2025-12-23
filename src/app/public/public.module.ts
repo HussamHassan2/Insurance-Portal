@@ -11,9 +11,13 @@ import {
 
 // Pages
 import { HomeComponent } from './pages/home/home.component';
+import { WataniyaHomeComponent } from './pages/home/wataniya-home.component';
 import { LoginComponent } from './pages/login/login.component';
+import { WataniyaLoginComponent } from './pages/login/wataniya-login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { WataniyaRegisterComponent } from './pages/register/wataniya-register.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { WataniyaContactComponent } from './pages/contact/wataniya-contact.component';
 import { SupportComponent } from './pages/support/support.component';
 import { MotorInsuranceComponent } from './pages/products/motor-insurance/motor-insurance.component';
 import { MedicalInsuranceComponent } from './pages/products/medical-insurance/medical-insurance.component';
@@ -30,9 +34,13 @@ import { GuideComponent } from './pages/support/guide.component';
 @NgModule({
     declarations: [
         HomeComponent,
+        WataniyaHomeComponent,
         LoginComponent,
+        WataniyaLoginComponent,
         RegisterComponent,
+        WataniyaRegisterComponent,
         ContactComponent,
+        WataniyaContactComponent,
         SupportComponent,
         MotorInsuranceComponent,
         MedicalInsuranceComponent,

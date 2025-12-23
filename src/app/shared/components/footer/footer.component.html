@@ -1,0 +1,84 @@
+<footer class="bg-navy text-white pt-16 pb-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <!-- Brand -->
+            <div class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <div class="bg-primary text-white p-1.5 rounded font-bold text-xl">W</div>
+                    <span class="text-xl font-bold">Al Wataniya</span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Providing innovative insurance solutions that fit your lifestyle since 2020.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                        <i-lucide name="facebook" class="w-5 h-5"></i-lucide>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                        <i-lucide name="twitter" class="w-5 h-5"></i-lucide>
+                    </a>
+                    <a href="#"
+                        class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-colors text-white">
+                        <i-lucide name="instagram" class="w-5 h-5"></i-lucide>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div>
+                <h3 class="font-bold text-lg mb-6">Quick Links</h3>
+                <ul class="space-y-4 text-gray-400">
+                    <li><a routerLink="/" class="hover:text-primary transition-colors">Home</a></li>
+                    <li><a routerLink="/about" class="hover:text-primary transition-colors">About Us</a></li>
+                    <li><a routerLink="/products/motor" class="hover:text-primary transition-colors">Products</a></li>
+                    <li><a routerLink="/contact" class="hover:text-primary transition-colors">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Products -->
+            <div>
+                <h3 class="font-bold text-lg mb-6">Products</h3>
+                <ul class="space-y-4 text-gray-400">
+                    <li><a routerLink="/products/motor" class="hover:text-primary transition-colors">Motor Insurance</a>
+                    </li>
+                    <li><a routerLink="/products/medical" class="hover:text-primary transition-colors">Medical
+                            Insurance</a></li>
+                    <li><a routerLink="/products/travel" class="hover:text-primary transition-colors">Travel
+                            Insurance</a></li>
+                    <li><a routerLink="/products/property" class="hover:text-primary transition-colors">Property
+                            Insurance</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h3 class="font-bold text-lg mb-6">Contact Us</h3>
+                <ul class="space-y-4 text-gray-400">
+                    <li class="flex items-start gap-3">
+                        <i-lucide name="map-pin" class="w-5 h-5 text-primary mt-0.5"></i-lucide>
+                        <span>123 Insurance St, Cairo, Egypt</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i-lucide name="phone" class="w-5 h-5 text-primary"></i-lucide>
+                        <span>+20 2 1234 5678</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i-lucide name="mail" class="w-5 h-5 text-primary"></i-lucide>
+                        <span>info&#64;alwataniya.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div
+            class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm">
+            <p>&copy; {{ currentYear }} Al Wataniya Insurance. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

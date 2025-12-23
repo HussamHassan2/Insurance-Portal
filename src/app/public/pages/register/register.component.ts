@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
 import { extractBirthDateFromNationalId } from '../../../shared/utils/national-id.utils';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -9,6 +10,7 @@ import { extractBirthDateFromNationalId } from '../../../shared/utils/national-i
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  clientId = environment.clientId;
   formData = {
     name: '',
     email: '',

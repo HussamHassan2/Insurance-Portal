@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-navbar',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
     isOpen = false;
     user: User | null = null;
+    clientId = environment.clientId;
 
     navLinks = [
         { name: 'MENU.HOME', path: '/' },
@@ -21,8 +23,12 @@ export class NavbarComponent implements OnInit {
     constructor(private authService: AuthService, private router: Router) { }
 
     ngOnInit(): void {
+        console.log('NavbarComponent initialized');
+        console.log('clientId:', this.clientId);
+        console.log('navLinks:', this.navLinks);
         this.authService.currentUser.subscribe(user => {
             this.user = user;
+            console.log('Current user:', user);
         });
     }
 
