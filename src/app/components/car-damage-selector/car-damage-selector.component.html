@@ -37,7 +37,7 @@
                             <div *ngSwitchCase="'front'" style="position: relative; width: 100%; aspect-ratio: 114/83;">
                                 <!-- Visual Layer -->
                                 <div style="position: absolute; inset: 0; z-index: 0;">
-                                    <img src="assets/car-visuals/visual-front.png"
+                                    <img src="assets/visual-front.png"
                                         style="width: 100%; height: 100%; object-fit: contain;" alt="Front View">
                                 </div>
 
@@ -135,7 +135,7 @@
                             <div *ngSwitchCase="'rear'" style="position: relative; width: 100%; aspect-ratio: 114/84;">
                                 <!-- Visual Layer -->
                                 <div style="position: absolute; inset: 0; z-index: 0;">
-                                    <img src="assets/car-visuals/visual-rear.png"
+                                    <img src="assets/visual-rear.png"
                                         style="width: 100%; height: 100%; object-fit: contain;" alt="Rear View">
                                 </div>
 
@@ -216,7 +216,7 @@
                             <!-- LEFT VIEW -->
                             <!-- LEFT VIEW (Using Front-Side Image) -->
                             <svg *ngSwitchCase="'left'" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-                                <image href="assets/car-visuals/visual-left.png" x="0" y="0" width="800" height="600" />
+                                <image href="assets/visual-left.png" x="0" y="0" width="800" height="600" />
 
                                 <!-- Interactive Zones -->
                                 <svg viewBox="0 0 800 600" preserveAspectRatio="none"
@@ -282,8 +282,7 @@
                             <svg *ngSwitchCase="'right'" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
                                 <!-- Scale(-1,1) to flip horizontal around center (400) -> translate(-800, 0) to bring getting back -->
                                 <g>
-                                    <image href="assets/car-visuals/visual-right.png" x="0" y="0" width="800"
-                                        height="600" />
+                                    <image href="assets/visual-right.png" x="0" y="0" width="800" height="600" />
                                 </g>
 
                                 <!-- Interactive Zones -->
@@ -353,8 +352,7 @@
                             <svg *ngSwitchCase="'top'" viewBox="0 0 420 800" preserveAspectRatio="xMidYMid meet">
                                 <!-- Background Image (Rotated to match vertical SVG) -->
                                 <g transform="translate(420, 0) rotate(90)">
-                                    <image href="assets/car-visuals/visual-top.png" x="60" y="32" width="680"
-                                        height="357" />
+                                    <image href="assets/visual-top.png" x="60" y="32" width="680" height="357" />
                                 </g>
 
                                 <!-- Interactive Zones -->
