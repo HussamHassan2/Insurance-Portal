@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { AuthService, User } from '../../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 interface NavItem {
     name: string;
@@ -20,6 +21,7 @@ import { SurveyorService } from '../../../core/services/surveyor.service';
     styleUrls: ['./dashboard-layout.component.css']
 })
 export class DashboardLayoutComponent implements OnInit {
+    clientId = environment.clientId;
     user: User | null = null;
     isSidebarOpen = false; // Mobile toggle
     isCollapsed = true; // Desktop minimize

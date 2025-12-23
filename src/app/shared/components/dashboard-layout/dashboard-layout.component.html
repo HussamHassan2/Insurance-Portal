@@ -3,7 +3,7 @@
     <div *ngIf="isSidebarOpen" class="fixed inset-0 bg-black/50 z-40 lg:hidden" (click)="closeSidebar()"></div>
 
     <!-- Sidebar -->
-    <aside [ngClass]="{
+    <aside *ngIf="clientId !== 'wataniya'" [ngClass]="{
     'fixed lg:static inset-y-0 left-0 z-50 text-white transition-all duration-300 transform flex flex-col h-full shadow-2xl': true,
     'translate-x-0': isSidebarOpen,
     '-translate-x-full lg:translate-x-0': !isSidebarOpen,
@@ -370,7 +370,7 @@
         <!-- Header -->
         <header
             class="bg-white dark:bg-gray-800 shadow-sm h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 z-30 relative transition-colors duration-300">
-            <button (click)="toggleSidebar()"
+            <button (click)="toggleSidebar()" *ngIf="clientId !== 'wataniya'"
                 class="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -380,6 +380,47 @@
                     <line x1="4" x2="20" y1="18" y2="18"></line>
                 </svg>
             </button>
+
+            <!-- Wataniya Header Navigation -->
+            <div *ngIf="clientId === 'wataniya'" class="flex items-center gap-6 mr-auto">
+                <div class="flex items-center gap-2">
+                    <img src="assets/logo.png" alt="Wataniya Insurance" class="h-10 object-contain" />
+                </div>
+
+                <nav class="hidden lg:flex items-center gap-1">
+                    <ng-container *ngFor="let item of navItems">
+                        <!-- Single Link -->
+                        <a *ngIf="!item.children" [routerLink]="item.path" routerLinkActive="text-primary bg-primary/5"
+                            class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg flex items-center gap-2">
+                            <span>{{ item.name | translate }}</span>
+                        </a>
+
+                        <!-- Dropdown -->
+                        <div *ngIf="item.children" class="relative group">
+                            <button
+                                class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors rounded-lg flex items-center gap-1 group-hover:text-primary">
+                                <span>{{ item.name | translate }}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="transition-transform duration-200 group-hover:rotate-180">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div
+                                class="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-100 dark:border-gray-700 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                <a *ngFor="let child of item.children" [routerLink]="child.path"
+                                    routerLinkActive="bg-gray-50 dark:bg-gray-700 text-primary"
+                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary transition-colors">
+                                    {{ child.name | translate }}
+                                </a>
+                            </div>
+                        </div>
+                    </ng-container>
+                </nav>
+            </div>
 
             <div class="flex items-center gap-4 ml-auto relative">
                 <!-- Notification Icon -->

@@ -1,0 +1,211 @@
+header {
+    width: 100%;
+    z-index: 99;
+    position: fixed;
+    height: 88px;
+    transition: background-color 1s, height 1s;
+}
+header ul.top-bar{
+    list-style: none;
+    display: flex;
+    padding: 0;
+    width: fit-content;
+    margin:auto;
+    float: right;
+    height: fit-content;
+}
+.logo-wrap{
+    height: 1800px;
+    background-color: #ffffff;
+    float: left;
+}
+.logo-wrap a img.custom-logo{
+    height: 410px;
+    width: auto;
+    transition: height 1s;
+    margin: 80px 120px;
+}
+header .top-bar li a{
+    color: #1d1d1d;
+    text-decoration: none;
+    line-height:88px;
+    margin: 0 14px;
+    display: block;
+    height: 100%;
+    position: relative;
+    transition: line-height 1s;
+    margin-top: -1px;
+}
+header .top-bar li.current-menu-item  a{
+    color: #f40808;
+    box-shadow: 0px 3px 0px 0px #f40808;
+}
+header .top-bar li a:hover{
+    color: #f40808;
+    box-shadow: 0px 3px 0px 0px #202020;
+}
+header .wh li a{
+    color: #ffffff;
+}
+header .wh li.current-menu-item a{
+    color: #ffffff;
+    box-shadow: 0px 3px 0px 0px #ffffff;
+}
+header .wh li a:hover{
+    color: #ffffff;
+    box-shadow: 0px 3px 0px 0px #ffffff;
+}
+header .top-bar li:first-child a{
+    padding-left:0;
+}
+header .top-bar li:last-child a{
+    padding-right:0;
+}
+.arb{
+    font-family:"almarai reg";
+    font-size: 19px;
+    letter-spacing: 0.2px;
+}
+/******************* Akmza css *************************/
+
+.elementor-323, .elementor-334, .elementor-338, .elementor-358, .elementor-373{
+	direction: rtl;
+}
+#wpcf7-f378-p373-o1.wpcf7{
+    direction: rtl !important;
+	text-align:right;
+}
+#wpcf7-f378-p373-o1 input[type="url"], #wpcf7-f378-p373-o1 input[type="email"], #wpcf7-f378-p373-o1 input[type="tel"] {
+    direction: rtl;
+}
+.ic-contact .elementor-icon-box-icon {
+    margin-left: 15px;
+}
+.elementor-shortcode{
+	direction: ltr;
+}
+a.cp{
+    color:#F40808 !important;
+}
+.footer-ic a i{
+    color: #FFFFFF !important;
+    font-size: 26px;
+    background-color: #F40808;
+    width: 61px !important;
+    height: auto;
+    padding: 17px;
+    border-radius: 90px;
+}
+.footer-ic a i:hover{
+    color: #FFFFFF !important;
+    font-size: 26px;
+    background-color: #1d1d1d;
+    width: 61px !important;
+    height: auto;
+    padding: 17px;
+    border-radius: 90px;
+}
+.cl-slider .swiper-slide-image {
+    box-shadow: 1px 1px 1px 2px #e1e1e1;
+    margin: 10px 0;
+}
+.serv-ic .elementor-icon {
+    /*box-shadow: 1px 1px 2px 1px #b0b0b0;*/
+}
+.cnt input, textarea{
+    overflow: visible;
+    border: 0;
+    box-shadow: 3px 3px 5px 1px #cacaca;
+    padding: 15px;
+}
+.cnt input:focus, .cnt textarea:focus{
+    outline-color: transparent;
+    background-color: #F40808;
+    color: #ffffff;
+}
+.cnt input:focus::placeholder, .cnt textarea:focus::placeholder{
+    color: #ffffff;
+    opacity: 1; /* Firefox */
+  }
+  
+  .cnt input:focus:-ms-input-placeholder, .cnt textarea:focus:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+    color: #ffffff;
+    opacity: 1; /* Firefox */
+  }
+  
+  .cnt input:focus::-ms-input-placeholder, .cnt textarea:focus::-ms-input-placeholder{ /* Microsoft Edge */
+    color: #ffffff;
+    opacity: 1; /* Firefox */
+  }
+  .ic-bars{
+      display: none;
+  }
+  .sld{
+		font-family: "almarai reg" !important;
+  }
+  .menu-ar a{
+	    font-family: "almarai reg" !important;
+    	font-weight: bolder;
+    	font-size: 21px;
+  }
+  .menu-en a{
+		font-family:poppins;
+	    font-weight: bolder;
+  }
+  /******************** Media Queries **********************/
+
+  @media (max-width: 767px) {
+  #menu-ar li a{
+      text-align:right;
+  }
+    /*#menu-top-bar{*/
+    .top-bar{
+        opacity: 0;
+    }
+    header .top-bar li.current-menu-item a{
+        box-shadow: none;
+    }
+    /*#menu-top-bar.active{*/
+    .top-bar.active{
+        display: block;
+        opacity: 1;
+        background-color: #ffffff;
+        width: 100%;
+        box-shadow: 0px 0px 6px 1px #d0d0d0;
+        transition: opacity 500ms;
+    }
+    #site-header{
+        height: 90px !important;
+    }
+    .custom-logo{
+        height: 80px !important;
+    }
+    .ic-bars{
+        float: right;
+        font-size: 36px;
+        padding: 24px 5px;
+        display: block;
+    }
+    .ic-wh{
+        color: #ffffff;
+    }
+    header .top-bar li a:hover {
+        box-shadow: none;
+    }
+    .sec .elementor-heading-title{
+        font-size: 45px !important;
+    }
+    .cnt input, textarea {
+        max-width: 300px;
+    }
+    header .wh li a {
+        color: #1d1d1d;
+    }
+    header .wh li a:hover {
+        color: #F40808;
+    }
+    header .wh li.current-menu-item a {
+        color: #F40808;
+    }
+    
+  }
