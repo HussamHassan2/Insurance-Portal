@@ -22,7 +22,7 @@ export class GuideComponent {
             title: 'SUPPORT.GUIDE.CARDS.CLAIMS.TITLE',
             description: 'SUPPORT.GUIDE.CARDS.CLAIMS.DESC',
             icon: 'alert-circle',
-            color: 'bg-red-100 text-red-600'
+            color: 'bg-orange-100 text-orange-600'
         },
         {
             title: 'SUPPORT.GUIDE.CARDS.PAYMENTS.TITLE',

@@ -4,6 +4,7 @@ import { AuthService, User } from '../../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { Title } from '@angular/platform-browser';
 
 interface NavItem {
     name: string;
@@ -34,7 +35,8 @@ export class DashboardLayoutComponent implements OnInit {
         private authService: AuthService,
         private router: Router,
         public translate: TranslateService,
-        private surveyorService: SurveyorService
+        private surveyorService: SurveyorService,
+        private titleService: Title
     ) {
         // Subscribe to route changes
         this.router.events.pipe(
@@ -46,6 +48,7 @@ export class DashboardLayoutComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.setWebsiteTitle();
         this.authService.currentUser.subscribe(user => {
             console.log('DashboardLayout: Current user:', user);
             this.user = user;
@@ -54,6 +57,14 @@ export class DashboardLayoutComponent implements OnInit {
             this.checkActiveSubmenu();
         });
         this.currentPath = this.router.url;
+    }
+
+    setWebsiteTitle(): void {
+        if (this.clientId === 'wataniya') {
+            this.titleService.setTitle('Wataniya Insurance | الوطنية للتأمين');
+        } else {
+            this.titleService.setTitle('Orient Insurance Portal');
+        }
     }
 
     getNavItems(): NavItem[] {
