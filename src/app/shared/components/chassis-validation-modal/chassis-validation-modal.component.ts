@@ -56,6 +56,9 @@ export class ChassisValidationModalComponent {
             queryParams: {
               chassis: this.chassisNumber,
               loss_date: formattedLossDate
+            },
+            state: {
+              riskData: result
             }
           });
           this.onClose();

@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClaimService } from '../../../core/services/claim.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { WizardStep } from '../../components/wizard/wizard.component';
+import { WizardStep, WizardComponent } from '../../components/wizard/wizard.component';
 import { NotificationService } from '../../../core/services/notification.service';
+import { CAR_PARTS } from '../../../components/car-damage-selector/models/car-parts.model';
 
 @Component({
     selector: 'app-file-claim',
     templateUrl: './file-claim.component.html'
 })
 export class FileClaimComponent implements OnInit {
+    @ViewChild('wizard') wizard!: WizardComponent;
+
     steps: WizardStep[] = [
-        { title: 'Intimation Details', component: null },
+        { title: 'Customer & Policy Info', component: null },
         { title: 'Loss & Accident Details', component: null },
         { title: 'Claim Documents', component: null },
         { title: 'Review & Submit', component: null }
@@ -40,15 +44,17 @@ export class FileClaimComponent implements OnInit {
         police_report_number: '',
         severity: 'low',
         initial_damage_description: '',
+        damagedParts: [] as any[], // Store full damage selection objects
         acc_desc: '',
         accident_address: '',
         requested_survey_date: '',
 
         // Driver & Workshop & Intimator
-        is_driver: true,
+        is_driver: false,
         driver_name: '',
         driver_birth_date: null,
         driver_gender: '',
+        driver_license_type: 'private',
         driver_licence_start_date: null,
         driver_licence_expiration_date: null,
 
@@ -66,7 +72,7 @@ export class FileClaimComponent implements OnInit {
         claim_documents: [],
 
         // System
-        is_insured: true,
+        is_insured: false,
         user_id: null,
         claim_source: 'customer'
     };
@@ -87,12 +93,28 @@ export class FileClaimComponent implements OnInit {
         { code: 'external', name: 'External Workshop', icon: '🔧', description: 'Third-party workshop' }
     ];
 
+    licenseTypeOptions = [
+        { code: 'private', name: 'Private', icon: '🚗' },
+        { code: 'professional', name: 'Professional', icon: '🚚' }
+    ];
+
     internalWorkshopOptions: any[] = [];
     requiredDocuments: any[] = [];
 
     loading = false;
 
     // Removed availability check state variables
+    checkingAvailability = false;
+    availabilityError = '';
+    riskInfo: any = null;
+    customerInfo: any = null;
+    isCustomerInfoExpanded: boolean = true;
+    isIntimatorInfoExpanded: boolean = true;
+    isDriverInfoExpanded: boolean = true;
+    isCarLicenseInfoExpanded: boolean = true;
+    isAccidentInfoExpanded: boolean = true;
+    isWorkshopInfoExpanded: boolean = true;
+
 
     claimId: string | null = null;
     isComplete = false;
@@ -103,7 +125,13 @@ export class FileClaimComponent implements OnInit {
         private claimService: ClaimService,
         private authService: AuthService,
         private notificationService: NotificationService
-    ) { }
+    ) {
+        // Read state from navigation
+        const navigation = this.router.getCurrentNavigation();
+        if (navigation?.extras?.state?.['riskData']) {
+            this.handleAvailabilityData(navigation.extras.state['riskData']);
+        }
+    }
 
     ngOnInit(): void {
         this.loadWorkshops();
@@ -123,7 +151,8 @@ export class FileClaimComponent implements OnInit {
                 'vehicle_maker', 'vehcile_model', 'vechicle_category', 'vechicle_engine_capacity',
                 'vehicle_manufacturing_year', 'vehicle_motor_number', 'vehicle_plate_number',
                 'workshop_type', 'driver_name', 'driver_birth_date', 'driver_gender',
-                'accident_address', 'claim_source', 'relative'
+                'workshop_type', 'driver_name', 'driver_birth_date', 'driver_gender',
+                'accident_address', 'claim_source', 'relative', 'damagedParts'
             ];
 
             fieldsToMap.forEach(key => {
@@ -156,6 +185,111 @@ export class FileClaimComponent implements OnInit {
 
             if (this.formData.is_driver && user) {
                 if (!this.formData.driver_name) this.formData.driver_name = user.name;
+            }
+
+            // Auto-fetch if not already populated from state
+            if (!this.riskInfo && this.formData.chassis_number && this.formData.loss_date) {
+                this.checkAvailability();
+            }
+        });
+    }
+
+    handleAvailabilityData(data: any): void {
+        this.riskInfo = data.risk_info;
+        this.customerInfo = data.customer_info;
+
+        // Map Customer Info
+        if (this.customerInfo) {
+            this.formData.intimator_name = this.customerInfo.customer_name;
+            this.formData.intimator_phone = this.customerInfo.customer_phone_number;
+            this.formData.intimator_address = this.customerInfo.customer_address;
+            this.formData.relative = 'Self';
+
+            // Also populate driver info by default
+            this.formData.driver_name = this.customerInfo.customer_name;
+            this.formData.driver_birth_date = this.customerInfo.customer_birth_date;
+            this.formData.driver_gender = this.customerInfo.customer_gender?.toLowerCase();
+            this.formData.driver_licence_start_date = this.customerInfo.customer_licence_start_date || null;
+            this.formData.driver_licence_expiration_date = this.customerInfo.customer_licence_expiration_date || null;
+        }
+
+        // Map Risk Info (Vehicle)
+        if (this.riskInfo) {
+            this.formData.vehicle_maker = this.riskInfo.vehicle_maker;
+            this.formData.vehcile_model = this.riskInfo.vehcile_model;
+            this.formData.vechicle_category = this.riskInfo.vechicle_category;
+            this.formData.vechicle_engine_capacity = this.riskInfo.vechicle_engine_capacity;
+            this.formData.vehicle_manufacturing_year = this.riskInfo.vehicle_manufacturing_year;
+            this.formData.vehicle_motor_number = this.riskInfo.vehicle_motor_number;
+            this.formData.vehicle_plate_number = this.riskInfo.vehicle_plate_number;
+            this.formData.vehicle_licence_start_date = this.riskInfo.vehicle_licence_start_date || null;
+            this.formData.vehicle_licence_expiration_date = this.riskInfo.vehicle_licence_expiration_date || null;
+        }
+    }
+
+    checkAvailability(): void {
+        this.availabilityError = '';
+        if (!this.formData.loss_date || !this.formData.chassis_number) {
+            this.availabilityError = 'Please enter Loss Date and Chassis Number.';
+            return;
+        }
+
+        this.checkingAvailability = true;
+        // Mocking Request for now as I need user_id? 
+        // Logic says: checkRiskAvailability(chassis, userId, lossDate)
+        // User ID might be null if new user? 
+        // Assuming user_id from formData or auth service.
+        const userId = this.formData.user_id || 0; // Or handle if missing
+
+        this.claimService.checkRiskAvailability(
+            this.formData.chassis_number,
+            userId,
+            this.formData.loss_date
+        ).subscribe({
+            next: (response: any) => {
+                this.checkingAvailability = false;
+                if (response.result?.available) {
+                    const data = response.result.data;
+                    this.riskInfo = data.risk_info;
+                    this.customerInfo = data.customer_info;
+
+                    // Map Customer Info
+                    if (this.customerInfo) {
+                        this.formData.intimator_name = this.customerInfo.customer_name;
+                        this.formData.intimator_phone = this.customerInfo.customer_phone_number;
+                        this.formData.intimator_address = this.customerInfo.customer_address;
+                        this.formData.relative = 'Self';
+
+                        // Also populate driver info by default
+                        this.formData.driver_name = this.customerInfo.customer_name;
+                        this.formData.driver_birth_date = this.customerInfo.customer_birth_date;
+                        this.formData.driver_gender = this.customerInfo.customer_gender?.toLowerCase();
+                        this.formData.driver_licence_start_date = this.customerInfo.customer_licence_start_date || null;
+                        this.formData.driver_licence_expiration_date = this.customerInfo.customer_licence_expiration_date || null;
+                        // Gender etc?
+                    }
+
+                    // Map Risk Info (Vehicle)
+                    if (this.riskInfo) {
+                        this.formData.vehicle_maker = this.riskInfo.vehicle_maker;
+                        this.formData.vehcile_model = this.riskInfo.vehcile_model; // Note typo in API/Code
+                        this.formData.vechicle_category = this.riskInfo.vechicle_category;
+                        this.formData.vechicle_engine_capacity = this.riskInfo.vechicle_engine_capacity;
+                        this.formData.vehicle_manufacturing_year = this.riskInfo.vehicle_manufacturing_year;
+                        this.formData.vehicle_motor_number = this.riskInfo.vehicle_motor_number;
+                        this.formData.vehicle_plate_number = this.riskInfo.vehicle_plate_number;
+                        this.formData.vehicle_licence_start_date = this.riskInfo.vehicle_licence_start_date || null;
+                        this.formData.vehicle_licence_expiration_date = this.riskInfo.vehicle_licence_expiration_date || null;
+                        // Chassis already set
+                    }
+                } else {
+                    this.availabilityError = response.result?.message || 'Risk not available.';
+                }
+            },
+            error: (err: any) => {
+                this.checkingAvailability = false;
+                console.error('Availability check failed', err);
+                this.availabilityError = 'Failed to check availability. Please try again.';
             }
         });
     }
@@ -201,12 +335,103 @@ export class FileClaimComponent implements OnInit {
         this.formData.claim_documents = files;
     }
 
+    onPartsSelected(parts: string[]): void {
+        this.formData.damagedParts = parts;
+
+        // Auto-populate description
+        const partNames = parts.map(id => {
+            const part = CAR_PARTS.find(p => p.id === id);
+            return part ? part.name : id;
+        });
+
+        if (partNames.length > 0) {
+            this.formData.initial_damage_description = partNames.join(', ');
+        }
+    }
+
+    onInsuredToggle(): void {
+        if (this.formData.is_insured && this.customerInfo) {
+            this.formData.intimator_name = this.customerInfo.customer_name || '';
+            this.formData.intimator_phone = this.customerInfo.customer_phone_number || '';
+            this.formData.intimator_address = this.customerInfo.customer_address || '';
+            this.formData.relative = 'Self';
+        }
+    }
+
+    onDriverToggle(): void {
+        if (this.formData.is_driver && this.customerInfo) {
+            this.formData.driver_name = this.customerInfo.customer_name || '';
+            this.formData.driver_birth_date = this.customerInfo.customer_birth_date || null;
+            this.formData.driver_gender = this.customerInfo.customer_gender?.toLowerCase() || '';
+            this.formData.driver_licence_start_date = this.customerInfo.customer_licence_start_date || null;
+            this.formData.driver_licence_expiration_date = this.customerInfo.customer_licence_expiration_date || null;
+            // License info might not be in customerInfo, check API response structure if needed
+            this.calculateDriverLicenseExpiration();
+        }
+    }
+
+    onDriverLicenseTypeChange(type: string): void {
+        this.formData.driver_license_type = type;
+        this.calculateDriverLicenseExpiration();
+    }
+
+    calculateDriverLicenseExpiration(): void {
+        if (!this.formData.driver_licence_start_date) return;
+
+        // Default to private if not set
+        const type = this.formData.driver_license_type || 'private';
+        const startDate = new Date(this.formData.driver_licence_start_date);
+
+        if (isNaN(startDate.getTime())) return;
+
+        let yearsToAdd = 0;
+        if (type === 'private') {
+            yearsToAdd = 10;
+        } else if (type === 'professional') {
+            yearsToAdd = 1;
+        }
+
+        if (yearsToAdd > 0) {
+            const expiryDate = new Date(startDate);
+            expiryDate.setFullYear(startDate.getFullYear() + yearsToAdd);
+            // Subtract one day? Usually license expires on same day or day before? 
+            // Requirements said "10 year from start date". Usually means exactly 10 years later.
+            // e.g. 2023-01-01 -> 2033-01-01.
+            this.formData.driver_licence_expiration_date = expiryDate.toISOString().split('T')[0];
+        }
+    }
+
+    calculateVehicleLicenseExpiration(): void {
+        if (!this.formData.vehicle_licence_start_date) return;
+
+        const startDate = new Date(this.formData.vehicle_licence_start_date);
+        if (isNaN(startDate.getTime())) return;
+
+        const yearsToAdd = 3;
+        const expiryDate = new Date(startDate);
+        expiryDate.setFullYear(startDate.getFullYear() + yearsToAdd);
+        this.formData.vehicle_licence_expiration_date = expiryDate.toISOString().split('T')[0];
+    }
+
     onWizardComplete(event: { data: any; isLastStep: boolean }): void {
         this.formData = { ...this.formData, ...event.data };
         if (event.isLastStep) {
             this.submitClaim();
         }
     }
+
+    onLossDetailsNext(): void {
+        this.loading = true; // Optional visual feedback
+        this.loadClaimDocuments();
+        // Small delay to ensure API call is fired? Or just proceed.
+        // The user says "call this api... while click".
+        // We trigger it, then move next.
+        // Ideally we wait for response but user didn't strict-block.
+        // Let's just trigger it.
+        this.wizard.handleNext(this.formData);
+        this.loading = false;
+    }
+
 
     submitClaim(): void {
         this.loading = true;

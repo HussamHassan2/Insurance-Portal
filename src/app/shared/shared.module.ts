@@ -43,6 +43,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { FileClaimComponent } from './pages/file-claim/file-claim.component';
 import { DatePickerComponent } from './components/form-inputs/date-picker/date-picker.component';
+import { CarDamageSelectorComponent } from '../components/car-damage-selector/car-damage-selector.component';
 import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
 
 @NgModule({
@@ -73,8 +74,6 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         ChangePasswordComponent,
         ProfileComponent,
         SettingsComponent,
-        SettingsComponent,
-        FileClaimComponent,
         FileClaimComponent,
         DynamicTranslatePipe,
         LanguageSwitcherComponent
@@ -92,7 +91,8 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
             ArrowRight, ArrowLeft, Trash2, Edit, Eye, EyeOff, X, UploadCloud, File, RefreshCw,
             Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
             ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle
-        })
+        }),
+        CarDamageSelectorComponent
     ],
     exports: [
         NavbarComponent,

@@ -1,0 +1,410 @@
+<div class="damage-selector-container">
+    <div class="main-grid">
+        <!-- Left: View Selector + Car Diagram -->
+        <div class="diagram-section">
+            <!-- View Tabs -->
+            <div class="view-tabs">
+                <button *ngFor="let view of views" [class.active]="currentView === view.id"
+                    (click)="changeView(view.id)">
+                    <!-- Simple Icons can be replaced with lucide-icon if available, using text for now or simple unicode if matched -->
+                    <span *ngIf="view.id === 'front'">🚘</span>
+                    <span *ngIf="view.id === 'rear'">🚘</span>
+                    <span *ngIf="view.id === 'left'">⬅️</span>
+                    <span *ngIf="view.id === 'right'">➡️</span>
+                    <span *ngIf="view.id === 'top'">⬆️</span>
+                    <span *ngIf="view.id === 'interior'">💺</span>
+                    {{ view.name }}
+                </button>
+            </div>
+
+            <!-- SVG Car Diagram (changes based on currentView) -->
+            <div class="diagram-wrapper">
+                <ng-container [ngSwitch]="currentView">
+
+                    <!-- FRONT VIEW -->
+                    <svg *ngSwitchCase="'front'" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="bodyGradientFront" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Body Outline -->
+                        <path d="M 100 300 L 100 200 L 140 120 L 460 120 L 500 200 L 500 300 Z"
+                            fill="url(#bodyGradientFront)" stroke="#475569" stroke-width="2" />
+
+                        <!-- Windshield -->
+                        <path id="windshield" d="M 150 130 L 450 130 L 480 200 L 120 200 Z"
+                            [ngStyle]="getPartStyle('windshield')" (click)="selectPart('windshield')"
+                            (mouseenter)="hoveredPart = 'windshield'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Hood -->
+                        <path id="hood" d="M 120 200 L 480 200 L 480 250 L 120 250 Z" [ngStyle]="getPartStyle('hood')"
+                            (click)="selectPart('hood')" (mouseenter)="hoveredPart = 'hood'"
+                            (mouseleave)="hoveredPart = null" />
+
+                        <!-- Grille -->
+                        <path id="grille" d="M 200 250 L 400 250 L 400 290 L 200 290 Z"
+                            [ngStyle]="getPartStyle('grille')" (click)="selectPart('grille')"
+                            (mouseenter)="hoveredPart = 'grille'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Headlight -->
+                        <path id="left-headlight" d="M 130 255 L 190 255 L 185 285 L 135 280 Z"
+                            [ngStyle]="getPartStyle('left-headlight')" (click)="selectPart('left-headlight')"
+                            (mouseenter)="hoveredPart = 'left-headlight'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Headlight -->
+                        <path id="right-headlight" d="M 410 255 L 470 255 L 465 280 L 415 285 Z"
+                            [ngStyle]="getPartStyle('right-headlight')" (click)="selectPart('right-headlight')"
+                            (mouseenter)="hoveredPart = 'right-headlight'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Front Bumper -->
+                        <path id="front-bumper" d="M 100 290 L 500 290 L 500 330 L 100 330 Z"
+                            [ngStyle]="getPartStyle('front-bumper')" (click)="selectPart('front-bumper')"
+                            (mouseenter)="hoveredPart = 'front-bumper'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Fender (Front View) -->
+                        <path id="left-front-fender-front" d="M 100 200 L 120 200 L 120 290 L 100 290 Z"
+                            [ngStyle]="getPartStyle('left-front-fender')" (click)="selectPart('left-front-fender')"
+                            (mouseenter)="hoveredPart = 'left-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Fender (Front View) -->
+                        <path id="right-front-fender-front" d="M 480 200 L 500 200 L 500 290 L 480 290 Z"
+                            [ngStyle]="getPartStyle('right-front-fender')" (click)="selectPart('right-front-fender')"
+                            (mouseenter)="hoveredPart = 'right-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Mirrors -->
+                        <path id="left-mirror-front" d="M 80 180 L 130 180 L 130 160 Z"
+                            [ngStyle]="getPartStyle('left-mirror')" (click)="selectPart('left-mirror')"
+                            (mouseenter)="hoveredPart = 'left-mirror'" (mouseleave)="hoveredPart = null" />
+
+                        <path id="right-mirror-front" d="M 470 180 L 520 180 L 470 160 Z"
+                            [ngStyle]="getPartStyle('right-mirror')" (click)="selectPart('right-mirror')"
+                            (mouseenter)="hoveredPart = 'right-mirror'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Wheels -->
+                        <circle cx="130" cy="330" r="30" fill="#334155" />
+                        <circle cx="470" cy="330" r="30" fill="#334155" />
+                    </svg>
+
+                    <!-- REAR VIEW -->
+                    <svg *ngSwitchCase="'rear'" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="bodyGradientRear" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Body Outline -->
+                        <path d="M 100 300 L 100 200 L 140 120 L 460 120 L 500 200 L 500 300 Z"
+                            fill="url(#bodyGradientRear)" stroke="#475569" stroke-width="2" />
+
+                        <!-- Rear Windshield -->
+                        <path id="rear-windshield" d="M 150 130 L 450 130 L 480 190 L 120 190 Z"
+                            [ngStyle]="getPartStyle('rear-windshield')" (click)="selectPart('rear-windshield')"
+                            (mouseenter)="hoveredPart = 'rear-windshield'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Trunk -->
+                        <path id="trunk" d="M 120 190 L 480 190 L 480 270 L 120 270 Z" [ngStyle]="getPartStyle('trunk')"
+                            (click)="selectPart('trunk')" (mouseenter)="hoveredPart = 'trunk'"
+                            (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Taillight -->
+                        <path id="left-taillight" d="M 105 230 L 140 230 L 140 260 L 105 260 Z"
+                            [ngStyle]="getPartStyle('left-taillight')" (click)="selectPart('left-taillight')"
+                            (mouseenter)="hoveredPart = 'left-taillight'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Taillight -->
+                        <path id="right-taillight" d="M 460 230 L 495 230 L 495 260 L 460 260 Z"
+                            [ngStyle]="getPartStyle('right-taillight')" (click)="selectPart('right-taillight')"
+                            (mouseenter)="hoveredPart = 'right-taillight'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Rear Bumper -->
+                        <path id="rear-bumper" d="M 100 270 L 500 270 L 500 330 L 100 330 Z"
+                            [ngStyle]="getPartStyle('rear-bumper')" (click)="selectPart('rear-bumper')"
+                            (mouseenter)="hoveredPart = 'rear-bumper'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Fender (Rear View) -->
+                        <path id="left-rear-fender-rear" d="M 100 200 L 120 200 L 120 270 L 100 270 Z"
+                            [ngStyle]="getPartStyle('left-rear-fender')" (click)="selectPart('left-rear-fender')"
+                            (mouseenter)="hoveredPart = 'left-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Fender (Rear View) -->
+                        <path id="right-rear-fender-rear" d="M 480 200 L 500 200 L 500 270 L 480 270 Z"
+                            [ngStyle]="getPartStyle('right-rear-fender')" (click)="selectPart('right-rear-fender')"
+                            (mouseenter)="hoveredPart = 'right-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Wheels -->
+                        <circle cx="130" cy="330" r="30" fill="#334155" />
+                        <circle cx="470" cy="330" r="30" fill="#334155" />
+                    </svg>
+
+                    <!-- LEFT VIEW -->
+                    <svg *ngSwitchCase="'left'" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="bodyGradientLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Body Outline -->
+                        <path d="M 50 200 L 100 150 L 180 100 L 400 100 L 500 150 L 550 200 L 550 250 L 50 250 Z"
+                            fill="url(#bodyGradientLeft)" stroke="#475569" stroke-width="2" />
+
+                        <!-- Roof -->
+                        <path id="roof-left" d="M 180 100 L 400 100 L 420 120 L 160 120 Z"
+                            [ngStyle]="getPartStyle('roof')" (click)="selectPart('roof')"
+                            (mouseenter)="hoveredPart = 'roof'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Front Door -->
+                        <path id="left-front-door" d="M 170 125 L 290 125 L 290 240 L 170 240 Z"
+                            [ngStyle]="getPartStyle('left-front-door')" (click)="selectPart('left-front-door')"
+                            (mouseenter)="hoveredPart = 'left-front-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Rear Door -->
+                        <path id="left-rear-door" d="M 295 125 L 400 125 L 420 240 L 295 240 Z"
+                            [ngStyle]="getPartStyle('left-rear-door')" (click)="selectPart('left-rear-door')"
+                            (mouseenter)="hoveredPart = 'left-rear-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Front Fender -->
+                        <path id="left-front-fender" d="M 80 160 L 170 160 L 170 240 L 140 240 A 30 30 0 0 1 80 240 Z"
+                            [ngStyle]="getPartStyle('left-front-fender')" (click)="selectPart('left-front-fender')"
+                            (mouseenter)="hoveredPart = 'left-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Rear Fender -->
+                        <path id="left-rear-fender" d="M 420 160 L 520 160 L 520 240 A 30 30 0 0 1 450 240 L 420 240 Z"
+                            [ngStyle]="getPartStyle('left-rear-fender')" (click)="selectPart('left-rear-fender')"
+                            (mouseenter)="hoveredPart = 'left-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Mirror -->
+                        <path id="left-mirror" d="M 160 150 L 180 150 L 180 140 L 170 140 Z"
+                            [ngStyle]="getPartStyle('left-mirror')" (click)="selectPart('left-mirror')"
+                            (mouseenter)="hoveredPart = 'left-mirror'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Wheels (Interactivity if needed, usually mapped to left-front-wheel etc) -->
+                        <circle id="left-front-wheel" cx="110" cy="240" r="35"
+                            [ngStyle]="getPartStyle('left-front-wheel')" (click)="selectPart('left-front-wheel')"
+                            (mouseenter)="hoveredPart = 'left-front-wheel'" (mouseleave)="hoveredPart = null" />
+
+                        <circle id="left-rear-wheel" cx="490" cy="240" r="35"
+                            [ngStyle]="getPartStyle('left-rear-wheel')" (click)="selectPart('left-rear-wheel')"
+                            (mouseenter)="hoveredPart = 'left-rear-wheel'" (mouseleave)="hoveredPart = null" />
+                    </svg>
+
+                    <!-- RIGHT VIEW (Mirrored Left) -->
+                    <svg *ngSwitchCase="'right'" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
+                        <defs>
+                            <linearGradient id="bodyGradientRight" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#cbd5e1;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Body Outline (flipped horizontally concept manually drawn) -->
+                        <path d="M 550 200 L 500 150 L 420 100 L 200 100 L 100 150 L 50 200 L 50 250 L 550 250 Z"
+                            fill="url(#bodyGradientRight)" stroke="#475569" stroke-width="2" />
+
+                        <!-- Roof -->
+                        <path id="roof-right" d="M 200 100 L 420 100 L 440 120 L 180 120 Z"
+                            [ngStyle]="getPartStyle('roof')" (click)="selectPart('roof')"
+                            (mouseenter)="hoveredPart = 'roof'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Front Door -->
+                        <path id="right-front-door" d="M 310 125 L 430 125 L 430 240 L 310 240 Z"
+                            [ngStyle]="getPartStyle('right-front-door')" (click)="selectPart('right-front-door')"
+                            (mouseenter)="hoveredPart = 'right-front-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Rear Door -->
+                        <path id="right-rear-door" d="M 200 125 L 305 125 L 305 240 L 180 240 Z"
+                            [ngStyle]="getPartStyle('right-rear-door')" (click)="selectPart('right-rear-door')"
+                            (mouseenter)="hoveredPart = 'right-rear-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Front Fender -->
+                        <path id="right-front-fender"
+                            d="M 430 160 L 520 160 L 520 240 A 30 30 0 0 1 490 240 L 430 240 Z"
+                            [ngStyle]="getPartStyle('right-front-fender')" (click)="selectPart('right-front-fender')"
+                            (mouseenter)="hoveredPart = 'right-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Rear Fender -->
+                        <path id="right-rear-fender" d="M 80 160 L 180 160 L 180 240 A 30 30 0 0 0 110 240 L 80 240 Z"
+                            [ngStyle]="getPartStyle('right-rear-fender')" (click)="selectPart('right-rear-fender')"
+                            (mouseenter)="hoveredPart = 'right-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Mirror -->
+                        <path id="right-mirror" d="M 440 150 L 420 150 L 420 140 L 430 140 Z"
+                            [ngStyle]="getPartStyle('right-mirror')" (click)="selectPart('right-mirror')"
+                            (mouseenter)="hoveredPart = 'right-mirror'" (mouseleave)="hoveredPart = null" />
+
+                        <circle id="right-front-wheel" cx="490" cy="240" r="35"
+                            [ngStyle]="getPartStyle('right-front-wheel')" (click)="selectPart('right-front-wheel')"
+                            (mouseenter)="hoveredPart = 'right-front-wheel'" (mouseleave)="hoveredPart = null" />
+
+                        <circle id="right-rear-wheel" cx="110" cy="240" r="35"
+                            [ngStyle]="getPartStyle('right-rear-wheel')" (click)="selectPart('right-rear-wheel')"
+                            (mouseenter)="hoveredPart = 'right-rear-wheel'" (mouseleave)="hoveredPart = null" />
+                    </svg>
+
+                    <!-- TOP VIEW -->
+                    <svg *ngSwitchCase="'top'" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet">
+                        <!-- Hood -->
+                        <path id="hood-top" d="M 120 100 L 280 100 L 280 180 L 120 180 Z"
+                            [ngStyle]="getPartStyle('hood')" (click)="selectPart('hood')"
+                            (mouseenter)="hoveredPart = 'hood'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Front Bumper -->
+                        <path id="front-bumper-top" d="M 110 80 L 290 80 L 290 100 L 110 100 Z"
+                            [ngStyle]="getPartStyle('front-bumper')" (click)="selectPart('front-bumper')"
+                            (mouseenter)="hoveredPart = 'front-bumper'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Windshield -->
+                        <path id="windshield-top" d="M 120 180 L 280 180 L 270 230 L 130 230 Z"
+                            [ngStyle]="getPartStyle('windshield')" (click)="selectPart('windshield')"
+                            (mouseenter)="hoveredPart = 'windshield'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Roof -->
+                        <path id="roof-top" d="M 130 230 L 270 230 L 270 400 L 130 400 Z"
+                            [ngStyle]="getPartStyle('roof')" (click)="selectPart('roof')"
+                            (mouseenter)="hoveredPart = 'roof'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Rear Windshield -->
+                        <path id="rear-windshield-top" d="M 130 400 L 270 400 L 280 440 L 120 440 Z"
+                            [ngStyle]="getPartStyle('rear-windshield')" (click)="selectPart('rear-windshield')"
+                            (mouseenter)="hoveredPart = 'rear-windshield'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Trunk -->
+                        <path id="trunk-top" d="M 120 440 L 280 440 L 280 520 L 120 520 Z"
+                            [ngStyle]="getPartStyle('trunk')" (click)="selectPart('trunk')"
+                            (mouseenter)="hoveredPart = 'trunk'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Rear Bumper -->
+                        <path id="rear-bumper-top" d="M 110 520 L 290 520 L 290 540 L 110 540 Z"
+                            [ngStyle]="getPartStyle('rear-bumper')" (click)="selectPart('rear-bumper')"
+                            (mouseenter)="hoveredPart = 'rear-bumper'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Front Fender -->
+                        <path id="left-front-fender-top" d="M 90 100 L 120 100 L 120 180 L 90 180 Z"
+                            [ngStyle]="getPartStyle('left-front-fender')" (click)="selectPart('left-front-fender')"
+                            (mouseenter)="hoveredPart = 'left-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Front Door -->
+                        <path id="left-front-door-top" d="M 90 180 L 130 180 L 130 300 L 90 300 Z"
+                            [ngStyle]="getPartStyle('left-front-door')" (click)="selectPart('left-front-door')"
+                            (mouseenter)="hoveredPart = 'left-front-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Rear Door -->
+                        <path id="left-rear-door-top" d="M 90 300 L 130 300 L 130 420 L 90 420 Z"
+                            [ngStyle]="getPartStyle('left-rear-door')" (click)="selectPart('left-rear-door')"
+                            (mouseenter)="hoveredPart = 'left-rear-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Rear Fender -->
+                        <path id="left-rear-fender-top" d="M 90 420 L 120 420 L 120 520 L 90 520 Z"
+                            [ngStyle]="getPartStyle('left-rear-fender')" (click)="selectPart('left-rear-fender')"
+                            (mouseenter)="hoveredPart = 'left-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Front Fender -->
+                        <path id="right-front-fender-top" d="M 280 100 L 310 100 L 310 180 L 280 180 Z"
+                            [ngStyle]="getPartStyle('right-front-fender')" (click)="selectPart('right-front-fender')"
+                            (mouseenter)="hoveredPart = 'right-front-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Front Door -->
+                        <path id="right-front-door-top" d="M 270 180 L 310 180 L 310 300 L 270 300 Z"
+                            [ngStyle]="getPartStyle('right-front-door')" (click)="selectPart('right-front-door')"
+                            (mouseenter)="hoveredPart = 'right-front-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Rear Door -->
+                        <path id="right-rear-door-top" d="M 270 300 L 310 300 L 310 420 L 270 420 Z"
+                            [ngStyle]="getPartStyle('right-rear-door')" (click)="selectPart('right-rear-door')"
+                            (mouseenter)="hoveredPart = 'right-rear-door'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Rear Fender -->
+                        <path id="right-rear-fender-top" d="M 280 420 L 310 420 L 310 520 L 280 520 Z"
+                            [ngStyle]="getPartStyle('right-rear-fender')" (click)="selectPart('right-rear-fender')"
+                            (mouseenter)="hoveredPart = 'right-rear-fender'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Left Mirror -->
+                        <path id="left-mirror-top" d="M 70 190 L 90 190 L 90 210 L 70 210 Z"
+                            [ngStyle]="getPartStyle('left-mirror')" (click)="selectPart('left-mirror')"
+                            (mouseenter)="hoveredPart = 'left-mirror'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Right Mirror -->
+                        <path id="right-mirror-top" d="M 310 190 L 330 190 L 330 210 L 310 210 Z"
+                            [ngStyle]="getPartStyle('right-mirror')" (click)="selectPart('right-mirror')"
+                            (mouseenter)="hoveredPart = 'right-mirror'" (mouseleave)="hoveredPart = null" />
+                    </svg>
+
+                    <!-- INTERIOR VIEW -->
+                    <svg *ngSwitchCase="'interior'" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+                        <!-- Dashboard -->
+                        <path id="dashboard" d="M 100 100 L 500 100 L 500 200 L 100 200 Z"
+                            [ngStyle]="getPartStyle('dashboard')" (click)="selectPart('dashboard')"
+                            (mouseenter)="hoveredPart = 'dashboard'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Steering Wheel -->
+                        <circle id="steering" cx="180" cy="160" r="40" [ngStyle]="getPartStyle('steering')"
+                            (click)="selectPart('steering')" (mouseenter)="hoveredPart = 'steering'"
+                            (mouseleave)="hoveredPart = null" stroke-width="5" />
+
+                        <!-- Center Console -->
+                        <path id="center-console" d="M 280 200 L 320 200 L 320 350 L 280 350 Z"
+                            [ngStyle]="getPartStyle('center-console')" (click)="selectPart('center-console')"
+                            (mouseenter)="hoveredPart = 'center-console'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Front Seats -->
+                        <rect id="front-seats" x="120" y="220" width="120" height="120" rx="10"
+                            [ngStyle]="getPartStyle('front-seats')" (click)="selectPart('front-seats')"
+                            (mouseenter)="hoveredPart = 'front-seats'" (mouseleave)="hoveredPart = null" />
+
+                        <rect id="front-seats-2" x="360" y="220" width="120" height="120" rx="10"
+                            [ngStyle]="getPartStyle('front-seats')" (click)="selectPart('front-seats')"
+                            (mouseenter)="hoveredPart = 'front-seats'" (mouseleave)="hoveredPart = null" />
+
+                        <!-- Rear Seats -->
+                        <rect id="rear-seats" x="120" y="360" width="360" height="30" rx="5"
+                            [ngStyle]="getPartStyle('rear-seats')" (click)="selectPart('rear-seats')"
+                            (mouseenter)="hoveredPart = 'rear-seats'" (mouseleave)="hoveredPart = null" />
+                    </svg>
+
+                </ng-container>
+            </div>
+
+            <!-- Legend & Clear Button -->
+            <div class="controls">
+                <div class="legend">
+                    <span class="legend-item">
+                        <div class="color-box available"></div> Available
+                    </span>
+                    <span class="legend-item">
+                        <div class="color-box damaged"></div> Damaged
+                    </span>
+                </div>
+                <button (click)="clearSelection()" class="clear-btn">
+                    Clear Selection
+                </button>
+            </div>
+        </div>
+
+        <!-- Right: Selected Parts List -->
+        <div class="selection-panel">
+            <h3>Damaged Parts ({{ selectedParts.length }})</h3>
+
+            <div *ngIf="selectedParts.length === 0" class="empty-state">
+                <p>No parts selected yet</p>
+            </div>
+
+            <div *ngIf="selectedParts.length > 0" class="parts-list">
+                <div *ngFor="let partId of selectedParts" class="part-item">
+                    <span class="part-name">{{ getPartName(partId) }}</span>
+                    <button (click)="selectPart(partId)" class="remove-btn">✕</button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h4>Instructions:</h4>
+                <ul>
+                    <li>Click any part to mark as damaged</li>
+                    <li>Click again to deselect</li>
+                    <li>Switch views to see all angles</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
