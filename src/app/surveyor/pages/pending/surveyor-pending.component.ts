@@ -286,4 +286,31 @@ export class SurveyorPendingComponent implements OnInit {
             error: (err) => console.error('Error rejecting survey:', err)
         });
     }
+
+    get title(): string {
+        let statusText = '';
+
+        if (this.statusFilter === 'pending') {
+            statusText = 'Pending';
+        } else if (this.statusFilter === 'suspended') {
+            statusText = 'Suspended';
+        } else if (this.statusFilter === 'in_progress') {
+            statusText = 'In Progress';
+        } else {
+            statusText = 'Pending'; // Default
+        }
+
+        return `${statusText} Surveys`;
+    }
+
+    get description(): string {
+        if (this.statusFilter === 'pending') {
+            return 'Review and complete assigned surveys';
+        } else if (this.statusFilter === 'suspended') {
+            return 'Surveys suspended for another time';
+        } else if (this.statusFilter === 'in_progress') {
+            return 'Surveys currently being processed';
+        }
+        return 'Review and complete assigned surveys'; // Default
+    }
 }

@@ -54,12 +54,15 @@ export class SurveyStagesComponent implements OnInit {
             this.surveyorService.listSurveys.bind(this.surveyorService) :
             this.surveyorService.listClaims.bind(this.surveyorService);
 
-        const identificationCodes = this.user?.identification_code ?
-            JSON.stringify([this.user.identification_code]) : '[]';
+        const statusCounts = {
+            pending: 0,
+            suspended: 0
+        };
 
+        // Fetch pending surveys (state = 'surveyor')
         method({
             limit: 100,
-            identification_codes: identificationCodes
+            domain: JSON.stringify([['state', '=', 'surveyor']])
         }).subscribe({
             next: (response) => {
                 let surveys: any[] = [];
@@ -78,26 +81,43 @@ export class SurveyStagesComponent implements OnInit {
                     surveys = response;
                 }
 
-                const statusCounts = {
-                    pending: 0,
-                    suspended: 0
-                };
+                statusCounts.pending = surveys.length;
 
-                surveys.forEach(survey => {
-                    const status = (survey.state || survey.status || '').toLowerCase();
-                    // Map 'Surveyor Assigned' and 'pending' to Pending bucket
-                    if (status.includes('pending') || status.includes('surveyor') || status === 'surveyor assigned') {
-                        statusCounts.pending++;
-                    } else if (status.includes('suspend')) {
-                        statusCounts.suspended++;
+                // Fetch suspended surveys (state = 'suspended')
+                method({
+                    limit: 100,
+                    domain: JSON.stringify([['state', '=', 'suspended']])
+                }).subscribe({
+                    next: (suspendedResponse) => {
+                        let suspendedSurveys: any[] = [];
+                        // Handle different response structures
+                        if (suspendedResponse.surveys) {
+                            suspendedSurveys = suspendedResponse.surveys;
+                        } else if (suspendedResponse.data && suspendedResponse.data.surveys) {
+                            suspendedSurveys = suspendedResponse.data.surveys;
+                        } else if (suspendedResponse.data && suspendedResponse.data.result && suspendedResponse.data.result.data) {
+                            suspendedSurveys = suspendedResponse.data.result.data;
+                        } else if (suspendedResponse.data && suspendedResponse.data.data) {
+                            suspendedSurveys = suspendedResponse.data.data;
+                        } else if (suspendedResponse.data && Array.isArray(suspendedResponse.data)) {
+                            suspendedSurveys = suspendedResponse.data;
+                        } else if (Array.isArray(suspendedResponse)) {
+                            suspendedSurveys = suspendedResponse;
+                        }
+
+                        statusCounts.suspended = suspendedSurveys.length;
+                        this.stats[this.surveyType] = statusCounts;
+                        this.loading = false;
+                    },
+                    error: (err) => {
+                        console.error('Error fetching suspended survey stats:', err);
+                        this.stats[this.surveyType] = statusCounts;
+                        this.loading = false;
                     }
                 });
-
-                this.stats[this.surveyType] = statusCounts;
-                this.loading = false;
             },
             error: (err) => {
-                console.error('Error fetching survey stats:', err);
+                console.error('Error fetching pending survey stats:', err);
                 this.loading = false;
             }
         });

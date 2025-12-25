@@ -21,6 +21,7 @@ export class SurveyDetailsComponent implements OnInit {
     };
 
     activeTab: 'overview' | 'risk' | 'documents' | 'actions' = 'overview';
+    showWizard: boolean = false;
 
     setActiveTab(tab: 'overview' | 'risk' | 'documents' | 'actions'): void {
         this.activeTab = tab;
@@ -44,6 +45,11 @@ export class SurveyDetailsComponent implements OnInit {
             next: (response) => {
                 // Assuming response might be wrapped or direct
                 this.survey = response.data || response;
+
+                // Show wizard if survey is in progress or surveying state
+                const state = (this.survey.state || '').toLowerCase();
+                this.showWizard = state === 'in_progress' || state === 'surveying';
+
                 this.loading = false;
             },
             error: (err) => {

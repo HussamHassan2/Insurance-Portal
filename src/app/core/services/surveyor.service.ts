@@ -1,66 +1,44 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { AuthService } from './auth.service';
 
 export interface SurveyListParams {
-    survey_type?: string;
+    survey_type?: 'Issuance' | 'claim';
     limit?: number;
     offset?: number;
     domain?: string;
+    identification_codes?: string[];
     [key: string]: any;
-}
-
-export interface SurveyPhoto {
-    name: string;
-    data: string; // Base64
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class SurveyorService {
-    // Subject to trigger opening the wizard from other components
-    private openWizardSource = new Subject<void>();
-    openWizard$ = this.openWizardSource.asObservable();
 
     constructor(
         private api: ApiService,
         private authService: AuthService
     ) { }
 
-    triggerOpenWizard() {
-        this.openWizardSource.next();
-    }
-
     /**
-     * Get identification codes from current user
+     * List Surveys (Issuance or Claim)
+     * GET /api/v1/survey/list-surveys
      */
-    private getIdentificationCodes(): string {
-        const user = this.authService.currentUserValue;
-        if (user) {
-            if (user.identification_code) {
-                return JSON.stringify([user.identification_code]);
-            } else if (user.id) {
-                return JSON.stringify([user.id.toString()]);
-            }
-        }
-        return '[]';
-    }
-
-    /**
-     * List Issuance Surveys
-     */
-    listSurveys(params?: SurveyListParams): Observable<any> {
-        // Ensure default params for issuance
+    listSurveys(params: SurveyListParams = {}): Observable<any> {
+        // Default params
         const queryParams = {
-            survey_type: 'issuance',
             limit: 10,
             offset: 0,
             domain: '[]',
-            identification_codes: this.getIdentificationCodes(),
             ...params
         };
+
+        // If identification_codes is passed as array, we might need to stringify it or handle it based on how ApiService handles arrays in params.
+        // Based on previous code, it seems we might need to handle it. 
+        // However, standard Angular HttpParams handles arrays by repeating keys.
+        // Let's assume ApiService handles it or we pass it as is for now.
 
         return this.api.get('/v1/survey/list-surveys', {
             params: queryParams
@@ -69,97 +47,67 @@ export class SurveyorService {
 
     /**
      * Get Survey Details
+     * GET /api/v1/survey/get-survey
      */
-    getSurveyDetails(surveyId: number | string, identificationCode?: string): Observable<any> {
-        // Use provided code or fallback to user ID
-        const codes = identificationCode
-            ? JSON.stringify([identificationCode])
-            : this.getIdentificationCodes();
-
+    getSurveyDetails(surveyId: number | string): Observable<any> {
         return this.api.get('/v1/survey/get-survey', {
             params: {
-                survey_id: surveyId,
-                identification_codes: codes
+                survey_id: surveyId
             }
         });
     }
 
     /**
-     * Update Survey Status
+     * Submit Survey
+     * POST /api/v1/survey/submit
      */
-    updateSurveyStatus(data: { survey_id: number; status: string; notes?: string }): Observable<any> {
-        return this.api.post('/v1/survey/update-survey-status', {
+    submitSurvey(data: {
+        survey_id: number;
+        recommendation: string;
+        car_condition: string;
+        conclusion: string;
+        market_value: number;
+        number_of_kilometers: number;
+        zero_price: number;
+        survey_exclusions: any[];
+        survey_documents: any[];
+    }): Observable<any> {
+        return this.api.post('/v1/survey/submit', {
             params: data
         });
     }
 
     /**
-     * Upload Survey Photos
+     * Get Survey Exclusion Types
+     * GET /api/v1/lov/exclusion-types
      */
-    uploadSurveyPhotos(surveyId: string | number, photos: SurveyPhoto[]): Observable<any> {
-        return this.api.post('/v1/survey/upload-survey-photos', {
-            params: {
-                survey_id: surveyId,
-                photos: photos
-            }
-        });
+    getExclusionTypes(): Observable<any> {
+        return this.api.get('/v1/lov/exclusion-types');
     }
 
     /**
-     * List Surveyor Claims
+     * Get Survey Document Lines (Types)
+     * GET /api/v1/lov/survey-document-lines
      */
-    listClaims(params?: SurveyListParams): Observable<any> {
-        // Ensure default params for claims
-        const queryParams = {
-            survey_type: 'claim',
-            limit: 10,
-            offset: 0,
-            domain: '[]',
-            identification_codes: this.getIdentificationCodes(),
-            ...params
-        };
-
-        return this.api.get('/v1/survey/list-surveys', {
-            params: queryParams
-        });
+    getSurveyDocumentTypes(): Observable<any> {
+        return this.api.get('/v1/lov/survey-document-lines');
     }
 
     /**
-     * Get Claim Details
+     * Get Issuance Survey Types
+     * GET /api/v1/lov/issuance-survey-types
      */
-    getClaimDetails(claimId: number | string, identificationCode?: string): Observable<any> {
-        // Use generic endpoint filtering by ID
-        return this.api.get('/v1/survey/get-survey', {
-            params: {
-                survey_id: claimId,
-                // identification_code might be needed if the API supports it
-            }
-        });
-    }
-    /**
-     * Accept Survey
-     */
-    acceptSurvey(surveyId: number | string): Observable<any> {
-        return this.api.post('/v1/survey/accept', {
-            params: { survey_id: surveyId }
-        });
+    getIssuanceSurveyTypes(): Observable<any> {
+        return this.api.get('/v1/lov/issuance-survey-types');
     }
 
     /**
-     * Suspend Survey
+     * Update Survey Documents (Independent of submit if needed)
+     * POST /api/v1/survey/docs/update
      */
-    suspendSurvey(surveyId: number | string): Observable<any> {
-        return this.api.post('/v1/survey/suspend', {
-            params: { survey_id: surveyId }
-        });
-    }
-
-    /**
-     * Reject Survey
-     */
-    rejectSurvey(surveyId: number | string): Observable<any> {
-        return this.api.post('/v1/survey/reject', {
-            params: { survey_id: surveyId }
+    updateSurveyDocuments(data: { line_id: number; comment: string }): Observable<any> {
+        return this.api.post('/v1/survey/docs/update', {
+            params: data
         });
     }
 }

@@ -9,7 +9,8 @@ import {
     History, Clock, AlertCircle, ChevronLeft, Plus, Search, Filter,
     ArrowRight, ArrowLeft, Trash2, Edit, Eye, EyeOff, X, UploadCloud, File, RefreshCw,
     Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
-    ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle
+    ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle,
+    Heart, Plane, Anchor
 } from 'lucide-angular';
 
 // Components
@@ -95,7 +96,8 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
             History, Clock, AlertCircle, ChevronLeft, Plus, Search, Filter,
             ArrowRight, ArrowLeft, Trash2, Edit, Eye, EyeOff, X, UploadCloud, File, RefreshCw,
             Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
-            ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle
+            ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle,
+            Heart, Plane, Anchor
         }),
         CarDamageSelectorComponent,
         ChatBoxModule

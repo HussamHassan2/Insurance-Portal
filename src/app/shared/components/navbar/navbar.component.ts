@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthService, User } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-navbar',
@@ -20,15 +21,35 @@ export class NavbarComponent implements OnInit {
         { name: 'MENU.CONTACT', path: '/contact' }
     ];
 
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private translateService: TranslateService,
+        private cdr: ChangeDetectorRef
+    ) { }
 
     ngOnInit(): void {
         console.log('NavbarComponent initialized');
         console.log('clientId:', this.clientId);
         console.log('navLinks:', this.navLinks);
+
+        // Subscribe to user changes
         this.authService.currentUser.subscribe(user => {
             this.user = user;
             console.log('Current user:', user);
+        });
+
+        // Force initial change detection after a short delay to ensure translations are loaded
+        setTimeout(() => {
+            this.cdr.detectChanges();
+        }, 100);
+
+        // Subscribe to translation changes to trigger change detection
+        this.translateService.onLangChange.subscribe(() => {
+            this.cdr.detectChanges();
+        });
+        this.translateService.onDefaultLangChange.subscribe(() => {
+            this.cdr.detectChanges();
         });
     }
 

@@ -1,0 +1,40 @@
+<div class="space-y-6">
+    <div *ngIf="loading" class="flex justify-center py-8">
+        <app-loading-spinner [loading]="true" message="Loading exclusions..."></app-loading-spinner>
+    </div>
+
+    <div *ngIf="!loading && exclusions.length === 0" class="text-center py-8 text-gray-500">
+        No exclusions available.
+    </div>
+
+    <div *ngIf="!loading && exclusions.length > 0" class="animate-fadeIn">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Detailed Exclusions</h3>
+            <span class="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300">
+                {{ getSelectedCount() }} selected
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div *ngFor="let exclusion of exclusions"
+                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-gray-800 hover:shadow-sm transition-shadow">
+                <h4
+                    class="font-semibold text-gray-800 dark:text-gray-200 mb-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+                    {{ exclusion.exclusion_name }}
+                </h4>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <label *ngFor="let type of exclusion.exclusion_types"
+                        class="flex items-start gap-2 cursor-pointer p-1.5 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        <input type="checkbox" [checked]="isSelected(exclusion.exclusion_name, type.code)"
+                            (change)="toggleExclusion(exclusion.exclusion_name, type.code)"
+                            class="mt-1 w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary dark:border-gray-600 dark:bg-gray-700">
+                        <span class="text-sm text-gray-600 dark:text-gray-300 leading-tight">
+                            {{ type.name }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
