@@ -70,6 +70,7 @@ export class DashboardLayoutComponent implements OnInit {
     getNavItems(): NavItem[] {
         const basePath = this.getDashboardPath();
         const common: NavItem[] = [
+            { name: 'OCR Scanner', path: '/ocr', icon: 'file-text' }, // Added OCR MenuItem
             { name: 'APP.SUPPORT', path: '/support', icon: 'help-circle' },
             { name: 'APP.SETTINGS', path: `${basePath}/settings`, icon: 'settings' }
         ];

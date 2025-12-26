@@ -20,7 +20,12 @@
         "useDefineForClassFields": false,
         "lib": [
             "ES2022",
-            "dom"
+            "dom",
+            "dom.iterable",
+            "scripthost"
+        ],
+        "types": [
+            "node"
         ],
         "paths": {
             "@app/*": [

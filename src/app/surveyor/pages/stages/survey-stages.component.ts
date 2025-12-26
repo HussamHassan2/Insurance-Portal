@@ -64,7 +64,7 @@ export class SurveyStagesComponent implements OnInit {
             limit: 100,
             domain: JSON.stringify([['state', '=', 'surveyor']])
         }).subscribe({
-            next: (response) => {
+            next: (response: any) => {
                 let surveys: any[] = [];
                 // Handle different response structures
                 if (response.surveys) {
@@ -88,7 +88,7 @@ export class SurveyStagesComponent implements OnInit {
                     limit: 100,
                     domain: JSON.stringify([['state', '=', 'suspended']])
                 }).subscribe({
-                    next: (suspendedResponse) => {
+                    next: (suspendedResponse: any) => {
                         let suspendedSurveys: any[] = [];
                         // Handle different response structures
                         if (suspendedResponse.surveys) {
@@ -109,14 +109,14 @@ export class SurveyStagesComponent implements OnInit {
                         this.stats[this.surveyType] = statusCounts;
                         this.loading = false;
                     },
-                    error: (err) => {
+                    error: (err: any) => {
                         console.error('Error fetching suspended survey stats:', err);
                         this.stats[this.surveyType] = statusCounts;
                         this.loading = false;
                     }
                 });
             },
-            error: (err) => {
+            error: (err: any) => {
                 console.error('Error fetching pending survey stats:', err);
                 this.loading = false;
             }

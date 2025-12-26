@@ -8,6 +8,8 @@ import { SurveyStagesComponent } from './pages/stages/survey-stages.component';
 import { ProfileComponent } from '../shared/pages/profile/profile.component';
 import { SettingsComponent } from '../shared/pages/settings/settings.component';
 
+import { SurveyWizardComponent } from './components/survey-wizard/survey-wizard.component';
+
 const routes: Routes = [
     { path: '', component: SurveyorDashboardComponent },
     { path: 'stages', component: SurveyStagesComponent },
@@ -15,6 +17,7 @@ const routes: Routes = [
     { path: 'suspended', component: SurveyorPendingComponent },
     { path: 'in-progress', component: SurveyorPendingComponent },
     { path: 'surveys/:id', component: SurveyDetailsComponent },
+    { path: 'wizard/:id', component: SurveyWizardComponent },
     { path: 'claims', component: SurveyorClaimsComponent },
     { path: 'profile', component: ProfileComponent },
     { path: 'settings', component: SettingsComponent }

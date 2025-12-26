@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto" *ngIf="!loading && survey">
+<div class="max-w-7xl mx-auto" *ngIf="!loading && survey">
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
@@ -51,357 +51,497 @@
         </div>
     </div>
 
-    <!-- Step Content -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <!-- Step 1: Review Survey Data -->
-        <div *ngIf="currentStep === 1" class="space-y-6 animate-fadeIn">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Review Survey Information</h2>
+    <!-- Step Content Container (Natural Height) -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Survey Info -->
-                <app-card title="Survey Details">
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Survey Number</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.survey_number }}</p>
+        <div class="p-6">
+            <!-- Step 1: Review Survey Data (Redesigned) -->
+            <div *ngIf="currentStep === 1" class="space-y-4 animate-fadeIn">
+
+                <!-- Section 1: Survey Overview (Existing) -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                    <div (click)="toggleSection('survey')"
+                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="p-1.5 bg-blue-100 text-blue-600 rounded-md dark:bg-blue-900 dark:text-blue-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">Survey Overview</h3>
                         </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Type</p>
-                            <span
-                                class="inline-block px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-sm font-medium capitalize">
-                                {{ survey.survey_type }}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="transition-transform duration-200" [class.rotate-180]="detailsExpanded['survey']">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+
+                    <div *ngIf="detailsExpanded['survey']"
+                        class="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 space-y-8">
+
+                        <!-- Hero Section: Vehicle & Status -->
+                        <div
+                            class="p-6 rounded-lg border border-gray-100 dark:border-gray-600 flex flex-col md:flex-row justify-between gap-6">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="p-2 bg-primary/10 text-primary rounded-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M14 16H9m10 4h3v-7.252a1 1 0 0 0-.555-.894l-3-1.448h-6l-3.22 1.932A2 2 0 0 0 9 14h.01" />
+                                            <path
+                                                d="M14 16v3.5a.5.5 0 0 1-.5.5H2.5a.5.5 0 0 1-.5-.5V8.5a.5.5 0 0 1 .5-.5h9.237a.5.5 0 0 1 .456.29L14 11Zm0 0V11" />
+                                            <path d="M16 16v-3" />
+                                        </svg>
+                                    </div>
+                                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        {{ survey.risk_info?.vehicle_make_name || 'Vehicle' }} {{
+                                        survey.risk_info?.vehicle_model_name }}
+                                    </h2>
+                                </div>
+                                <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                    <span
+                                        class="bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded text-gray-700 dark:text-gray-200 font-mono">
+                                        {{ survey.risk_info?.vehicle_plate_number || 'No Plate' }}
+                                    </span>
+                                    <span>{{ survey.risk_info?.vehicle_manufacture_year }}</span>
+                                    <span>|</span>
+                                    <span>Chassis: {{ survey.risk_info?.vehicle_chassis_number || 'N/A' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-end gap-2">
+                                <span class="px-3 py-1 rounded-full text-sm font-medium capitalize" [ngClass]="{
+                                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': survey.survey_type === 'issuance',
+                                'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200': survey.survey_type === 'claim'
+                            }">
+                                    {{ survey.survey_type }} Survey
+                                </span>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-500 uppercase">Assigned</p>
+                                    <p class="font-medium text-gray-900 dark:text-white">{{ survey.assign_date |
+                                        date:'mediumDate' }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Customer Details -->
+                            <div>
+                                <h3
+                                    class="flex items-center text-lg font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    Customer
+                                </h3>
+                                <div class="space-y-4 pl-2">
+                                    <div class="group">
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Name</label>
+                                        <p
+                                            class="text-base font-medium text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                            {{ survey.customer_name }}
+                                        </p>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Phone</label>
+                                            <p class="text-gray-700 dark:text-gray-300">{{ survey.customer_phone }}</p>
+                                        </div>
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Email</label>
+                                            <p class="text-gray-700 dark:text-gray-300 truncate"
+                                                title="{{ survey.customer_email }}">
+                                                {{ survey.customer_email || 'N/A' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="survey.customer_street">
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Address</label>
+                                        <p class="text-gray-700 dark:text-gray-300">{{ survey.customer_street }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Survey Details / Location -->
+                            <div>
+                                <h3
+                                    class="flex items-center text-lg font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="12" y1="16" x2="12" y2="12" />
+                                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                                    </svg>
+                                    Task Details
+                                </h3>
+                                <div class="space-y-4 pl-2">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Survey
+                                                Number</label>
+                                            <p class="text-base font-mono text-gray-700 dark:text-gray-300">{{
+                                                survey.survey_number }}</p>
+                                        </div>
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Current
+                                                Status</label>
+                                            <div class="mt-1 flex items-center">
+                                                <span class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></span>
+                                                <span class="text-gray-900 dark:text-white capitalize">{{ survey.state
+                                                    }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Product</label>
+                                            <p class="text-gray-900 dark:text-white">{{ survey.product_name || 'N/A' }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">{{ survey.line_of_business }}</p>
+                                        </div>
+                                        <div>
+                                            <label
+                                                class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Due
+                                                Date</label>
+                                            <p class="text-red-600 dark:text-red-400 font-medium">{{ survey.due_date |
+                                                date:'mediumDate' }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="survey.address || survey.location">
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Location</label>
+                                        <p class="text-gray-700 dark:text-gray-300">{{ survey.address || survey.location
+                                            }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Vehicle Details (Full Width) -->
+                            <div class="md:col-span-2 mt-4" *ngIf="survey.risk_info">
+                                <h3
+                                    class="flex items-center text-lg font-medium text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">
+                                    <svg class="w-5 h-5 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path
+                                            d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+                                        <circle cx="7" cy="17" r="2" />
+                                        <circle cx="17" cy="17" r="2" />
+                                    </svg>
+                                    Vehicle Specifications
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pl-2">
+                                    <div>
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Color</label>
+                                        <p class="text-gray-900 dark:text-white capitalize">{{
+                                            survey.risk_info.vehicle_color_name || survey.risk_info.vehicle_color ||
+                                            'N/A' }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Body
+                                            Type</label>
+                                        <p class="text-gray-900 dark:text-white capitalize">{{
+                                            survey.risk_info.vehicle_body_type_name ||
+                                            survey.risk_info.vehicle_body_type ||
+                                            'N/A' }}</p>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Vehicle
+                                            State</label>
+                                        <p class="text-gray-900 dark:text-white capitalize">{{
+                                            survey.risk_info.vehicle_state ||
+                                            'Used' }}</p>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Motor
+                                            Number</label>
+                                        <p class="font-mono text-gray-900 dark:text-white">{{
+                                            survey.risk_info.vehicle_motor_number || 'N/A' }}</p>
+                                    </div>
+                                    <div *ngIf="survey.risk_info.vehicle_fuel_type_name">
+                                        <label class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Fuel
+                                            Type</label>
+                                        <p class="text-gray-900 dark:text-white">{{
+                                            survey.risk_info.vehicle_fuel_type_name }}
+                                        </p>
+                                    </div>
+                                    <div *ngIf="survey.risk_info.vehicle_usage_name">
+                                        <label
+                                            class="text-xs uppercase text-gray-400 font-semibold tracking-wider">Usage</label>
+                                        <p class="text-gray-900 dark:text-white">{{ survey.risk_info.vehicle_usage_name
+                                            }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Section 2: Additional Details (Opportunity / Claim) -->
+                <div *ngIf="survey.lead_id || survey.claim_id"
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                    <div (click)="toggleSection('additional')"
+                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="p-1.5 bg-purple-100 text-purple-600 rounded-md dark:bg-purple-900 dark:text-purple-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14 2z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                    <polyline points="10 9 9 9 8 9" />
+                                </svg>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                {{ isIssuanceSurvey ? 'Opportunity Details' : 'Claim Details' }}
+                            </h3>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="transition-transform duration-200"
+                            [class.rotate-180]="detailsExpanded['additional']">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+
+                    <div *ngIf="detailsExpanded['additional']"
+                        class="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                        <app-loading-spinner *ngIf="loadingDetails" message="Loading details..."></app-loading-spinner>
+
+                        <div *ngIf="!loadingDetails && additionalDetails">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <ng-container *ngFor="let item of formattedDetails">
+                                    <div class="break-words">
+                                        <label class="text-xs uppercase text-gray-500 font-semibold tracking-wider">{{
+                                            item.key | titlecase }}</label>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white mt-1">
+                                            {{ item.value }}
+                                        </p>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+
+
+                        <div *ngIf="!loadingDetails && !additionalDetails" class="text-center text-gray-500 py-4">
+                            No additional details available.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specialized Sections: Conditions, Deductibles, Documents (Separate Cards) -->
+
+                <!-- Opportunity Conditions Card -->
+                <div *ngIf="conditionsList.length > 0"
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mt-6">
+                    <div (click)="toggleSection('conditions')"
+                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="p-1.5 bg-purple-100 text-purple-600 rounded-md dark:bg-purple-900 dark:text-purple-300">
+                                <i-lucide name="file-text" class="w-5 h-5"></i-lucide>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                Opportunity Conditions
+                            </h3>
+                        </div>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [class.rotate-180]="detailsExpanded['conditions']"></i-lucide>
+                    </div>
+                    <div *ngIf="detailsExpanded['conditions']"
+                        class="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 animate-fadeIn">
+                        <div class="space-y-2">
+                            <div *ngFor="let item of conditionsList"
+                                class="flex items-start gap-2 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-100 dark:border-green-700 hover:shadow-sm transition-all">
+                                <i-lucide name="check-circle"
+                                    class="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0"></i-lucide>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ item.condition_name ||
+                                    item.name || item }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opportunity Deductibles Card -->
+                <div *ngIf="deductiblesList.length > 0"
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mt-6">
+                    <div (click)="toggleSection('deductibles')"
+                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="p-1.5 bg-purple-100 text-purple-600 rounded-md dark:bg-purple-900 dark:text-purple-300">
+                                <i-lucide name="shield-alert" class="w-5 h-5"></i-lucide>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                Opportunity Deductibles
+                            </h3>
+                        </div>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [class.rotate-180]="detailsExpanded['deductibles']"></i-lucide>
+                    </div>
+                    <div *ngIf="detailsExpanded['deductibles']"
+                        class="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 animate-fadeIn">
+                        <div class="space-y-2">
+                            <div *ngFor="let item of deductiblesList"
+                                class="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-900/30 rounded-lg border border-red-100 dark:border-red-700 hover:shadow-sm transition-all">
+                                <i-lucide name="alert-circle"
+                                    class="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"></i-lucide>
+                                <span class="text-sm text-gray-700 dark:text-gray-300">{{ item.name || item.display_name
+                                    || item }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opportunity Documents Card -->
+                <div *ngIf="documentsList.length > 0"
+                    class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden mt-6">
+                    <div (click)="toggleSection('documents')"
+                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="p-1.5 bg-purple-100 text-purple-600 rounded-md dark:bg-purple-900 dark:text-purple-300">
+                                <i-lucide name="paperclip" class="w-5 h-5"></i-lucide>
+                            </div>
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                                Opportunity Documents
+                            </h3>
+                        </div>
+                        <i-lucide name="chevron-down" class="w-5 h-5 text-gray-400 transition-transform duration-200"
+                            [class.rotate-180]="detailsExpanded['documents']"></i-lucide>
+                    </div>
+                    <div *ngIf="detailsExpanded['documents']"
+                        class="p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 animate-fadeIn">
+                        <div class="space-y-2">
+                            <div *ngFor="let doc of documentsList"
+                                class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ doc.document_name
+                                    || doc.name || doc }}</span>
+                                <span *ngIf="doc.status === 'Uploaded'"
+                                    class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">Uploaded</span>
+                                <span *ngIf="doc.status === 'Pending'"
+                                    class="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs font-medium">Pending</span>
+                                <span *ngIf="!doc.status"
+                                    class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">Document</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Step 2: Exclusions / Estimation -->
+            <div *ngIf="currentStep === 2" class="space-y-6 animate-fadeIn">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    {{ isIssuanceSurvey ? 'Vehicle Exclusions' : 'Select Damaged Parts' }}
+                </h2>
+                <!-- Exclusions / Estimation Component -->
+                <app-survey-exclusions [type]="isIssuanceSurvey ? 'issuance' : 'claim'"
+                    (exclusionsChanged)="onExclusionsChanged($event)"></app-survey-exclusions>
+            </div>
+
+
+            <!-- Step 3: Survey Documents -->
+            <div *ngIf="currentStep === 3" class="space-y-6 animate-fadeIn">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    Survey Documents
+                </h2>
+
+                <div class="grid grid-cols-1 gap-6">
+                    <div *ngFor="let doc of formData.survey_documents; let i = index"
+                        class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="font-medium text-gray-900 dark:text-white">{{ doc.document_name }}</h3>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">{{ doc.document_code
+                                    }}
+                                </p>
+                            </div>
+                            <span *ngIf="doc.files && doc.files.length > 0"
+                                class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                {{ doc.files.length }} file(s) selected
                             </span>
                         </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Status</p>
-                            <p class="font-semibold text-gray-900 dark:text-white capitalize">{{ survey.state }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Assigned Date</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.assign_date |
-                                date:'mediumDate' }}</p>
-                        </div>
-                    </div>
-                </app-card>
 
-                <!-- Customer Info -->
-                <app-card title="Customer Information">
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Name</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.customer_name }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Phone</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{ survey.customer_phone }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Email</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ survey.customer_email }}</p>
-                        </div>
-                    </div>
-                </app-card>
-
-                <!-- Vehicle Info -->
-                <app-card title="Vehicle Information" *ngIf="survey.risk_info">
-                    <div class="space-y-3">
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Make & Model</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">
-                                {{ survey.risk_info.vehicle_make_name }} {{ survey.risk_info.vehicle_model_name }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Plate Number</p>
-                            <p
-                                class="font-mono font-medium bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded inline-block">
-                                {{ survey.risk_info.vehicle_plate_number || 'N/A' }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Chassis Number</p>
-                            <p class="font-mono text-sm text-gray-900 dark:text-white">{{
-                                survey.risk_info.vehicle_chassis_number }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 uppercase">Year</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{
-                                survey.risk_info.vehicle_manufacture_year }}</p>
-                        </div>
-                    </div>
-                </app-card>
-            </div>
-
-            <div class="flex justify-end pt-4">
-                <app-button variant="primary" (click)="nextStep()">
-                    Continue to Assessment
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="ml-2">
-                        <path d="m9 18 6-6-6-6" />
-                    </svg>
-                </app-button>
-            </div>
-        </div>
-
-        <!-- Step 2: Input Form Data -->
-        <div *ngIf="currentStep === 2" class="space-y-6 animate-fadeIn">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                {{ isIssuanceSurvey ? 'Vehicle Inspection Assessment' : 'Damage Assessment' }}
-            </h2>
-
-            <form class="space-y-6">
-                <!-- Issuance Survey Form -->
-                <div *ngIf="isIssuanceSurvey" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Vehicle Condition <span class="text-red-500">*</span>
+                        <div class="mt-2">
+                            <label class="block w-full cursor-pointer">
+                                <span class="sr-only">Choose files</span>
+                                <input type="file" multiple (change)="onDocumentFileSelected($event, i)" class="block w-full text-sm text-gray-500
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-full file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-primary file:text-white
+                                    hover:file:bg-primary-dark
+                                " />
                             </label>
-                            <app-selection-modal label="Vehicle Condition" [options]="[
-                                        {value: 'excellent', label: 'Excellent'},
-                                        {value: 'good', label: 'Good'},
-                                        {value: 'fair', label: 'Fair'},
-                                        {value: 'poor', label: 'Poor'}
-                                    ]" [(value)]="formData.vehicle_condition" title="Select Vehicle Condition"
-                                subtitle="Choose the overall condition of the vehicle" placeholder="Select condition"
-                                [required]="true" valueKey="value" displayKey="label">
-                            </app-selection-modal>
-                        </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Odometer Reading
-                            </label>
-                            <input type="number" [(ngModel)]="formData.odometer_reading" name="odometer_reading"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter odometer reading" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Exterior Condition
-                            </label>
-                            <app-selection-modal label="Exterior Condition" [options]="[
-                                        {value: 'excellent', label: 'Excellent'},
-                                        {value: 'good', label: 'Good'},
-                                        {value: 'fair', label: 'Fair'},
-                                        {value: 'poor', label: 'Poor'}
-                                    ]" [(value)]="formData.exterior_condition" title="Select Exterior Condition"
-                                placeholder="Select condition" valueKey="value" displayKey="label">
-                            </app-selection-modal>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Interior Condition
-                            </label>
-                            <app-selection-modal label="Interior Condition" [options]="[
-                                        {value: 'excellent', label: 'Excellent'},
-                                        {value: 'good', label: 'Good'},
-                                        {value: 'fair', label: 'Fair'},
-                                        {value: 'poor', label: 'Poor'}
-                                    ]" [(value)]="formData.interior_condition" title="Select Interior Condition"
-                                placeholder="Select condition" valueKey="value" displayKey="label">
-                            </app-selection-modal>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Market Value <span class="text-red-500">*</span>
-                            </label>
-                            <input type="number" [(ngModel)]="formData.market_value" name="market_value" required
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter market value" />
-                        </div>
-                    </div>
-
-                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                            Equipment Check
-                        </label>
-                        <div class="space-y-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" [(ngModel)]="formData.has_spare_tire" name="has_spare_tire"
-                                    class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" />
-                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Spare Tire</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" [(ngModel)]="formData.has_tools" name="has_tools"
-                                    class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" />
-                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Tools</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" [(ngModel)]="formData.has_fire_extinguisher"
-                                    name="has_fire_extinguisher"
-                                    class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" />
-                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Fire Extinguisher</span>
-                            </label>
+                            <!-- List selected file names -->
+                            <div *ngIf="doc.files && doc.files.length > 0" class="mt-2 space-y-1">
+                                <p *ngFor="let f of doc.files"
+                                    class="text-xs text-gray-600 dark:text-gray-300 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="mr-1">
+                                        <path
+                                            d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                    </svg>
+                                    {{ f.name }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
+            </div>
+
+            <!-- Step 4: Technical View (Forms) -->
+            <div *ngIf="currentStep === 4" class="space-y-6 animate-fadeIn">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                    {{ isIssuanceSurvey ? 'Vehicle Inspection Assessment' : 'Damage Assessment' }}
+                </h2>
+
+                <!-- Issuance Survey Form -->
+                <app-issuance-survey-form *ngIf="isIssuanceSurvey" [(data)]="formData"
+                    (dataChange)="onDataChanged($event)">
+                </app-issuance-survey-form>
 
                 <!-- Claim Survey Form -->
-                <div *ngIf="isClaimSurvey" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Damage Description <span class="text-red-500">*</span>
-                            </label>
-                            <textarea [(ngModel)]="formData.damage_description" name="damage_description" required
-                                rows="4"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Describe the damage in detail..."></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Damage Location
-                            </label>
-                            <input type="text" [(ngModel)]="formData.damage_location" name="damage_location"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="e.g., Front bumper, Driver door" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Damage Severity
-                            </label>
-                            <app-selection-modal label="Damage Severity" [options]="[
-                                        {value: 'minor', label: 'Minor'},
-                                        {value: 'moderate', label: 'Moderate'},
-                                        {value: 'severe', label: 'Severe'},
-                                        {value: 'total_loss', label: 'Total Loss'}
-                                    ]" [(value)]="formData.damage_severity" title="Select Damage Severity"
-                                placeholder="Select severity" valueKey="value" displayKey="label">
-                            </app-selection-modal>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Estimated Repair Cost <span class="text-red-500">*</span>
-                            </label>
-                            <input type="number" [(ngModel)]="formData.estimated_repair_cost"
-                                name="estimated_repair_cost" required
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter estimated cost" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Cause of Damage
-                            </label>
-                            <input type="text" [(ngModel)]="formData.cause_of_damage" name="cause_of_damage"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="e.g., Collision, Weather" />
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Salvage Value
-                            </label>
-                            <input type="number" [(ngModel)]="formData.salvage_value" name="salvage_value"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter salvage value" />
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Liability Assessment
-                            </label>
-                            <textarea [(ngModel)]="formData.liability_assessment" name="liability_assessment" rows="3"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                placeholder="Assess liability and responsibility..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Common Fields -->
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Conclusion
-                        </label>
-                        <textarea [(ngModel)]="formData.conclusion" name="conclusion" rows="3"
-                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                            placeholder="Enter your conclusion..."></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Recommendations
-                        </label>
-                        <textarea [(ngModel)]="formData.recommendation" name="recommendation" rows="3"
-                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
-                            placeholder="Enter your recommendations..."></textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Upload Photos
-                        </label>
-                        <app-file-upload [accept]="'image/*'" [multiple]="true"
-                            (filesSelected)="onFilesSelected($event)">
-                        </app-file-upload>
-                        <p class="mt-2 text-sm text-gray-500" *ngIf="formData.photos.length > 0">
-                            {{ formData.photos.length }} file(s) selected
-                        </p>
-                    </div>
-                </div>
-            </form>
-
-            <div class="flex justify-between pt-4">
-                <app-button variant="secondary" (click)="previousStep()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="mr-2">
-                        <path d="m15 18-6-6 6-6" />
-                    </svg>
-                    Back
-                </app-button>
-                <app-button variant="primary" (click)="nextStep()" [disabled]="!canProceedToNextStep">
-                    {{ isIssuanceSurvey ? 'Continue to Exclusions' : 'Continue to Review' }}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="ml-2">
-                        <path d="m9 18 6-6-6-6" />
-                    </svg>
-                </app-button>
+                <app-claim-survey-form *ngIf="isClaimSurvey" [(data)]="formData" (dataChange)="onDataChanged($event)">
+                </app-claim-survey-form>
             </div>
+
+
         </div>
 
-        <!-- Step 3: Exclusions (Issuance Only) -->
-        <div *ngIf="currentStep === 3 && isIssuanceSurvey" class="space-y-6 animate-fadeIn">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Vehicle Exclusions
-            </h2>
-
-            <!-- Exclusions Component -->
-            <app-survey-exclusions (exclusionsChanged)="onExclusionsChanged($event)"></app-survey-exclusions>
-
-            <div class="flex justify-between pt-4">
-                <app-button variant="secondary" (click)="previousStep()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="mr-2">
-                        <path d="m15 18-6-6 6-6" />
-                    </svg>
-                    Back
-                </app-button>
-                <app-button variant="primary" (click)="nextStep()">
-                    Continue to Review
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="ml-2">
-                        <path d="m9 18 6-6-6-6" />
-                    </svg>
-                </app-button>
-            </div>
-        </div>
-
-        <!-- Step 3: Review & Submit -->
         <!-- Final Step: Review & Submit -->
-        <div *ngIf="currentStep === totalSteps" class="space-y-6 animate-fadeIn">
+        <div *ngIf="currentStep === totalSteps" class="space-y-6 animate-fadeIn pb-4">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Review & Submit</h2>
 
             <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
@@ -416,8 +556,7 @@
                     <div>
                         <p class="text-sm font-medium text-blue-900 dark:text-blue-200">Review your submission</p>
                         <p class="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                            Please review all the information below before submitting. Once submitted, this
-                            assessment will be sent for processing.
+                            Please review all the information below. This action cannot be undone.
                         </p>
                     </div>
                 </div>
@@ -480,6 +619,15 @@
                                 <p class="font-medium text-gray-900 dark:text-white">{{
                                     formData.estimated_repair_cost | currency }}</p>
                             </div>
+                            <div class="col-span-2" *ngIf="formData.survey_exclusions?.length > 0">
+                                <p class="text-gray-500 dark:text-gray-400 mb-1">Damaged Parts</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span *ngFor="let ex of formData.survey_exclusions"
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
+                                        {{ ex.exclusion_name }} ({{ ex.exclusion_type_codes.length }})
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -493,7 +641,7 @@
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Recommendations</p>
                                 <p class="text-gray-900 dark:text-white">{{ formData.recommendation }}</p>
                             </div>
-                            <div *ngIf="formData.photos.length > 0">
+                            <div *ngIf="formData.photos && formData.photos.length > 0">
                                 <p class="text-gray-500 dark:text-gray-400 text-sm">Photos</p>
                                 <p class="text-gray-900 dark:text-white">{{ formData.photos.length }} photo(s)
                                     attached</p>
@@ -502,26 +650,46 @@
                     </div>
                 </div>
             </app-card>
+        </div>
+    </div>
 
-            <div class="flex justify-between pt-4">
-                <app-button variant="secondary" (click)="previousStep()">
+    <!-- Action Bar (Inline) -->
+    <div class="mt-8 flex justify-between items-center">
+        <!-- Back Button -->
+        <div>
+            <app-button *ngIf="currentStep > 1" variant="secondary" (click)="previousStep()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                    <path d="m15 18-6-6 6-6" />
+                </svg>
+                Back
+            </app-button>
+        </div>
+
+        <!-- Next / Submit Button -->
+        <div>
+            <app-button *ngIf="currentStep < totalSteps" variant="primary" (click)="nextStep()"
+                [disabled]="!canProceedToNextStep">
+                <span class="flex items-center">
+                    Next Step
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="mr-2">
-                        <path d="m15 18-6-6 6-6" />
+                        class="ml-2">
+                        <path d="m9 18 6-6-6-6" />
                     </svg>
-                    Back
-                </app-button>
-                <app-button variant="primary" (click)="submitSurvey()" [disabled]="loading">
-                    <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="mr-2">
-                        <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    <span *ngIf="loading">Submitting...</span>
-                    <span *ngIf="!loading">Submit Survey</span>
-                </app-button>
-            </div>
+                </span>
+            </app-button>
+
+            <app-button *ngIf="currentStep === totalSteps" variant="primary" (click)="submitSurvey()"
+                [disabled]="loading">
+                <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="mr-2">
+                    <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span *ngIf="loading">Submitting...</span>
+                <span *ngIf="!loading">Submit Survey</span>
+            </app-button>
         </div>
     </div>
 </div>

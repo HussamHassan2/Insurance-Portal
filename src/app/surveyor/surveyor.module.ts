@@ -10,6 +10,8 @@ import { SurveyDetailsComponent } from './pages/survey-details/survey-details.co
 import { SurveyorClaimsComponent } from './pages/claims/surveyor-claims.component';
 import { SurveyWizardComponent } from './components/survey-wizard/survey-wizard.component';
 import { SurveyExclusionsComponent } from './components/survey-exclusions/survey-exclusions.component';
+import { IssuanceSurveyFormComponent } from './components/issuance-survey-form/issuance-survey-form.component';
+import { ClaimSurveyFormComponent } from './components/claim-survey-form/claim-survey-form.component';
 
 @NgModule({
     declarations: [
@@ -17,14 +19,16 @@ import { SurveyExclusionsComponent } from './components/survey-exclusions/survey
         SurveyorPendingComponent,
         SurveyDetailsComponent,
         SurveyorClaimsComponent,
-        SurveyWizardComponent
+        SurveyWizardComponent,
+        IssuanceSurveyFormComponent,
+        ClaimSurveyFormComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
         SurveyorRoutingModule,
         SharedModule,
-        SurveyExclusionsComponent
+        SurveyExclusionsComponent // Assumption: Standalone, based on previous file content check needed. If not, will move to declarations next.
     ]
 })
 export class SurveyorModule { }

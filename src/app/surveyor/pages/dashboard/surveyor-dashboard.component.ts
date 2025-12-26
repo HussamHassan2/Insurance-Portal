@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, User } from '../../../core/services/auth.service';
 import { SurveyorService } from '../../../core/services/surveyor.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-surveyor-dashboard',
@@ -12,7 +11,6 @@ import { Subscription } from 'rxjs';
 export class SurveyorDashboardComponent implements OnInit, OnDestroy {
   user: User | null = null;
   showWizard = false;
-  private wizardSubscription: Subscription | undefined;
 
   stats: any = {
     totalSurveys: 62,
@@ -40,17 +38,9 @@ export class SurveyorDashboardComponent implements OnInit, OnDestroy {
         this.showWizard = true;
       }
     });
-
-    // Subscribe to wizard open events
-    this.wizardSubscription = this.surveyorService.openWizard$.subscribe(() => {
-      this.showWizard = true;
-    });
   }
 
   ngOnDestroy(): void {
-    if (this.wizardSubscription) {
-      this.wizardSubscription.unsubscribe();
-    }
   }
 
   openWizard(): void {

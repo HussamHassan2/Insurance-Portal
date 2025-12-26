@@ -42,7 +42,7 @@ export class SurveyDetailsComponent implements OnInit {
     loadSurvey(): void {
         this.loading = true;
         this.surveyorService.getSurveyDetails(this.surveyId).subscribe({
-            next: (response) => {
+            next: (response: any) => {
                 // Assuming response might be wrapped or direct
                 this.survey = response.data || response;
 
@@ -52,7 +52,7 @@ export class SurveyDetailsComponent implements OnInit {
 
                 this.loading = false;
             },
-            error: (err) => {
+            error: (err: any) => {
                 console.error('Error loading survey details:', err);
                 this.notificationService.error('Failed to load survey details');
                 this.loading = false;
@@ -75,7 +75,7 @@ export class SurveyDetailsComponent implements OnInit {
                 this.notificationService.success('Survey accepted successfully');
                 this.loadSurvey();
             },
-            error: (err) => {
+            error: (err: any) => {
                 console.error('Error accepting survey:', err);
                 this.notificationService.error('Failed to accept survey');
                 this.loading = false;
@@ -90,7 +90,7 @@ export class SurveyDetailsComponent implements OnInit {
                 this.notificationService.success('Survey suspended successfully');
                 this.loadSurvey();
             },
-            error: (err) => {
+            error: (err: any) => {
                 console.error('Error suspending survey:', err);
                 this.notificationService.error('Failed to suspend survey');
                 this.loading = false;
@@ -106,7 +106,7 @@ export class SurveyDetailsComponent implements OnInit {
                     this.notificationService.success('Survey rejected successfully');
                     this.router.navigate(['/dashboard/surveyor/pending']);
                 },
-                error: (err) => {
+                error: (err: any) => {
                     console.error('Error rejecting survey:', err);
                     this.notificationService.error('Failed to reject survey');
                     this.loading = false;

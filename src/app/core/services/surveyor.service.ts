@@ -8,7 +8,7 @@ export interface SurveyListParams {
     limit?: number;
     offset?: number;
     domain?: string;
-    identification_codes?: string[];
+    identification_codes?: any; // Changed to any to accept string or string[] to fix TS error
     [key: string]: any;
 }
 
@@ -16,11 +16,25 @@ export interface SurveyListParams {
     providedIn: 'root'
 })
 export class SurveyorService {
+    // Subject to trigger opening the wizard from other components - Restoring for Dashboard compatibility
+    // private openWizardSource = new Subject<void>();   // If needed by other parts not yet refactored
+    // openWizard$ = this.openWizardSource.asObservable();
 
     constructor(
         private api: ApiService,
         private authService: AuthService
     ) { }
+
+    /**
+     * Helper to get identification codes from Auth Service
+     */
+    private getIdentificationCodes(): string {
+        const user = this.authService.currentUserValue;
+        if (user && user.identification_code) {
+            return JSON.stringify([user.identification_code]);
+        }
+        return '[]';
+    }
 
     /**
      * List Surveys (Issuance or Claim)
@@ -29,16 +43,13 @@ export class SurveyorService {
     listSurveys(params: SurveyListParams = {}): Observable<any> {
         // Default params
         const queryParams = {
+            survey_type: 'issuance',
             limit: 10,
             offset: 0,
             domain: '[]',
+            identification_codes: this.getIdentificationCodes(),
             ...params
         };
-
-        // If identification_codes is passed as array, we might need to stringify it or handle it based on how ApiService handles arrays in params.
-        // Based on previous code, it seems we might need to handle it. 
-        // However, standard Angular HttpParams handles arrays by repeating keys.
-        // Let's assume ApiService handles it or we pass it as is for now.
 
         return this.api.get('/v1/survey/list-surveys', {
             params: queryParams
@@ -52,8 +63,43 @@ export class SurveyorService {
     getSurveyDetails(surveyId: number | string): Observable<any> {
         return this.api.get('/v1/survey/get-survey', {
             params: {
-                survey_id: surveyId
+                survey_id: surveyId,
+                identification_codes: this.getIdentificationCodes()
             }
+        });
+    }
+
+    /**
+     * List Surveyor Claims (Alias for listSurveys with claim type)
+     */
+    listClaims(params: SurveyListParams = {}): Observable<any> {
+        return this.listSurveys({ ...params, survey_type: 'claim' });
+    }
+
+    /**
+     * Accept Survey
+     */
+    acceptSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/accept', {
+            params: { survey_id: surveyId }
+        });
+    }
+
+    /**
+     * Suspend Survey
+     */
+    suspendSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/suspend', {
+            params: { survey_id: surveyId }
+        });
+    }
+
+    /**
+     * Reject Survey
+     */
+    rejectSurvey(surveyId: number | string): Observable<any> {
+        return this.api.post('/v1/survey/reject', {
+            params: { survey_id: surveyId }
         });
     }
 
@@ -80,9 +126,14 @@ export class SurveyorService {
     /**
      * Get Survey Exclusion Types
      * GET /api/v1/lov/exclusion-types
+     * Aliased as getExclusions for compatibility
      */
+    getExclusions(): Observable<any> {
+        return this.api.get('/v1/policy/exclusions');
+    }
+
     getExclusionTypes(): Observable<any> {
-        return this.api.get('/v1/lov/exclusion-types');
+        return this.getExclusions();
     }
 
     /**

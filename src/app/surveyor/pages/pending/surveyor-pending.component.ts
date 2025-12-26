@@ -263,7 +263,7 @@ export class SurveyorPendingComponent implements OnInit {
             next: () => {
                 this.loadPendingSurveys();
             },
-            error: (err) => console.error('Error accepting survey:', err)
+            error: (err: any) => console.error('Error accepting survey:', err)
         });
     }
 
@@ -273,7 +273,7 @@ export class SurveyorPendingComponent implements OnInit {
             next: () => {
                 this.loadPendingSurveys();
             },
-            error: (err) => console.error('Error suspending survey:', err)
+            error: (err: any) => console.error('Error suspending survey:', err)
         });
     }
 
@@ -283,7 +283,7 @@ export class SurveyorPendingComponent implements OnInit {
             next: () => {
                 this.loadPendingSurveys();
             },
-            error: (err) => console.error('Error rejecting survey:', err)
+            error: (err: any) => console.error('Error rejecting survey:', err)
         });
     }
 

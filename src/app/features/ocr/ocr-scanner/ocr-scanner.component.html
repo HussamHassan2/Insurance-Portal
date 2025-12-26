@@ -1,0 +1,270 @@
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-4 border-gray-200 dark:border-gray-700">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Bilingual OCR Scanner</h1>
+            <p class="text-gray-500 dark:text-gray-400">Upload or scan Arabic/English documents</p>
+        </div>
+        <div class="flex gap-2">
+            <button (click)="startCamera()"
+                class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z">
+                    </path>
+                    <circle cx="12" cy="13" r="3"></circle>
+                </svg>
+                Open Camera
+            </button>
+        </div>
+    </div>
+
+    <!-- Image Editor Modal -->
+    <app-image-editor *ngIf="showEditor" [imageChangedEvent]="imageChangedEvent"
+        (cropComplete)="onEditorComplete($event)" (cancel)="onEditorCancel()">
+    </app-image-editor>
+
+    <!-- Main Content Grid -->
+    <div class="grid lg:grid-cols-2 gap-6 h-[calc(100vh-200px)]">
+
+        <!-- Left: Upload / Preview -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg flex flex-col overflow-hidden">
+            <div
+                class="p-4 border-b border-gray-100 dark:border-gray-700 font-semibold text-gray-700 dark:text-gray-300">
+                Document Source
+            </div>
+
+            <div class="flex-1 p-4 relative bg-gray-50 dark:bg-gray-900 text-center flex flex-col justify-center items-center"
+                [class.drag-active]="isDragActive" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)">
+
+                <!-- Camera View -->
+                <div *ngIf="showCamera" class="absolute inset-0 bg-black z-20 flex flex-col">
+                    <video #videoElement autoplay playsinline class="flex-1 w-full h-full object-contain"></video>
+                    <div class="p-4 flex justify-center gap-4 bg-black/50 absolute bottom-0 w-full">
+                        <button (click)="stopCamera()"
+                            class="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-full">Cancel</button>
+                        <button (click)="captureImage()"
+                            class="px-6 py-2 bg-white text-black hover:bg-gray-200 rounded-full font-bold">Capture</button>
+                    </div>
+                </div>
+
+                <!-- Hidden Canvas for capture -->
+                <canvas #canvasElement class="hidden"></canvas>
+
+                <!-- Image Preview -->
+                <div *ngIf="imageUrl && !showCamera"
+                    class="relative w-full h-full flex flex-col items-center justify-center gap-4">
+                    <img [src]="imageUrl" class="max-w-full max-h-[calc(100%-60px)] object-contain shadow-md rounded-lg"
+                        alt="Scanned Document">
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-2">
+                        <button (click)="runOcr(imageUrl)" [disabled]="isProcessing"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors font-medium flex items-center gap-2">
+                            <svg *ngIf="!isProcessing" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span *ngIf="isProcessing">Processing... {{progress}}%</span>
+                            <span *ngIf="!isProcessing">Process Image</span>
+                        </button>
+
+                        <button (click)="imageUrl = null; extractedData = null; processedImageUrl = null"
+                            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Placeholder / Upload Prompt -->
+                <div *ngIf="!imageUrl && !showCamera" class="space-y-4">
+                    <div
+                        class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                    </div>
+                    <p class="text-lg font-medium text-gray-700 dark:text-gray-300">Drag & Drop document here</p>
+                    <p class="text-sm text-gray-500">or</p>
+                    <button (click)="triggerFileInput()"
+                        class="px-6 py-2 border-2 border-dashed border-blue-400 text-blue-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+                        Browse Files
+                    </button>
+                    <input #fileInput type="file" accept="image/*" class="hidden" (change)="onFileSelected($event)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Results -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg flex flex-col">
+            <div class="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                <span class="font-semibold text-gray-700 dark:text-gray-300">Extraction Results</span>
+                <span *ngIf="isProcessing" class="text-sm text-blue-500 animate-pulse">Processing...
+                    {{progress}}%</span>
+            </div>
+
+            <div class="flex-1 p-6 overflow-y-auto">
+                <div *ngIf="!extractedData && !isProcessing"
+                    class="h-full flex flex-col items-center justify-center text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                        class="mb-4 opacity-50">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <p>No data extracted yet.</p>
+                </div>
+
+                <!-- Structured Data Form -->
+                <div *ngIf="extractedData" class="space-y-6">
+
+                    <!-- Debug Image -->
+                    <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                        <h3 class="text-xs font-bold uppercase text-gray-500 mb-2">Processed Image For OCR</h3>
+                        <img [src]="processedImageUrl"
+                            class="w-full rounded border border-gray-300 dark:border-gray-600 bg-white"
+                            alt="Processed Image">
+                    </div>
+
+                    <!-- License Header Card -->
+                    <div
+                        class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-blue-100 dark:border-gray-600">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-gray-500 uppercase">Traffic Unit</label>
+                                <p class="font-bold text-gray-900 dark:text-white" dir="auto">
+                                    {{extractedData.trafficUnit || '---'}}</p>
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 uppercase">Vehicle Model</label>
+                                <p class="font-bold text-gray-900 dark:text-white">{{extractedData.vehicleModel ||
+                                    '---'}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Owner Name -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Owner Name</label>
+                        <input [ngModel]="extractedData.ownerName" readonly
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-white"
+                            placeholder="Not detected">
+                    </div>
+
+                    <!-- National ID -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">National ID</label>
+                        <div class="relative">
+                            <input [ngModel]="extractedData.nationalId" readonly
+                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:text-white tracking-wider font-bold"
+                                placeholder="Not detected">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technical Details -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Chassis -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Chassis
+                                No.</label>
+                            <input [ngModel]="extractedData.chassisNumber" readonly
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-white font-mono text-sm"
+                                placeholder="Not detected">
+                        </div>
+                        <!-- Motor -->
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Motor No.</label>
+                            <input [ngModel]="extractedData.motorNumber" readonly
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-white font-mono text-sm"
+                                placeholder="Not detected">
+                        </div>
+                    </div>
+
+                    <!-- Amounts Detected -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Detected
+                            Amounts</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span *ngFor="let amt of extractedData.amounts"
+                                class="px-3 py-1 bg-green-100 text-green-800 rounded-lg text-sm font-bold border border-green-200">
+                                {{amt | number:'1.2-2'}}
+                            </span>
+                            <span *ngIf="!extractedData.amounts?.length" class="text-gray-500 italic text-sm">No amounts
+                                detected</span>
+                        </div>
+                    </div>
+
+                    <!-- Dates Detected -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Detected Dates</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span *ngFor="let date of extractedData.dates"
+                                class="px-3 py-1 bg-purple-100 text-purple-800 rounded-lg text-sm font-bold border border-purple-200">
+                                {{date}}
+                            </span>
+                            <span *ngIf="!extractedData.dates?.length" class="text-gray-500 italic text-sm">No dates
+                                detected</span>
+                        </div>
+                    </div>
+
+                    <!-- Raw Text Toggle -->
+                    <details
+                        class="group border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
+                        <summary
+                            class="flex justify-between items-center font-medium cursor-pointer list-none p-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors rounded-lg">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">View Raw Text (Debug)</span>
+                            <span class="transition group-open:rotate-180">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    viewBox="0 0 24 24" width="24">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </summary>
+                        <div dir="rtl"
+                            class="text-sm font-arabic text-gray-700 dark:text-gray-300 p-4 pt-0 whitespace-pre-wrap h-64 overflow-y-auto border-t border-gray-200 dark:border-gray-700 leading-relaxed font-mono">
+                            {{extractedData.rawText}}
+                        </div>
+                    </details>
+
+                </div>
+
+                <style>
+                    .font-arabic {
+                        font-family: 'Arial', 'Segoe UI', sans-serif;
+                        line-height: 1.8;
+                        text-align: right;
+                    }
+
+                    /* RTL support */
+                    [dir="rtl"] {
+                        text-align: right;
+                        unicode-bidi: isolate;
+                    }
+                </style>
+
+            </div>
+        </div>
+    </div>
+</div>

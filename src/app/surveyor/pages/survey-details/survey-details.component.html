@@ -1,6 +1,7 @@
 <app-dashboard-layout>
     <!-- Show Wizard for In-Progress Surveys -->
-    <app-survey-wizard *ngIf="showWizard && !loading && survey" [surveyId]="surveyId"></app-survey-wizard>
+    <app-survey-wizard *ngIf="showWizard && !loading && survey" [surveyId]="surveyId"
+        [surveyData]="survey"></app-survey-wizard>
 
     <!-- Show Regular Details View for Other States -->
     <div *ngIf="!showWizard && !loading && survey" class="space-y-6">

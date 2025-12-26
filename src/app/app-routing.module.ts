@@ -17,6 +17,11 @@ const routes: Routes = [
         path: 'client-dashboard',
         loadComponent: () => import('./tenant-dashboard/dashboard.component').then(m => m.DashboardComponent)
     },
+    {
+        path: 'ocr',
+        loadChildren: () => import('./features/ocr/ocr.routes').then(m => m.OCR_ROUTES),
+        canActivate: [AuthGuard]
+    },
 
     // Dashboard redirect based on role
     {
