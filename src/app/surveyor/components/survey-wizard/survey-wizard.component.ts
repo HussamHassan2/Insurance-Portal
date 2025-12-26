@@ -369,15 +369,25 @@ export class SurveyWizardComponent implements OnInit {
         if (this.currentStep === 1) {
             return true; // Review step, always can proceed
         } else if (this.currentStep === 2) {
-            // Validate required fields based on survey type
+            // Step 2: Exclusions / Damaged Parts
+            if (this.formData.survey_exclusions && this.formData.survey_exclusions.length > 0) {
+                // If exclusions are selected, validate that each has at least one type selected
+                return this.formData.survey_exclusions.every((exclusion: any) =>
+                    exclusion.exclusion_type_codes && exclusion.exclusion_type_codes.length > 0
+                );
+            }
+            // If no exclusions selected, can proceed
+            return true;
+        } else if (this.currentStep === 3) {
+            // Step 3: Documents - optional, always can proceed
+            return true;
+        } else if (this.currentStep === 4) {
+            // Step 4: Technical Assessment
             if (this.isIssuanceSurvey) {
                 return !!(this.formData.vehicle_condition && this.formData.market_value);
             } else if (this.isClaimSurvey) {
                 return !!(this.formData.damage_description && this.formData.estimated_repair_cost);
             }
-        } else if (this.currentStep === 3 && this.isIssuanceSurvey) {
-            // Step 3 is Exclusions for Issuance, always proceed
-            return true;
         }
         return true;
     }
