@@ -161,4 +161,24 @@ export class SurveyorService {
             params: data
         });
     }
+
+    /**
+     * Create Survey Estimation Lines
+     * POST /v1/survey/create-survey-estimation-lines
+     */
+    createSurveyEstimationLines(data: { survey_id: number, estimation_lines: any[] }): Observable<any> {
+        return this.api.post('/v1/survey/create-survey-estimation-lines', {
+            params: data
+        });
+    }
+
+    /**
+     * Update Survey Estimation Lines
+     * POST /v1/survey/update-survey-estimation-lines
+     */
+    updateSurveyEstimationLines(data: { survey_id: number, estimation_lines: any[] }): Observable<any> {
+        return this.api.post('/v1/survey/update-survey-estimation-lines', {
+            params: data
+        });
+    }
 }

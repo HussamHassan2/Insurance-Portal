@@ -258,13 +258,24 @@ export class SurveyWizardComponent implements OnInit {
             ...event.item,
             id: Math.floor(Math.random() * 1000), // temp ID
             estimation_amount: (event.item.quantity * event.item.estimation_unit_amount) - (event.item.depreciation || 0),
-            estimation_item_type: this.getEstimationTypeName(event.item.estimation_item_type_id)
+            estimation_item_type: this.getEstimationTypeName(event.item.estimation_item_type_id),
+            isNew: true // Mark as new for API distinction
         };
 
         if (!this.estimationItems) {
             this.estimationItems = [];
         }
         this.estimationItems.push(newItem);
+
+        // Recalculate total and update formData for validation
+        const total = this.estimationItems.reduce((sum, item) => sum + (item.estimation_amount || 0), 0);
+        this.formData.estimated_repair_cost = total;
+
+        // Update details for display
+        if (this.estimationDetails) {
+            this.estimationDetails.total_estimation = total;
+            this.estimationDetails.total_amount = total;
+        }
 
         if (event.action === 'close') {
             this.closeAddItemModal();
@@ -294,11 +305,11 @@ export class SurveyWizardComponent implements OnInit {
                 // Update total steps based on survey type
                 if (this.isIssuanceSurvey) {
                     this.totalSteps = 5;
-                    this.stepTitles = ['Review', 'Exclusions', 'Documents', 'Assessment', 'Submit'];
+                    this.stepTitles = ['Review', 'Exclusions', 'Documents', 'Technical View', 'Submit'];
                     this.stepSubtitles = ['Survey Details', 'Vehicle Exclusions', 'Upload Documents', 'Technical View', 'Review & Submit'];
                 } else if (this.isClaimSurvey) {
                     this.totalSteps = 5;
-                    this.stepTitles = ['Review', 'Estimation Details', 'Documents', 'Assessment', 'Submit'];
+                    this.stepTitles = ['Review', 'Estimation Details', 'Documents', 'Technical View', 'Submit'];
                     this.stepSubtitles = ['Survey Details', 'Estimation & Items', 'Upload Documents', 'Technical View', 'Review & Submit'];
                 }
 
@@ -393,6 +404,12 @@ export class SurveyWizardComponent implements OnInit {
                     console.log('Set estimationItems from details:', this.estimationItems);
                 }
 
+                // Sync estimated_repair_cost with the total
+                if (this.estimationDetails.total_estimation || this.estimationDetails.total_amount) {
+                    this.formData.estimated_repair_cost = this.estimationDetails.total_estimation || this.estimationDetails.total_amount;
+                    console.log('Synced estimated_repair_cost:', this.formData.estimated_repair_cost);
+                }
+
                 console.log('Set estimationDetails to:', this.estimationDetails);
                 this.loadingEstimation = false; // Set loading to false here to ensure UI updates even if items fail
             },
@@ -463,11 +480,39 @@ export class SurveyWizardComponent implements OnInit {
                 number_of_kilometers: Number(this.formData.odometer_reading) || 0,
                 zero_price: 0,
                 survey_exclusions: this.formData.survey_exclusions || [],
-                survey_documents: this.formData.survey_documents || []
+                survey_documents: this.formData.survey_documents || [],
+                estimation_lines: this.estimationItems || []
             };
 
             // Submit survey
             await this.surveyorService.submitSurvey(surveyData).toPromise();
+
+            // Handle Estimation Lines (Create New vs Update Existing)
+            if (this.estimationItems && this.estimationItems.length > 0) {
+                const newLines = this.estimationItems.filter((i: any) => i.isNew);
+                const existingLines = this.estimationItems.filter((i: any) => !i.isNew);
+                const linePromises = [];
+
+                if (newLines.length > 0) {
+                    console.log('Creating new estimation lines:', newLines);
+                    linePromises.push(this.surveyorService.createSurveyEstimationLines({
+                        survey_id: Number(this.surveyId),
+                        estimation_lines: newLines
+                    }).toPromise());
+                }
+
+                if (existingLines.length > 0) {
+                    console.log('Updating existing estimation lines:', existingLines);
+                    linePromises.push(this.surveyorService.updateSurveyEstimationLines({
+                        survey_id: Number(this.surveyId),
+                        estimation_lines: existingLines
+                    }).toPromise());
+                }
+
+                if (linePromises.length > 0) {
+                    await Promise.all(linePromises);
+                }
+            }
 
             // Update documents if photos are provided
             if (this.formData.photos.length > 0) {

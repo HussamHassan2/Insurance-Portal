@@ -59,17 +59,37 @@ export class AddEstimationItemModalComponent implements OnInit, OnChanges {
 
   initForm(): void {
     this.itemForm = this.fb.group({
+      id: [null],
       estimation_id: [this.estimationId],
-      estimation_item_description: ['', Validators.required],
-      estimation_item_id: [null], // Store selected item ID
+      estimation_item_type: [''],
       estimation_item_type_id: [null],
+      estimation_item_type_symbol: [''],
       spare_part_type: [''],
+      estimation_item_description: ['', Validators.required],
       estimation_item_state: ['Accepted'],
-      quantity: [1, [Validators.required, Validators.min(1)]],
+      salvage_state: ['pending_collection'],
+      estimation_item: [''],
+      estimation_item_id: [null],
       estimation_unit_amount: [0, [Validators.required, Validators.min(0)]],
+      adjustment_unit_amount: [0],
+      estimation_amount: [0],
+      adjustment_amount: [0],
+      taxed_adjustment_amount: [0],
+      taxed_estimation_amount: [0],
+      difference_amount: [0],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      apply_tax: [false],
+      post_comment: [false],
+      pre_comment: [false],
       depreciation: [0],
+      apply_depreciation_calculations: [false],
+      apply_panorama_calculations: [false],
+      is_excluded: [false],
       special_discount: [0],
-      apply_tax: [false]
+      apply_damage_calculations: [false],
+      apply_airbag_calculations: [false],
+      pre_pics: [[]],
+      post_pics: [[]]
     });
   }
 
@@ -84,7 +104,8 @@ export class AddEstimationItemModalComponent implements OnInit, OnChanges {
         estimation_item_description: selectedItem.name || selectedItem.description,
         estimation_item_id: selectedItem.id,
         estimation_unit_amount: selectedItem.price || selectedItem.unit_price || 0,
-        estimation_item_type_id: selectedItem.estimation_spare_part_type_id || selectedItem.type_id || null
+        estimation_item_type_id: selectedItem.estimation_spare_part_type_id || selectedItem.type_id || null,
+        spare_part_type: selectedItem.code || selectedItem.reference || ''
       });
     }
   }
