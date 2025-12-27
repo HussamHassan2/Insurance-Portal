@@ -180,6 +180,14 @@
                     <line x1="10" x2="10" y1="15" y2="9"></line>
                     <line x1="14" x2="14" y1="15" y2="9"></line>
                 </svg>
+                <svg *ngIf="item.icon === 'file-plus'" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    <path d="M12 18v-6"></path>
+                    <path d="M9 15h6"></path>
+                </svg>
                 <!-- End of Icons -->
             </ng-template>
 
@@ -259,14 +267,19 @@
                         </svg>
 
                         <!-- Floating Submenu for Collapsed State -->
-                        <div *ngIf="isCollapsed"
-                            class="fixed left-20 ml-2 min-w-[200px] bg-slate-900 rounded-xl shadow-xl border border-white/10 transition-all duration-200 z-[9999] overflow-hidden"
-                            [style.top.px]="flyoutTop" [class.opacity-100]="hoveredItem === item"
+                        <div *ngIf="isCollapsed" [ngClass]="{
+                                'fixed min-w-[200px] bg-slate-900 rounded-xl shadow-xl border border-white/10 transition-all duration-200 z-[9999]': true,
+                                'left-20 ml-2': translate.currentLang !== 'ar',
+                                'right-20 mr-2': translate.currentLang === 'ar'
+                            }" [style.top.px]="flyoutTop" [class.opacity-100]="hoveredItem === item"
                             [class.opacity-0]="hoveredItem !== item" [class.pointer-events-auto]="hoveredItem === item"
                             [class.pointer-events-none]="hoveredItem !== item">
                             <!-- Arrow -->
-                            <div
-                                class="absolute right-full top-3 -translate-y-1/2 border-8 border-transparent border-r-slate-900">
+                            <div [ngClass]="{
+                                'absolute top-3 -translate-y-1/2 border-8 border-transparent': true,
+                                'right-full border-r-slate-900': translate.currentLang !== 'ar',
+                                'left-full border-l-slate-900': translate.currentLang === 'ar'
+                            }">
                             </div>
 
                             <!-- Header -->
@@ -276,21 +289,72 @@
 
                             <!-- Items -->
                             <div class="py-2">
-                                <a *ngFor="let child of item.children" [routerLink]="child.path"
-                                    [routerLinkActive]="'active-link'" (click)="onSubmenuItemClick(item, child)"
-                                    class="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-white/10 group/item">
+                                <ng-container *ngFor="let child of item.children">
+                                    <!-- Child without grandchildren -->
+                                    <a *ngIf="!child.children" [routerLink]="child.path"
+                                        [routerLinkActive]="'active-link'" (click)="onSubmenuItemClick(item, child)"
+                                        class="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-white/10 group/item">
 
-                                    <span *ngIf="child.icon"
-                                        class="w-4 h-4 text-blue-300 group-hover/item:text-white transition-colors">
-                                        <ng-container
-                                            *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
-                                    </span>
-                                    <span *ngIf="!child.icon"
-                                        class="w-1.5 h-1.5 rounded-full bg-blue-400 group-hover/item:bg-white"></span>
+                                        <span *ngIf="child.icon"
+                                            class="w-4 h-4 text-blue-300 group-hover/item:text-white transition-colors">
+                                            <ng-container
+                                                *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
+                                        </span>
+                                        <span *ngIf="!child.icon"
+                                            class="w-1.5 h-1.5 rounded-full bg-blue-400 group-hover/item:bg-white"></span>
 
-                                    <span class="text-blue-100 group-hover/item:text-white">{{ child.name | translate
-                                        }}</span>
-                                </a>
+                                        <span class="text-blue-100 group-hover/item:text-white">{{ child.name |
+                                            translate }}</span>
+                                    </a>
+
+                                    <!-- Child with grandchildren -->
+                                    <div *ngIf="child.children" class="relative group/child">
+                                        <div
+                                            class="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-white/10 cursor-pointer">
+                                            <span *ngIf="child.icon"
+                                                class="w-4 h-4 text-blue-300 group-hover/child:text-white transition-colors">
+                                                <ng-container
+                                                    *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
+                                            </span>
+                                            <span *ngIf="!child.icon"
+                                                class="w-1.5 h-1.5 rounded-full bg-blue-400 group-hover/child:bg-white"></span>
+
+                                            <span class="flex-1 text-blue-100 group-hover/child:text-white">{{
+                                                child.name | translate }}</span>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="text-blue-300 transition-colors group-hover/child:text-white"
+                                                [class.rotate-180]="translate.currentLang === 'ar'">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </div>
+
+                                        <!-- Nested Flyout for Grandchildren -->
+                                        <div [ngClass]="{
+                                            'absolute top-0 min-w-[180px] bg-slate-800 rounded-lg shadow-xl border border-white/10 py-2 opacity-0 invisible group-hover/child:opacity-100 group-hover/child:visible transition-all duration-200 z-[10000]': true,
+                                            'left-full ml-1': translate.currentLang !== 'ar',
+                                            'right-full mr-1': translate.currentLang === 'ar'
+                                        }">
+                                            <a *ngFor="let grandchild of child.children" [routerLink]="grandchild.path"
+                                                [routerLinkActive]="'active-link'"
+                                                (click)="onSubmenuItemClick(item, grandchild)"
+                                                class="flex items-center gap-2 px-4 py-2 text-xs transition-colors hover:bg-white/10 group/grandchild">
+                                                <span *ngIf="grandchild.icon"
+                                                    class="w-3.5 h-3.5 text-blue-300 group-hover/grandchild:text-white transition-colors">
+                                                    <ng-container
+                                                        *ngTemplateOutlet="iconTemplate; context: {item: grandchild}"></ng-container>
+                                                </span>
+                                                <span *ngIf="!grandchild.icon"
+                                                    class="w-1 h-1 rounded-full bg-blue-400 group-hover/grandchild:bg-white"></span>
+
+                                                <span class="text-blue-100 group-hover/grandchild:text-white">{{
+                                                    grandchild.name | translate }}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
@@ -298,21 +362,69 @@
                     <!-- Children List -->
                     <div *ngIf="item.expanded && !isCollapsed"
                         class="mt-1 ml-4 pl-3 border-l border-white/10 space-y-1">
-                        <a *ngFor="let child of item.children" [routerLink]="child.path"
-                            [routerLinkActive]="'active-link'"
-                            class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 relative group overflow-hidden opacity-90 hover:opacity-100"
-                            [ngClass]="isActive(child.path) ? 'text-white font-medium bg-white/10' : 'text-blue-300 hover:text-white hover:bg-white/5'">
+                        <ng-container *ngFor="let child of item.children">
+                            <!-- Child without grandchildren -->
+                            <a *ngIf="!child.children" [routerLink]="child.path" [routerLinkActive]="'active-link'"
+                                class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 relative group overflow-hidden opacity-90 hover:opacity-100"
+                                [ngClass]="isActive(child.path) ? 'text-white font-medium bg-white/10' : 'text-blue-300 hover:text-white hover:bg-white/5'">
 
-                            <span *ngIf="child.icon"
-                                class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110">
-                                <ng-container *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
-                            </span>
-                            <span *ngIf="!child.icon" class="w-1.5 h-1.5 rounded-full"
-                                [class.bg-white]="isActive(child.path)"
-                                [class.bg-blue-400]="!isActive(child.path)"></span>
+                                <span *ngIf="child.icon"
+                                    class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110">
+                                    <ng-container
+                                        *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
+                                </span>
+                                <span *ngIf="!child.icon" class="w-1.5 h-1.5 rounded-full"
+                                    [class.bg-white]="isActive(child.path)"
+                                    [class.bg-blue-400]="!isActive(child.path)"></span>
 
-                            <span class="truncate">{{ child.name | translate }}</span>
-                        </a>
+                                <span class="truncate">{{ child.name | translate }}</span>
+                            </a>
+
+                            <!-- Child with grandchildren -->
+                            <div *ngIf="child.children" class="flex flex-col">
+                                <div (click)="toggleSubmenu(child)"
+                                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 relative group overflow-hidden opacity-90 hover:opacity-100 cursor-pointer"
+                                    [ngClass]="child.expanded ? 'text-white bg-white/5' : 'text-blue-300 hover:text-white hover:bg-white/5'">
+
+                                    <span *ngIf="child.icon"
+                                        class="w-4 h-4 shrink-0 transition-transform group-hover:scale-110">
+                                        <ng-container
+                                            *ngTemplateOutlet="iconTemplate; context: {item: child}"></ng-container>
+                                    </span>
+                                    <span *ngIf="!child.icon" class="w-1.5 h-1.5 rounded-full"
+                                        [class.bg-white]="child.expanded" [class.bg-blue-400]="!child.expanded"></span>
+
+                                    <span class="flex-1 truncate">{{ child.name | translate }}</span>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="transition-transform duration-200 text-blue-300"
+                                        [class.rotate-90]="child.expanded">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+
+                                <!-- Grandchildren List -->
+                                <div *ngIf="child.expanded" class="mt-1 ml-4 pl-3 border-l border-white/10 space-y-1">
+                                    <a *ngFor="let grandchild of child.children" [routerLink]="grandchild.path"
+                                        [routerLinkActive]="'active-link'"
+                                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-all duration-200 relative group overflow-hidden opacity-90 hover:opacity-100"
+                                        [ngClass]="isActive(grandchild.path) ? 'text-white font-medium bg-white/10' : 'text-blue-300 hover:text-white hover:bg-white/5'">
+
+                                        <span *ngIf="grandchild.icon"
+                                            class="w-3.5 h-3.5 shrink-0 transition-transform group-hover:scale-110">
+                                            <ng-container
+                                                *ngTemplateOutlet="iconTemplate; context: {item: grandchild}"></ng-container>
+                                        </span>
+                                        <span *ngIf="!grandchild.icon" class="w-1 h-1 rounded-full"
+                                            [class.bg-white]="isActive(grandchild.path)"
+                                            [class.bg-blue-400]="!isActive(grandchild.path)"></span>
+
+                                        <span class="truncate">{{ grandchild.name | translate }}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
 

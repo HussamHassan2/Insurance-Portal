@@ -13,6 +13,9 @@ import { SurveyExclusionsComponent } from './components/survey-exclusions/survey
 import { IssuanceSurveyFormComponent } from './components/issuance-survey-form/issuance-survey-form.component';
 import { ClaimSurveyFormComponent } from './components/claim-survey-form/claim-survey-form.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import { AddEstimationItemModalComponent } from './components/add-estimation-item-modal/add-estimation-item-modal.component';
+
 @NgModule({
     declarations: [
         SurveyorDashboardComponent,
@@ -21,14 +24,16 @@ import { ClaimSurveyFormComponent } from './components/claim-survey-form/claim-s
         SurveyorClaimsComponent,
         SurveyWizardComponent,
         IssuanceSurveyFormComponent,
-        ClaimSurveyFormComponent
+        ClaimSurveyFormComponent,
+        AddEstimationItemModalComponent
     ],
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         SurveyorRoutingModule,
         SharedModule,
-        SurveyExclusionsComponent // Assumption: Standalone, based on previous file content check needed. If not, will move to declarations next.
+        SurveyExclusionsComponent
     ]
 })
 export class SurveyorModule { }

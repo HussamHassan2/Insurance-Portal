@@ -20,16 +20,23 @@ export class OcrEngineService {
 
     private async initializeTesseract() {
         try {
+            console.log('🔄 Initializing Tesseract OCR Worker...');
+
             // Initialize worker
-            // Note: Using 0 arguments to satisfy linter (Expected 0-1 args).
-            // Language and parameters will be loaded manually below.
             this.worker = await createWorker();
+            console.log('✅ Worker created successfully');
 
             // CRITICAL: Load Arabic language with specific settings
+            console.log('🔄 Loading Arabic language data...');
             await this.worker.loadLanguage('ara');
+            console.log('✅ Arabic language loaded');
+
+            console.log('🔄 Initializing Arabic language...');
             await this.worker.initialize('ara');
+            console.log('✅ Arabic language initialized');
 
             // Set Arabic-optimized parameters
+            console.log('🔄 Setting OCR parameters...');
             await this.worker.setParameters({
                 tessedit_pageseg_mode: '6', // Single uniform block - BEST FOR ARABIC
                 tessedit_ocr_engine_mode: '1', // LSTM only
@@ -39,28 +46,39 @@ export class OcrEngineService {
                 user_defined_dpi: '300', // Force high DPI
                 debug_file: '/dev/null'
             });
+            console.log('✅ OCR parameters set');
 
             this.workerReady$.next(true);
-            console.log('OCR Worker Optimized for Arabic Ready');
+            console.log('✅ OCR Worker Optimized for Arabic Ready');
         } catch (error) {
-            console.error('Failed to initialize OCR worker:', error);
+            console.error('❌ Failed to initialize OCR worker:', error);
+            alert('Failed to initialize OCR engine. Please check console for details.');
         }
     }
 
     async recognize(imageData: string): Promise<any> {
+        console.log('🔄 Starting OCR recognition...');
+
         if (!this.worker) {
+            console.log('⚠️ Worker not initialized, initializing now...');
             await this.initializeTesseract();
         }
 
         try {
+            console.log('🔄 Running Tesseract recognition...');
             const result = await this.worker.recognize(imageData);
+            console.log('✅ OCR Recognition complete');
+            console.log('📝 Raw text extracted:', result.data.text);
 
             // Post-process Arabic text
             result.data.text = this.postProcessArabic(result.data.text);
+            console.log('✅ Post-processing complete');
+            console.log('📝 Processed text:', result.data.text);
 
             return result;
         } catch (error) {
-            console.error('OCR Recognition Error:', error);
+            console.error('❌ OCR Recognition Error:', error);
+            alert('OCR recognition failed. Please check console for details.');
             throw error;
         }
     }

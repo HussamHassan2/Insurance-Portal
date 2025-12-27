@@ -29,7 +29,21 @@ export class SurveyWizardComponent implements OnInit {
         'additional': false,
         'conditions': false,
         'deductibles': false,
-        'documents': false
+        'documents': false,
+        'estimation': true
+    };
+
+    // Estimation Data
+    estimationDetails: any = null;
+    estimationItems: any[] = [];
+    estimationItemTypes: any[] = []; // Added
+    loadingEstimation: boolean = false;
+
+    // Collapsible Sections for Estimation Header
+    estimationSections: { [key: string]: boolean } = { // Added
+        'general': true,
+        'financials': false,
+        'adjustments': false
     };
 
     // Keys to exclude from the Additional Details view
@@ -130,6 +144,19 @@ export class SurveyWizardComponent implements OnInit {
         return this.parseListField('opportunity_documents');
     }
 
+    get isIssuanceSurvey(): boolean {
+        return this.survey && (this.survey.survey_type === 'issuance' || this.survey.survey_type === 'Underwriting');
+    }
+
+    get isClaimSurvey(): boolean {
+        // Include 'Before Repair' as a claim survey type
+        return this.survey && (
+            this.survey.survey_type === 'claim' ||
+            this.survey.survey_type === 'Before Repair' ||
+            this.survey.survey_type === 'after_repair'
+        );
+    }
+
     // Form data for step 2
     formData: any = {
         // Common fields
@@ -170,7 +197,12 @@ export class SurveyWizardComponent implements OnInit {
         private claimService: ClaimService
     ) { }
 
+    // Modal State
+    showAddItemModal: boolean = false;
+
     ngOnInit(): void {
+        this.fetchEstimationItemTypes();
+
         if (!this.surveyId) {
             this.route.params.subscribe((params: any) => {
                 if (params['id']) {
@@ -181,6 +213,68 @@ export class SurveyWizardComponent implements OnInit {
         } else {
             this.loadSurveyData();
         }
+    }
+
+    fetchEstimationItemTypes(): void {
+        this.claimService.getEstimationItemTypes().subscribe({
+            next: (response) => {
+                // Ensure we get an array
+                if (Array.isArray(response)) {
+                    this.estimationItemTypes = response;
+                } else if (response && Array.isArray(response.data)) {
+                    this.estimationItemTypes = response.data;
+                } else {
+                    console.warn('Unexpected estimation item types format:', response);
+                    this.estimationItemTypes = [];
+                }
+            },
+            error: (err) => console.error('Error fetching estimation item types:', err)
+        });
+    }
+
+    toggleEstimationSection(section: string): void {
+        this.estimationSections[section] = !this.estimationSections[section];
+    }
+
+    // Modal Handlers
+    openAddItemModal(): void {
+        console.log('openAddItemModal called. Current showAddItemModal:', this.showAddItemModal);
+        this.showAddItemModal = true;
+        console.log('New showAddItemModal:', this.showAddItemModal);
+    }
+
+    closeAddItemModal(): void {
+        this.showAddItemModal = false;
+    }
+
+    onItemAdded(event: { item: any, action: 'new' | 'close' }): void {
+        // Here we would typically save to API. 
+        // Since we are mocking or the user didn't provide a create API (only list),
+        // we'll push to the local array for display.
+        // In real app, we'd call create API then refresh or push.
+
+        // Mock ID and default fields for display
+        const newItem = {
+            ...event.item,
+            id: Math.floor(Math.random() * 1000), // temp ID
+            estimation_amount: (event.item.quantity * event.item.estimation_unit_amount) - (event.item.depreciation || 0),
+            estimation_item_type: this.getEstimationTypeName(event.item.estimation_item_type_id)
+        };
+
+        if (!this.estimationItems) {
+            this.estimationItems = [];
+        }
+        this.estimationItems.push(newItem);
+
+        if (event.action === 'close') {
+            this.closeAddItemModal();
+        }
+    }
+
+    getEstimationTypeName(id: any): string {
+        if (!id || !this.estimationItemTypes || !Array.isArray(this.estimationItemTypes)) return '';
+        const type = this.estimationItemTypes.find(t => t.id == id);
+        return type ? type.name : '';
     }
 
     loadSurveyData(): void {
@@ -204,8 +298,8 @@ export class SurveyWizardComponent implements OnInit {
                     this.stepSubtitles = ['Survey Details', 'Vehicle Exclusions', 'Upload Documents', 'Technical View', 'Review & Submit'];
                 } else if (this.isClaimSurvey) {
                     this.totalSteps = 5;
-                    this.stepTitles = ['Review', 'Damaged Parts', 'Documents', 'Assessment', 'Submit'];
-                    this.stepSubtitles = ['Survey Details', 'Select Parts', 'Upload Documents', 'Technical View', 'Review & Submit'];
+                    this.stepTitles = ['Review', 'Estimation Details', 'Documents', 'Assessment', 'Submit'];
+                    this.stepSubtitles = ['Survey Details', 'Estimation & Items', 'Upload Documents', 'Technical View', 'Review & Submit'];
                 }
 
                 // Fetch additional details if opportunity or claim
@@ -244,6 +338,25 @@ export class SurveyWizardComponent implements OnInit {
                 next: (response) => {
                     this.additionalDetails = response.data || response;
                     this.loadingDetails = false;
+
+                    console.log('Claim details loaded:', this.additionalDetails);
+
+                    // Check for estimation in claim_estimations array
+                    if (this.additionalDetails?.claim_estimations && Array.isArray(this.additionalDetails.claim_estimations) && this.additionalDetails.claim_estimations.length > 0) {
+                        const estimation = this.additionalDetails.claim_estimations[0];
+                        console.log('Found estimation in claim_estimations:', estimation);
+
+                        if (estimation.id) {
+                            console.log('Fetching estimation data for ID:', estimation.id);
+                            this.fetchEstimationData(estimation.id);
+                        }
+                    } else if (this.additionalDetails?.estimation_id) {
+                        // Fallback to estimation_id field if it exists
+                        console.log('Fetching estimation data for ID:', this.additionalDetails.estimation_id);
+                        this.fetchEstimationData(this.additionalDetails.estimation_id);
+                    } else {
+                        console.warn('No estimation found in claim details');
+                    }
                 },
                 error: (err) => {
                     console.error('Error fetching claim details:', err);
@@ -251,6 +364,43 @@ export class SurveyWizardComponent implements OnInit {
                 }
             });
         }
+    }
+
+    fetchEstimationData(estimationId: number): void {
+        // Prevent duplicate calls if already loading or data exists
+        if (this.loadingEstimation || (this.estimationDetails && this.estimationItems.length > 0)) {
+            console.log('Skipping duplicate fetch. Loading:', this.loadingEstimation, 'Data exists:', !!this.estimationDetails);
+            return;
+        }
+
+        this.loadingEstimation = true;
+        console.log('Starting fetchEstimationData for ID:', estimationId);
+
+        // Fetch estimation details (auth handled by AuthInterceptor)
+        this.claimService.getEstimationDetails(estimationId).subscribe({
+            next: (response) => {
+                console.log('Raw estimation details response:', response);
+                this.estimationDetails = response.data || response;
+
+                // If response is the object itself (not wrapped in data)
+                if (!response.data && response.id) {
+                    this.estimationDetails = response;
+                }
+
+                // Populate estimation items from the details response directly
+                if (this.estimationDetails.estimation_lines) {
+                    this.estimationItems = this.estimationDetails.estimation_lines;
+                    console.log('Set estimationItems from details:', this.estimationItems);
+                }
+
+                console.log('Set estimationDetails to:', this.estimationDetails);
+                this.loadingEstimation = false; // Set loading to false here to ensure UI updates even if items fail
+            },
+            error: (err) => {
+                console.error('Error fetching estimation details:', err);
+                this.loadingEstimation = false;
+            }
+        });
     }
 
     toggleSection(section: string): void {
@@ -357,13 +507,7 @@ export class SurveyWizardComponent implements OnInit {
         });
     }
 
-    get isIssuanceSurvey(): boolean {
-        return (this.survey?.survey_type || '').toLowerCase() === 'issuance';
-    }
 
-    get isClaimSurvey(): boolean {
-        return (this.survey?.survey_type || '').toLowerCase() === 'claim';
-    }
 
     get canProceedToNextStep(): boolean {
         if (this.currentStep === 1) {

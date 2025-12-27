@@ -132,7 +132,15 @@ export class DashboardLayoutComponent implements OnInit {
                         icon: 'clipboard-list',
                         children: [
                             { name: 'SIDEBAR.PENDING_SURVEYS', path: '/dashboard/surveyor/pending', icon: 'clock' }, // stored as surveyor status
-                            { name: 'SIDEBAR.IN_PROGRESS', path: '/dashboard/surveyor/in-progress', icon: 'play-circle' }, // In Progress Surveys List
+                            {
+                                name: 'SIDEBAR.IN_PROGRESS',
+                                path: '/dashboard/surveyor/in-progress',
+                                icon: 'play-circle',
+                                children: [
+                                    { name: 'SIDEBAR.ISSUANCE_SURVEYS', path: '/dashboard/surveyor/in-progress/issuance', icon: 'file-plus' },
+                                    { name: 'SIDEBAR.CLAIM_SURVEYS', path: '/dashboard/surveyor/in-progress/claims', icon: 'file-text' }
+                                ]
+                            },
                             { name: 'SIDEBAR.SUSPENDED', path: '/dashboard/surveyor/suspended', icon: 'pause-circle' }
                         ]
                     },

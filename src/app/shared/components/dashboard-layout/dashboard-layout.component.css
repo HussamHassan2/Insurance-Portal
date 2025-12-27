@@ -51,3 +51,15 @@
     --navy-dark: #1B263B;
     --navy-darker: #0D1B2A;
 }
+
+/* Ensure nested flyouts remain visible on hover */
+.group\/child:hover > div[class*="opacity-0"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Keep nested flyout visible when hovering over it */
+.group\/child > div[class*="absolute"]:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+}

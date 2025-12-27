@@ -68,6 +68,7 @@ export class SurveyorPendingComponent implements OnInit {
 
     ngOnInit(): void {
         const path = this.route.snapshot.url[0]?.path;
+        const subPath = this.route.snapshot.url[1]?.path;
 
 
         this.route.queryParams.pipe(debounceTime(50)).subscribe(params => {
@@ -92,6 +93,13 @@ export class SurveyorPendingComponent implements OnInit {
             } else if (path === 'in-progress') {
                 this.statusFilter = 'in_progress';
                 this.boardColumns = [this.ALL_BOARD_COLUMNS.find(c => c.id === 'in_progress')!];
+
+                // Check for submenu paths
+                if (subPath === 'issuance') {
+                    this.currentType = 'issuance';
+                } else if (subPath === 'claims') {
+                    this.currentType = 'claim';
+                }
             } else if (params['status']) {
                 this.statusFilter = params['status'];
                 // Try to find matching column for status, otherwise show all or default
@@ -300,7 +308,15 @@ export class SurveyorPendingComponent implements OnInit {
             statusText = 'Pending'; // Default
         }
 
-        return `${statusText} Surveys`;
+        // Add survey type to title if filtered
+        let typeText = '';
+        if (this.currentType === 'issuance') {
+            typeText = ' Issuance';
+        } else if (this.currentType === 'claim') {
+            typeText = ' Claim';
+        }
+
+        return `${statusText}${typeText} Surveys`;
     }
 
     get description(): string {

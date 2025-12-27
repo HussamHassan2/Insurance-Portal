@@ -89,4 +89,49 @@ export class ClaimService {
     getClaimDocuments(): Observable<any> {
         return this.api.get('/v1/lov/claim-documents');
     }
+
+    /**
+     * Get Estimation Details
+     */
+    getEstimationDetails(estimationId: number): Observable<any> {
+        return this.api.get('/v1/claim/get-estimation-details', {
+            params: { estimation_id: estimationId }
+        });
+    }
+
+    /**
+     * Get Estimation Items
+     */
+    getEstimationItems(estimationId: number): Observable<any> {
+        return this.api.get('/v1/claim/get-estimation-items', {
+            params: { estimation_id: estimationId }
+        });
+    }
+
+    /**
+     * Search Estimation Items - for adding new items to estimation
+     */
+    searchEstimationItems(searchTerm: string): Observable<any> {
+        return this.api.get('/v1/claim/search-estimation-items', {
+            params: { search: searchTerm }
+        });
+    }
+
+    /**
+     * Get Estimation Item Types (Spare Parts Types LOV)
+     */
+    getEstimationItemTypes(): Observable<any> {
+        return this.api.get('/v1/lov/estimation-spare-parts-types');
+    }
+
+    /**
+     * List Estimation Items
+     * @param limit number
+     * @param offset number
+     */
+    listEstimationItems(limit: number = 10, offset: number = 0): Observable<any> {
+        return this.api.get('/v1/claim/list-estimation-items', {
+            params: { limit, offset }
+        });
+    }
 }

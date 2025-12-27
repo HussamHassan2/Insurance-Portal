@@ -45,7 +45,9 @@
         "LOST_REQUESTS": "Lost Requests",
         "SURVEYS": "Surveys",
         "IN_PROGRESS": "In Progress",
-        "SUSPENDED": "Suspended"
+        "SUSPENDED": "Suspended",
+        "ISSUANCE_SURVEYS": "Issuance Surveys",
+        "CLAIM_SURVEYS": "Claim Surveys"
     },
     "BUTTON": {
         "SAVE": "Save",

@@ -45,7 +45,9 @@
         "LOST_REQUESTS": "طلبات مفقودة",
         "SURVEYS": "الاستطلاعات",
         "IN_PROGRESS": "قيد التنفيذ",
-        "SUSPENDED": "معلقة"
+        "SUSPENDED": "معلقة",
+        "ISSUANCE_SURVEYS": "استطلاعات الإصدار",
+        "CLAIM_SURVEYS": "استطلاعات المطالبات"
     },
     "BUTTON": {
         "SAVE": "حفظ",

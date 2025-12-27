@@ -433,17 +433,271 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 
 
     <!-- Step 2: Exclusions / Estimation -->
+    <!-- Step 2: Exclusions / Estimation Details -->
     <div *ngIf="currentStep === 2" class="space-y-6 animate-fadeIn">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            {{ isIssuanceSurvey ? 'Vehicle Exclusions' : 'Select Damaged Parts' }}
+            {{ isIssuanceSurvey ? 'Vehicle Exclusions' : 'Estimation Details' }}
         </h2>
-        <!-- Exclusions / Estimation Component -->
-        <app-survey-exclusions [type]="isIssuanceSurvey ? 'issuance' : 'claim'"
+
+        <!-- Issuance: Show Exclusions Component -->
+        <app-survey-exclusions *ngIf="isIssuanceSurvey" [type]="'issuance'"
             (exclusionsChanged)="onExclusionsChanged($event)"></app-survey-exclusions>
+
+        <!-- Claim: Show Estimation Details -->
+        <div *ngIf="isClaimSurvey">
+            <app-loading-spinner *ngIf="loadingEstimation" message="Loading estimation..."></app-loading-spinner>
+
+            <div *ngIf="!loadingEstimation && estimationDetails">
+
+                <!-- Collapsible Header Sections -->
+                <div class="space-y-4 mb-6">
+
+                    <!-- General Info Section -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div (click)="toggleEstimationSection('general')"
+                            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 cursor-pointer">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">General Information</h4>
+                            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="estimationSections['general']"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div *ngIf="estimationSections['general']"
+                            class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="text-xs text-gray-500">Estimation Number</label>
+                                <p class="font-medium font-mono">{{ estimationDetails.estimation_number || 'N/A' }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Estimation Date</label>
+                                <p class="font-medium">{{ estimationDetails.estimation_date | date:'mediumDate' }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">State</label>
+                                <p class="font-medium capitalize text-blue-600">{{ estimationDetails.estimation_state }}
+                                </p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Claim ID</label>
+                                <p class="font-medium">{{ estimationDetails.claim_id }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Work Order</label>
+                                <p class="font-medium">{{ estimationDetails.work_order_number || 'N/A' }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Current Version</label>
+                                <p class="font-medium">{{ estimationDetails.current_version ? 'Yes' : 'No' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financials Section -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div (click)="toggleEstimationSection('financials')"
+                            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 cursor-pointer">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Financial Details</h4>
+                            <svg class="w-4 h-4 transition-transform"
+                                [class.rotate-180]="estimationSections['financials']" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div *ngIf="estimationSections['financials']"
+                            class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div><label class="text-xs text-gray-500">Total Estimation</label>
+                                <p class="font-bold text-gray-900 dark:text-white">{{ estimationDetails.total_estimation
+                                    | currency }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Total Taxed</label>
+                                <p class="font-bold">{{ estimationDetails.total_estimation_taxed | currency }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Spare Parts</label>
+                                <p class="font-medium">{{ estimationDetails.total_spare_parts | currency }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Labor</label>
+                                <p class="font-medium">{{ estimationDetails.total_labor | currency }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adjustments Section -->
+                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div (click)="toggleEstimationSection('adjustments')"
+                            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 cursor-pointer">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Adjustments & Differences
+                            </h4>
+                            <svg class="w-4 h-4 transition-transform"
+                                [class.rotate-180]="estimationSections['adjustments']" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div *ngIf="estimationSections['adjustments']"
+                            class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label class="text-xs text-gray-500">Total Adjustment</label>
+                                <p class="font-medium">{{ estimationDetails.total_adjustment | currency }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Total Diff</label>
+                                <p class="font-medium" [class.text-red-500]="estimationDetails.total_difference < 0"
+                                    [class.text-green-500]="estimationDetails.total_difference > 0">{{
+                                    estimationDetails.total_difference | currency }}</p>
+                            </div>
+                            <div><label class="text-xs text-gray-500">Diff Taxed</label>
+                                <p class="font-medium">{{ estimationDetails.total_difference_taxed | currency }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Estimation Items Table -->
+                <div *ngIf="estimationItems && estimationItems.length > 0" class="mt-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-900 dark:text-white flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="mr-2">
+                                <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                                <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9" />
+                                <path d="M12 3v6" />
+                            </svg>
+                            Estimation Items ({{ estimationItems.length }})
+                        </h4>
+                        <button type="button" (click)="openAddItemModal()"
+                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add Estimation Item
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-800">
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        #</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Description</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Type</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Reference</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        State</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Qty</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Unit Price</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Deprec.</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                                        Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tr *ngFor="let item of estimationItems; let i = index"
+                                    class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                    <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ i + 1 }}</td>
+
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ item.estimation_item_description || item.part_name || item.name || 'N/A' }}
+                                        <div class="text-xs text-gray-500 font-normal mt-0.5"
+                                            *ngIf="item.estimation_item">{{ item.estimation_item }}</div>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
+                                        <span *ngIf="estimationItemTypes.length === 0"
+                                            class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                            {{ item.estimation_item_type || item.repair_type || 'N/A' }}
+                                        </span>
+                                        <select *ngIf="estimationItemTypes.length > 0" disabled
+                                            class="block w-full text-xs border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600">
+                                            <option [value]="null">Select Type</option>
+                                            <option *ngFor="let type of estimationItemTypes" [value]="type.id"
+                                                [selected]="type.id === item.estimation_item_type_id">
+                                                {{ type.name || type }}
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                        {{ item.spare_part_type || 'N/A' }}
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm">
+                                        <span class="px-2 py-1 rounded text-xs font-medium"
+                                            [class.bg-green-100]="item.estimation_item_state === 'Accepted'"
+                                            [class.text-green-800]="item.estimation_item_state === 'Accepted'"
+                                            [class.bg-red-100]="item.estimation_item_state === 'Rejected'"
+                                            [class.text-red-800]="item.estimation_item_state === 'Rejected'"
+                                            [class.bg-yellow-100]="!item.estimation_item_state"
+                                            [class.text-yellow-800]="!item.estimation_item_state">
+                                            {{ item.estimation_item_state || 'Accepted' }}
+                                        </span>
+                                    </td>
+
+                                    <td class="px-4 py-3 text-sm text-right text-gray-700 dark:text-gray-300">{{
+                                        item.quantity || 1 }}</td>
+
+                                    <td class="px-4 py-3 text-sm text-right text-gray-700 dark:text-gray-300">{{
+                                        item.estimation_unit_amount || item.unit_price || 0 | currency }}</td>
+
+                                    <td class="px-4 py-3 text-sm text-right text-gray-500 dark:text-gray-400">{{
+                                        item.depreciation || 0 | currency }}</td>
+
+                                    <td
+                                        class="px-4 py-3 text-sm text-right font-semibold text-gray-900 dark:text-white">
+                                        {{ (item.estimation_amount || item.total || 0) | currency }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-gray-50 dark:bg-gray-800">
+                                <tr>
+                                    <td colspan="8"
+                                        class="px-4 py-3 text-sm font-semibold text-right text-gray-900 dark:text-white">
+                                        Grand Total:</td>
+                                    <td class="px-4 py-3 text-sm font-bold text-right text-primary">{{
+                                        estimationDetails.total_estimation || estimationDetails.total_amount || 0 |
+                                        currency }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="(!estimationItems || estimationItems.length === 0)" class="text-center text-gray-500 py-4">
+                    <p class="mb-3">No estimation items available.</p>
+                    <button type="button" (click)="openAddItemModal()"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add First Item
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div *ngIf="!loadingEstimation && !estimationDetails" class="text-center text-gray-500 py-4">
+                No estimation details available.
+            </div>
+        </div>
     </div>
 
 
@@ -674,3 +928,8 @@
 <div *ngIf="loading" class="flex items-center justify-center h-96">
     <app-loading-spinner [loading]="true" message="Loading survey..."></app-loading-spinner>
 </div>
+
+<!-- Add Estimation Item Modal (Root Level) -->
+<app-add-estimation-item-modal [visible]="showAddItemModal" [estimationId]="estimationDetails?.id"
+    (close)="closeAddItemModal()" (itemAdded)="onItemAdded($event)">
+</app-add-estimation-item-modal>
