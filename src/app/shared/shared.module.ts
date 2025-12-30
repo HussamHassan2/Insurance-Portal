@@ -10,7 +10,7 @@ import {
     ArrowRight, ArrowLeft, Trash2, Edit, Eye, EyeOff, X, UploadCloud, File, RefreshCw,
     Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
     ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle,
-    Heart, Plane, Anchor
+    Heart, Plane, Anchor, Facebook, Twitter, Instagram
 } from 'lucide-angular';
 
 // Components
@@ -97,7 +97,7 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
             ArrowRight, ArrowLeft, Trash2, Edit, Eye, EyeOff, X, UploadCloud, File, RefreshCw,
             Home, Settings, LogOut, Menu, Bell, AlertTriangle, Paperclip, Building, Loader2,
             ChevronsLeft, ChevronsRight, ChevronDown, Send, MessageCircle, Info, Columns, Lock, Rocket, ShieldCheck, XCircle,
-            Heart, Plane, Anchor
+            Heart, Plane, Anchor, Facebook, Twitter, Instagram
         }),
         CarDamageSelectorComponent,
         ChatBoxModule

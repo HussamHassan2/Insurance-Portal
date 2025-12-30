@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
     clientId: 'orient',
-    apiUrl: '/api',
+    apiUrl: 'http://10.245.3.225/api',
 };
