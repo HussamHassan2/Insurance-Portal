@@ -383,10 +383,11 @@ export class CustomerQuoteFlowComponent implements OnInit, AfterViewChecked {
             const user = this.authService.currentUserValue;
 
             // Helper function to format codes with prefix
+            // Helper function to format codes with prefix
             const formatWithPrefix = (code: string, prefix: string): string => {
                 if (!code) return '';
-                if (code.includes('/')) return code;
-                return `${prefix}/${code.padStart(4, '0')}`;
+                if (String(code).includes('/')) return code;
+                return `${prefix}/${String(code).padStart(4, '0')}`;
             };
 
             // Get resolved year value

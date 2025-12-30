@@ -4,6 +4,7 @@ import { EndorsementService, EndorsementType, EndorsementReason } from '../../..
 import { PolicyService } from '../../../core/services/policy.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { AppTranslateService } from '../../../core/services/app-translate.service';
+import { environment } from '../../../../environments/environment';
 
 declare var lucide: any;
 
@@ -105,18 +106,24 @@ export class BrokerEndorsementComponent implements OnInit, AfterViewChecked {
         this.error = null;
 
         try {
+            const endorsementData: any = {
+                end_sub_type_code: this.formData.end_sub_type_code,
+                endorsement_reason_id: Number(this.formData.endorsement_reason_id),
+                effective_from_date: this.formData.effective_from_date,
+                remarks: this.formData.remarks || ''
+            };
+
+            // Only send calculation_type if NOT Wataniya
+            if (environment.clientId !== 'wataniya') {
+                endorsementData.calculation_type = 'prorata';
+            }
+
             const payload = {
                 params: {
                     data: {
                         policy_number: this.policyNumber,
                         lead_source: 'Web Portal',
-                        endorsement_data: {
-                            calculation_type: 'prorata',
-                            end_sub_type_code: this.formData.end_sub_type_code,
-                            endorsement_reason_id: Number(this.formData.endorsement_reason_id),
-                            effective_from_date: this.formData.effective_from_date,
-                            remarks: this.formData.remarks || ''
-                        }
+                        endorsement_data: endorsementData
                     }
                 }
             };

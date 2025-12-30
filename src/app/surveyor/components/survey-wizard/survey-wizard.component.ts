@@ -248,38 +248,75 @@ export class SurveyWizardComponent implements OnInit {
     }
 
     onItemAdded(event: { item: any, action: 'new' | 'close' }): void {
-        // Here we would typically save to API. 
-        // Since we are mocking or the user didn't provide a create API (only list),
-        // we'll push to the local array for display.
-        // In real app, we'd call create API then refresh or push.
-
-        // Mock ID and default fields for display
         const newItem = {
             ...event.item,
-            id: Math.floor(Math.random() * 1000), // temp ID
+            // id: Math.floor(Math.random() * 1000), // Remove mock ID
             estimation_amount: (event.item.quantity * event.item.estimation_unit_amount) - (event.item.depreciation || 0),
-            estimation_item_type: this.getEstimationTypeName(event.item.estimation_item_type_id),
-            isNew: true // Mark as new for API distinction
+            estimation_item_type: this.getEstimationTypeName(event.item.estimation_item_type_id)
         };
 
-        if (!this.estimationItems) {
-            this.estimationItems = [];
-        }
-        this.estimationItems.push(newItem);
+        // Prepare payload for API
+        const payload = {
+            survey_id: Number(this.surveyId),
+            estimation_lines: [newItem]
+        };
 
-        // Recalculate total and update formData for validation
-        const total = this.estimationItems.reduce((sum, item) => sum + (item.estimation_amount || 0), 0);
-        this.formData.estimated_repair_cost = total;
+        this.loading = true; // Show global loading or handle local loading state
 
-        // Update details for display
-        if (this.estimationDetails) {
-            this.estimationDetails.total_estimation = total;
-            this.estimationDetails.total_amount = total;
-        }
+        this.surveyorService.createSurveyEstimationLines(payload).subscribe({
+            next: (response) => {
+                this.loading = false;
 
-        if (event.action === 'close') {
-            this.closeAddItemModal();
-        }
+                // Check if response contains JSON-RPC style error (sometimes successful HTTP 200 contains app error)
+                if (response.result && response.result.error) {
+                    this.notificationService.error(response.result.error);
+                    return; // Stop here, do not close modal or add item
+                }
+
+                // If success
+                this.notificationService.success('Item added successfully');
+
+                // Add to local list to update UI immediately
+                if (!this.estimationItems) {
+                    this.estimationItems = [];
+                }
+                // We might want to use the ID returned from backend if available, 
+                // but for now pushing the item with calculated fields is fine for display until refresh
+                this.estimationItems.push({
+                    ...newItem,
+                    isNew: false // It's now saved on backend
+                });
+
+                // Recalculate total
+                const total = this.estimationItems.reduce((sum, item) => sum + (item.estimation_amount || 0), 0);
+                this.formData.estimated_repair_cost = total;
+                if (this.estimationDetails) {
+                    this.estimationDetails.total_estimation = total;
+                    this.estimationDetails.total_amount = total;
+                }
+
+                if (event.action === 'close') {
+                    this.closeAddItemModal();
+                } else {
+                    // If 'Add & New', likely want to reset form in modal. 
+                    // The modal typically handles its own form reset on submit if designed so, 
+                    // or we might need to trigger it. Assuming modal handles it for now.
+                }
+            },
+            error: (err) => {
+                this.loading = false;
+                console.error('Error adding estimation item:', err);
+
+                // Handle JSON-RPC error format if it comes in error object
+                if (err.error && err.error.result && err.error.result.error) {
+                    this.notificationService.error(err.error.result.error);
+                } else if (err.error && err.error.error) {
+                    this.notificationService.error(err.error.error);
+                } else {
+                    this.notificationService.error('Failed to add item. Please try again.');
+                }
+            }
+        });
     }
 
     getEstimationTypeName(id: any): string {
@@ -377,10 +414,10 @@ export class SurveyWizardComponent implements OnInit {
         }
     }
 
-    fetchEstimationData(estimationId: number): void {
-        // Prevent duplicate calls if already loading or data exists
-        if (this.loadingEstimation || (this.estimationDetails && this.estimationItems.length > 0)) {
-            console.log('Skipping duplicate fetch. Loading:', this.loadingEstimation, 'Data exists:', !!this.estimationDetails);
+    fetchEstimationData(estimationId: number, forceRefresh: boolean = false): void {
+        // Prevent duplicate calls if already loading or data exists (unless forced)
+        if (this.loadingEstimation || (!forceRefresh && this.estimationDetails && this.estimationItems.length > 0)) {
+            console.log('Skipping duplicate fetch. Loading:', this.loadingEstimation, 'Data exists:', !!this.estimationDetails, 'Force:', forceRefresh);
             return;
         }
 
@@ -400,7 +437,10 @@ export class SurveyWizardComponent implements OnInit {
 
                 // Populate estimation items from the details response directly
                 if (this.estimationDetails.estimation_lines) {
-                    this.estimationItems = this.estimationDetails.estimation_lines;
+                    // Filter out empty/mock lines (where description and part name are missing)
+                    this.estimationItems = this.estimationDetails.estimation_lines.filter((item: any) =>
+                        item.estimation_item_description || item.part_name
+                    );
                     console.log('Set estimationItems from details:', this.estimationItems);
                 }
 
@@ -432,6 +472,25 @@ export class SurveyWizardComponent implements OnInit {
     nextStep(): void {
         if (this.currentStep < this.totalSteps) {
             this.currentStep++;
+
+            // If entering Step 2 (Estimation Details) for Claim Survey, force refresh estimation data
+            if (this.isClaimSurvey && this.currentStep === 2) {
+                // Determine estimation ID from details or additional details
+                let estId = this.estimationDetails?.id;
+
+                if (!estId && this.additionalDetails) {
+                    if (this.additionalDetails.claim_estimations && this.additionalDetails.claim_estimations.length > 0) {
+                        estId = this.additionalDetails.claim_estimations[0].id;
+                    } else if (this.additionalDetails.estimation_id) {
+                        estId = this.additionalDetails.estimation_id;
+                    }
+                }
+
+                if (estId) {
+                    console.log('Forcing refresh of estimation data for ID:', estId);
+                    this.fetchEstimationData(estId, true); // Force refresh
+                }
+            }
         }
     }
 
@@ -447,8 +506,13 @@ export class SurveyWizardComponent implements OnInit {
         }
     }
 
-    onFilesSelected(files: File[]): void {
-        this.formData.photos = files;
+    onFilesSelected(eventOrFiles: any): void {
+        if (eventOrFiles instanceof Event || (eventOrFiles.target && eventOrFiles.target.files)) {
+            const files = Array.from((eventOrFiles.target as HTMLInputElement).files || []) as File[];
+            this.formData.photos = files;
+        } else if (Array.isArray(eventOrFiles)) {
+            this.formData.photos = eventOrFiles;
+        }
     }
 
     onExclusionsChanged(exclusions: any[]): void {
@@ -514,17 +578,41 @@ export class SurveyWizardComponent implements OnInit {
                 }
             }
 
-            // Update documents if photos are provided
-            if (this.formData.photos.length > 0) {
-                const photoPromises = this.formData.photos.map((file: File) => this.convertFileToBase64(file));
-                const base64Photos = await Promise.all(photoPromises);
+            // Update documents if photos OR survey documents are provided
+            const allFilesToUpload = [];
 
+            // 1. Process Photos (Step 4 - even if hidden, might have data)
+            if (this.formData.photos.length > 0) {
+                for (const file of this.formData.photos) {
+                    const base64 = await this.convertFileToBase64(file);
+                    allFilesToUpload.push({
+                        name: file.name,
+                        data: base64,
+                        type: 'photo' // flag for backend if needed, or just send flat
+                    });
+                }
+            }
+
+            // 2. Process Survey Documents (Step 3)
+            if (this.formData.survey_documents && this.formData.survey_documents.length > 0) {
+                for (const doc of this.formData.survey_documents) {
+                    if (doc.files && doc.files.length > 0) {
+                        for (const file of doc.files) {
+                            const base64 = await this.convertFileToBase64(file);
+                            allFilesToUpload.push({
+                                name: file.name,
+                                data: base64,
+                                document_id: doc.document_id // Pass document type ID if relevant
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (allFilesToUpload.length > 0) {
                 const docsData: any = {
                     survey_id: this.surveyId,
-                    photos: base64Photos.map((data, index) => ({
-                        name: this.formData.photos[index].name,
-                        data: data
-                    }))
+                    photos: allFilesToUpload // Using 'photos' key as per service, assuming it handles generic files too
                 };
 
                 await this.surveyorService.updateSurveyDocuments(docsData).toPromise();

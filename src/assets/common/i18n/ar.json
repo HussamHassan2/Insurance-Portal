@@ -49,6 +49,37 @@
         "ISSUANCE_SURVEYS": "استطلاعات الإصدار",
         "CLAIM_SURVEYS": "استطلاعات المطالبات"
     },
+    "ANALYTICS": {
+        "TITLE": "لوحة التحليلات",
+        "SUBTITLE": "رؤى أعمال شاملة",
+        "REFRESH": "تحديث",
+        "EXPORT": "تصدير",
+        "FILTERS": {
+            "LAST_7_DAYS": "آخر 7 أيام",
+            "LAST_30_DAYS": "آخر 30 يوم",
+            "LAST_90_DAYS": "آخر 90 يوم",
+            "LAST_YEAR": "العام الماضي"
+        },
+        "KPI": {
+            "TOTAL_POLICIES": "إجمالي الوثائق",
+            "NET_PREMIUM": "صافي القسط",
+            "GROSS_PREMIUM": "الإجمالي",
+            "ACTIVE_CLAIMS": "المطالبات النشطة",
+            "CLAIMS_PERCENTAGE": "من الوثائق",
+            "OPEN_OPPS": "الفرص المفتوحة",
+            "CONVERSION_RATE": "تحويل",
+            "PENDING_QUOTES": "عروض معلقة",
+            "RENEWALS_30D": "تجديد (30 يوم)"
+        },
+        "CHARTS": {
+            "OPPS_BY_STAGE": "الفرص حسب المرحلة",
+            "TOP_SALES_PERSONS": "أفضل موظفي المبيعات",
+            "QUOTE_STATUS": "حالة العروض",
+            "PREMIUM_BY_PRODUCT": "القسط حسب المنتج",
+            "CLAIMS_BY_STATUS": "المطالبات حسب الحالة",
+            "CLAIMS_BY_LOB": "المطالبات حسب خط العمل"
+        }
+    },
     "BUTTON": {
         "SAVE": "حفظ",
         "CANCEL": "إلغاء",

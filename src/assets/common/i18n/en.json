@@ -49,6 +49,37 @@
         "ISSUANCE_SURVEYS": "Issuance Surveys",
         "CLAIM_SURVEYS": "Claim Surveys"
     },
+    "ANALYTICS": {
+        "TITLE": "Analytics Dashboard",
+        "SUBTITLE": "Comprehensive business insights",
+        "REFRESH": "Refresh",
+        "EXPORT": "Export",
+        "FILTERS": {
+            "LAST_7_DAYS": "Last 7 days",
+            "LAST_30_DAYS": "Last 30 days",
+            "LAST_90_DAYS": "Last 90 days",
+            "LAST_YEAR": "Last year"
+        },
+        "KPI": {
+            "TOTAL_POLICIES": "Total Policies",
+            "NET_PREMIUM": "Net Premium",
+            "GROSS_PREMIUM": "Gross",
+            "ACTIVE_CLAIMS": "Active Claims",
+            "CLAIMS_PERCENTAGE": "of policies",
+            "OPEN_OPPS": "Open Opps",
+            "CONVERSION_RATE": "conversion",
+            "PENDING_QUOTES": "Pending Quotes",
+            "RENEWALS_30D": "Renewals (30d)"
+        },
+        "CHARTS": {
+            "OPPS_BY_STAGE": "Opportunities by Stage",
+            "TOP_SALES_PERSONS": "Top Sales Persons",
+            "QUOTE_STATUS": "Quotation Status",
+            "PREMIUM_BY_PRODUCT": "Premium by Product",
+            "CLAIMS_BY_STATUS": "Claims by Status",
+            "CLAIMS_BY_LOB": "Claims by LOB"
+        }
+    },
     "BUTTON": {
         "SAVE": "Save",
         "CANCEL": "Cancel",
@@ -227,37 +258,7 @@
             "BACK_TO_POLICIES": "Back to Policies",
             "LOADING": "Loading policy details..."
         },
-        "ANALYTICS": {
-            "TITLE": "Analytics Dashboard",
-            "SUBTITLE": "Comprehensive business insights",
-            "REFRESH": "Refresh",
-            "EXPORT": "Export",
-            "FILTERS": {
-                "LAST_7_DAYS": "Last 7 days",
-                "LAST_30_DAYS": "Last 30 days",
-                "LAST_90_DAYS": "Last 90 days",
-                "LAST_YEAR": "Last year"
-            },
-            "KPI": {
-                "TOTAL_POLICIES": "Total Policies",
-                "NET_PREMIUM": "Net Premium",
-                "GROSS_PREMIUM": "Gross",
-                "ACTIVE_CLAIMS": "Active Claims",
-                "CLAIMS_PERCENTAGE": "of policies",
-                "OPEN_OPPS": "Open Opps",
-                "CONVERSION_RATE": "conversion",
-                "PENDING_QUOTES": "Pending Quotes",
-                "RENEWALS_30D": "Renewals (30d)"
-            },
-            "CHARTS": {
-                "OPPS_BY_STAGE": "Opportunities by Stage",
-                "TOP_SALES_PERSONS": "Top Sales Persons",
-                "QUOTE_STATUS": "Quotation Status",
-                "PREMIUM_BY_PRODUCT": "Premium by Product",
-                "CLAIMS_BY_STATUS": "Claims by Status",
-                "CLAIMS_BY_LOB": "Claims by LOB"
-            }
-        },
+
         "QUOTATION": {
             "BREADCRUMB": "Quotations",
             "EDIT_QUOTE": "Edit Quote",
