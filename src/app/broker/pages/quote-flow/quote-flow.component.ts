@@ -103,6 +103,8 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
     issuanceSuccess = false;
     issuanceResponseData: any = null;
 
+    isEditMode = false;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -118,6 +120,7 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
         this.route.queryParams.subscribe(async params => {
             const quotationId = params['quotationId'];
             const isEdit = params['edit'] === 'true';
+            this.isEditMode = isEdit;
 
             // Always load LOV data first
             await this.loadLOVData();
@@ -544,6 +547,16 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
         this.error = null;
 
         try {
+            if (this.isEditMode) {
+                console.log('Edit mode: Skipping new quotation request');
+                if (this.proposals.length === 0) {
+                    this.notificationService.warning('No proposals found for this quotation.');
+                }
+                this.currentStep++;
+                this.loading = false;
+                return;
+            }
+
             const user = this.authService.currentUserValue;
 
             // Format codes with prefixes
@@ -794,8 +807,9 @@ export class QuoteFlowComponent implements OnInit, AfterViewChecked {
             this.issuanceResponseData = {
                 policy_id: policyId,
                 policy_number: response?.result?.policy_number || response?.data?.policy_number || 'Pending',
-                policy_state: response?.result?.state || response?.data?.state || 'Active',
-                opportunity_number: response?.result?.opportunity_number || response?.data?.opportunity_number
+                policy_state: response?.result?.policy_state || response?.data?.policy_state || response?.result?.state || response?.data?.state || 'Active',
+                opportunity_number: response?.result?.opportunity_number || response?.data?.opportunity_number,
+                won_proposal: response?.result?.won_proposal || response?.data?.won_proposal || this.selectedProposal?.proposal_reference || 'N/A'
             };
 
             this.loading = false;

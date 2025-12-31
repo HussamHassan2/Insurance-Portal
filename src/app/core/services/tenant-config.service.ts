@@ -25,7 +25,7 @@ export class TenantConfigService {
     constructor(private http: HttpClient) { }
 
     loadConfig(): Observable<TenantConfig> {
-        const url = `${environment.apiUrl}/api/tenants/${environment.clientId}`;
+        const url = `${environment.apiUrl}/tenants/${environment.clientId}`;
 
         return this.http.get<TenantConfig>(url).pipe(
             tap(config => {

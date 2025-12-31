@@ -32,6 +32,13 @@ export class BrokerQuotationDetailsComponent implements OnInit {
     selectedFile: File | null = null;
     sendingMessage: boolean = false;
 
+    // Mark as Lost state
+    isLostModalOpen = false;
+    lostReasons: any[] = [];
+    selectedLostReason: any = null;
+    lostFeedback: string = '';
+    lostLoading = false;
+
     // Collapse states
     isPolicyConditionsCollapsed: boolean = true;
     isRequiredDocumentsCollapsed: boolean = true;
@@ -142,6 +149,80 @@ export class BrokerQuotationDetailsComponent implements OnInit {
 
     isStageNew(): boolean {
         return this.displayData?.header?.stage?.toLowerCase() === 'new';
+    }
+
+    isStageLostAllowed(): boolean {
+        const stage = this.displayData?.header?.stage?.toLowerCase();
+        return stage !== 'won' && stage !== 'approved';
+    }
+
+    async loadLostReasons(): Promise<void> {
+        try {
+            const res = await this.crmService.getLostReasons().toPromise();
+            const raw = res?.result?.data || res?.data || res;
+
+            // Map list similar to quote flow
+            if (Array.isArray(raw)) {
+                this.lostReasons = raw;
+            } else if (raw && typeof raw === 'object') {
+                if (raw.items && Array.isArray(raw.items)) this.lostReasons = raw.items;
+                else if (raw.data && Array.isArray(raw.data)) this.lostReasons = raw.data;
+                else {
+                    const key = Object.keys(raw).find(k => Array.isArray(raw[k]));
+                    if (key) this.lostReasons = raw[key];
+                    else this.lostReasons = [];
+                }
+            } else {
+                this.lostReasons = [];
+            }
+
+            // Normalize structure
+            this.lostReasons = this.lostReasons.map(item => ({
+                id: item.id,
+                name: item.item || item.name || item.value || item.display || item.label
+            }));
+
+        } catch (err) {
+            console.error('Failed to load lost reasons', err);
+            this.notificationService.error('Failed to load lost reasons');
+        }
+    }
+
+    openLostModal(): void {
+        this.isLostModalOpen = true;
+        if (this.lostReasons.length === 0) {
+            this.loadLostReasons();
+        }
+    }
+
+    closeLostModal(): void {
+        this.isLostModalOpen = false;
+        this.selectedLostReason = null;
+        this.lostFeedback = '';
+    }
+
+    async submitMarkAsLost(): Promise<void> {
+        if (!this.quotationId || !this.selectedLostReason) return;
+
+        this.lostLoading = true;
+        try {
+            await this.crmService.markLost(
+                Number(this.quotationId),
+                this.selectedLostReason,
+                this.lostFeedback
+            ).toPromise();
+
+            this.closeLostModal();
+            this.notificationService.success('Quotation marked as lost successfully');
+
+            // Reload quotation to update status
+            this.loadQuotation();
+        } catch (err) {
+            console.error('Failed to mark as lost', err);
+            this.notificationService.error('Failed to mark as lost. Please try again.');
+        } finally {
+            this.lostLoading = false;
+        }
     }
 
     editQuotation(): void {
