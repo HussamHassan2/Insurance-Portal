@@ -46,8 +46,10 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit(): void {
         this.authService.currentUser.subscribe(user => {
+            const previousId = this.user?.id;
             this.user = user;
-            if (user) {
+            // Only load profile if user exists and ID has changed (or first load)
+            if (user && user.id !== previousId) {
                 this.loadProfile();
             }
         });
@@ -60,6 +62,18 @@ export class ProfileComponent implements OnInit {
             next: (response) => {
                 // Extract customer_info from the response
                 const customerInfo = response.data?.customer_info || response.customer_info || response.data?.result?.data || response.data?.result || response.data || {};
+
+                // Update Auth User Image if available and different
+                let profileImage = customerInfo.customer_image || customerInfo.image;
+
+                // Clean Python bytes string representation if present
+                if (typeof profileImage === 'string' && profileImage.startsWith("b'") && profileImage.endsWith("'")) {
+                    profileImage = profileImage.substring(2, profileImage.length - 1);
+                }
+
+                if (profileImage && this.user?.image !== profileImage) {
+                    this.authService.updateCurrentUser({ image: profileImage });
+                }
 
                 this.formData = {
                     name_ar: customerInfo.customer_name_ar || customerInfo.name_ar || '',

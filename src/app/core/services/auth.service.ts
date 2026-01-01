@@ -33,6 +33,8 @@ export interface LoginResponse {
   };
 }
 
+import { CustomerService } from './customer.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,7 +44,7 @@ export class AuthService {
   private loadingSubject: BehaviorSubject<boolean>;
   public loading: Observable<boolean>;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private customerService: CustomerService) {
     const storedUser = localStorage.getItem('currentUser');
     this.currentUserSubject = new BehaviorSubject<User | null>(
       storedUser ? JSON.parse(storedUser) : null
@@ -51,6 +53,33 @@ export class AuthService {
 
     this.loadingSubject = new BehaviorSubject<boolean>(false);
     this.loading = this.loadingSubject.asObservable();
+  }
+
+  private imageFetchAttempted = false;
+
+  ensureCustomerImage(): void {
+    const user = this.currentUserSubject.value;
+    if (!user || user.role !== 'customer' || user.image || this.imageFetchAttempted) {
+      return;
+    }
+
+    this.imageFetchAttempted = true;
+    this.customerService.getCustomerInfo(user.id).subscribe({
+      next: (response) => {
+        const customerInfo = response.data?.customer_info || response.customer_info || response.data?.result?.data || response.data?.result || response.data || {};
+        let image = customerInfo.customer_image || customerInfo.image;
+
+        // Clean Python bytes string representation if present
+        if (typeof image === 'string' && image.startsWith("b'") && image.endsWith("'")) {
+          image = image.substring(2, image.length - 1);
+        }
+
+        if (image && typeof image === 'string' && image !== 'false') {
+          this.updateCurrentUser({ image });
+        }
+      },
+      error: (err) => console.error('Failed to fetch customer image', err)
+    });
   }
 
   public get currentUserValue(): User | null {
@@ -230,5 +259,17 @@ export class AuthService {
    */
   isAuthenticated(): boolean {
     return !!this.getToken();
+  }
+
+  /**
+   * Update Current User - Allows partial updates to the current user state
+   */
+  updateCurrentUser(userUpdates: Partial<User>): void {
+    const currentUser = this.currentUserSubject.value;
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...userUpdates };
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      this.currentUserSubject.next(updatedUser);
+    }
   }
 }

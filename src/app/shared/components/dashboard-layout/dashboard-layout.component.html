@@ -553,7 +553,21 @@
                 <div class="relative">
                     <button (click)="toggleUserMenu()"
                         class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <img [src]="getUserAvatar()" [alt]="user?.name" class="h-8 w-8 rounded-full bg-primary" />
+                        <ng-container *ngIf="getUserAvatar(); else defaultAvatar">
+                            <img [src]="getUserAvatar()" [alt]="user?.name"
+                                class="h-8 w-8 rounded-full bg-primary object-cover" />
+                        </ng-container>
+                        <ng-template #defaultAvatar>
+                            <div
+                                class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                        </ng-template>
                         <div class="hidden md:block text-left">
                             <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ user?.name }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400 capitalize">{{ user?.role }}</p>

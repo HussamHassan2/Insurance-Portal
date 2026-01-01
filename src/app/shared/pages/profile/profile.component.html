@@ -30,7 +30,11 @@
                             <div class="p-1 bg-white dark:bg-gray-800 rounded-full shadow-lg">
                                 <div
                                     class="h-24 w-24 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-4 border-white dark:border-gray-800 overflow-hidden">
-                                    <i-lucide name="user" class="h-12 w-12 text-gray-400"></i-lucide>
+                                    <img *ngIf="user?.image"
+                                        [src]="user.image.startsWith('data:image') ? user.image : 'data:image/png;base64,' + user.image"
+                                        alt="Profile Picture" class="h-full w-full object-cover">
+                                    <i-lucide *ngIf="!user?.image" name="user"
+                                        class="h-12 w-12 text-gray-400"></i-lucide>
                                 </div>
                             </div>
                         </div>

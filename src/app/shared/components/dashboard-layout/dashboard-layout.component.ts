@@ -15,6 +15,7 @@ interface NavItem {
 }
 
 import { SurveyorService } from '../../../core/services/surveyor.service';
+import { CustomerService } from '../../../core/services/customer.service';
 
 @Component({
     selector: 'app-dashboard-layout',
@@ -36,6 +37,7 @@ export class DashboardLayoutComponent implements OnInit {
         private router: Router,
         public translate: TranslateService,
         private surveyorService: SurveyorService,
+        private customerService: CustomerService,
         private titleService: Title
     ) {
         // Subscribe to route changes
@@ -54,6 +56,10 @@ export class DashboardLayoutComponent implements OnInit {
             this.user = user;
             this.navItems = this.getNavItems();
             console.log('DashboardLayout: Generated navItems:', this.navItems);
+
+            // Fetch customer image if missing
+            this.authService.ensureCustomerImage();
+
             this.checkActiveSubmenu();
         });
         this.currentPath = this.router.url;
@@ -181,6 +187,12 @@ export class DashboardLayoutComponent implements OnInit {
     }
 
     getUserAvatar(): string {
+        if (this.user?.image) {
+            if (this.user.image.startsWith('data:image')) {
+                return this.user.image;
+            }
+            return `data:image/png;base64,${this.user.image}`;
+        }
         return '';
     }
 
