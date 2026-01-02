@@ -6,7 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { OdooLivechatComponent } from './components/odoo-livechat/odoo-livechat.component';
 import { ToastComponent } from './shared/components/toast/toast.component';
+import { SharedModule } from './shared/shared.module';
 
 // Core Services
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -30,7 +32,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        OdooLivechatComponent
     ],
     imports: [
         BrowserModule,
@@ -39,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        SharedModule,
         ToastComponent,
         TranslateModule.forRoot({
             defaultLanguage: 'en',

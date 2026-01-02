@@ -4,5 +4,17 @@
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
+    },
+    "/im_livechat": {
+        "target": "http://165.227.174.138:80",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    },
+    "/web": {
+        "target": "http://165.227.174.138:80",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
     }
 }

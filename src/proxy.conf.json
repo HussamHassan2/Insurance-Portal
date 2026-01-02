@@ -1,6 +1,12 @@
 {
-    "/api": {
-        "target": "http://165.227.174.138:80",
+    "/im_livechat": {
+        "target": "http://165.227.174.138",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    },
+    "/web": {
+        "target": "http://165.227.174.138",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"

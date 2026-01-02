@@ -40,6 +40,7 @@ import { ColumnToggleComponent } from './components/column-toggle/column-toggle.
 import { LanguageSwitcherComponent } from './components/language-switcher/language-switcher.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ChatBoxModule } from './components/chat-box/chat-box.module';
+import { LiveChatComponent } from './components/live-chat/live-chat.component';
 // import { ChatBoxComponent } from './components/chat-box/chat-box.component';
 
 // Pages
@@ -82,6 +83,7 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         DynamicTranslatePipe,
         LanguageSwitcherComponent,
         FooterComponent,
+        LiveChatComponent,
         // ChatBoxComponent
     ],
     imports: [
@@ -138,6 +140,7 @@ import { DynamicTranslatePipe } from './pipes/dynamic-translate.pipe';
         DynamicTranslatePipe,
         LanguageSwitcherComponent,
         ChatBoxModule,
+        LiveChatComponent,
         FooterComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

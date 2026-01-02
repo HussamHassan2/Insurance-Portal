@@ -94,3 +94,8 @@ code {
     direction: rtl;
   }
 }
+
+/* Hide default Odoo livechat button */
+.o_livechat_button {
+  display: none !important;
+}
