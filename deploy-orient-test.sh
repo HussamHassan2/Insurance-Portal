@@ -22,23 +22,22 @@ echo "📦 Installing dependencies..."
 npm install --legacy-peer-deps
 
 echo "🔨 Building project..."
-npx ng build --configuration=orient --optimization=false --base-href http://10.245.3.230:4002/portal/
+npx ng build --configuration=orient --optimization=false --base-href http://10.245.3.230:8080/
 
 echo "📋 Copying .htaccess..."
 sudo cp .htaccess dist/insurance-portal/
 
 echo "🚀 Deploying to web server..."
-# Note: Adjust deployment path based on server configuration
-sudo rm -rf /var/www/html/portal/*
-sudo cp -r dist/insurance-portal/* /var/www/html/portal/
+sudo rm -rf /var/www/insurance-portal/*
+sudo cp -r dist/insurance-portal/* /var/www/insurance-portal/
 
 echo "🔒 Setting permissions..."
-sudo chown -R www-data:www-data /var/www/html/portal
-sudo chmod -R 755 /var/www/html/portal
+sudo chown -R www-data:www-data /var/www/insurance-portal
+sudo chmod -R 755 /var/www/insurance-portal
 
 echo "🔄 Reloading Nginx..."
 sudo systemctl reload nginx
 
 echo "✅ Deployment complete!"
-echo "🌐 Website: http://10.245.3.230:4002/portal/"
+echo "🌐 Website: http://10.245.3.230:8080/"
 echo "=========================================="
