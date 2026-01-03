@@ -29,6 +29,11 @@ export class CommissionsComponent implements OnInit, AfterViewChecked {
     totalRecords: number = 0;
     paymentStatus: 'paid' | 'outstanding' = 'paid';
 
+    // Caching mechanism
+    private cachedData: any[] = [];
+    private loadedPages: Set<number> = new Set();
+    hasActiveFilters: boolean = false;
+
     constructor(
         private appTranslate: AppTranslateService,
         private brokerService: BrokerService,
@@ -39,7 +44,8 @@ export class CommissionsComponent implements OnInit, AfterViewChecked {
     }
 
     ngOnInit(): void {
-        this.loadCommissions();
+        this.loadFirstPage();
+        this.loadAllInBackground();
         this.loadCommissionSummary();
     }
 
@@ -105,51 +111,90 @@ export class CommissionsComponent implements OnInit, AfterViewChecked {
         return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedStatus}</span>`;
     }
 
-    loadCommissions(): void {
+    loadFirstPage(): void {
         this.isLoading = true;
         this.error = null;
 
         const currentUser = this.authService.currentUserValue;
         if (!currentUser || !currentUser.id) {
-            this.error = 'ERROR.USER_NOT_FOUND';
-            this.isLoading = false;
-            this.notificationService.error(this.appTranslate.instant('ERROR.USER_NOT_FOUND'));
+            this.handleUserError();
             return;
         }
 
         const agentId = currentUser.id;
-        const offset = (this.currentPage - 1) * this.pageSize;
 
-        // First, get total count without limit/offset
-        this.brokerService.getCommissions(agentId, this.paymentStatus).subscribe({
+        // Load page 1 immediately
+        this.brokerService.getCommissions(agentId, this.paymentStatus, this.pageSize, 0).subscribe({
             next: (response) => {
                 if (response.result?.data) {
-                    this.totalRecords = response.result.data.length;
+                    const mappedData = this.mapCommissionData(response.result.data);
 
-                    // Now get paginated data
-                    this.brokerService.getCommissions(agentId, this.paymentStatus, this.pageSize, offset).subscribe({
-                        next: (paginatedResponse) => {
-                            if (paginatedResponse.result?.data) {
-                                this.data = this.mapCommissionData(paginatedResponse.result.data);
-                            } else {
-                                this.data = [];
-                            }
-                            this.isLoading = false;
-                        },
-                        error: (error) => {
-                            this.handleError(error);
-                        }
+                    // Populate first page cache
+                    mappedData.forEach((item, index) => {
+                        this.cachedData[index] = item;
                     });
+
+                    this.data = mappedData;
+
+                    // Initial total estimate
+                    if (this.totalRecords === 0) {
+                        this.totalRecords = response.result.total_count || 100;
+                    }
                 } else {
                     this.data = [];
-                    this.totalRecords = 0;
-                    this.isLoading = false;
                 }
+                this.isLoading = false;
             },
             error: (error) => {
                 this.handleError(error);
             }
         });
+    }
+
+    loadAllInBackground(): void {
+        const currentUser = this.authService.currentUserValue;
+        if (!currentUser || !currentUser.id) return;
+
+        const agentId = currentUser.id;
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+
+        const fetchNextBatch = () => {
+            this.brokerService.getCommissions(agentId, this.paymentStatus, batchSize, offset).subscribe({
+                next: (response) => {
+                    const batchData = response.result?.data || [];
+                    const mappedBatch = this.mapCommissionData(batchData);
+
+                    allData = [...allData, ...mappedBatch];
+
+                    // If we received a full batch, assume there's more and fetch next
+                    if (batchData.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        // Finished loading all data
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+
+                        // Refresh view if needed
+                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
+                            this.displayCurrentPage();
+                        }
+                        console.log(`✓ Cached all ${allData.length} commissions recursively.`);
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
+    }
+
+    handleUserError(): void {
+        this.error = 'ERROR.USER_NOT_FOUND';
+        this.isLoading = false;
+        this.notificationService.error(this.appTranslate.instant('ERROR.USER_NOT_FOUND'));
     }
 
     loadCommissionSummary(): void {
@@ -219,6 +264,10 @@ export class CommissionsComponent implements OnInit, AfterViewChecked {
         this.filteredData = filteredData;
     }
 
+    onFilterChange(activeFilters: any): void {
+        this.hasActiveFilters = Object.keys(activeFilters).length > 0;
+    }
+
     handleTableAction(event: { action: string, data: any }): void {
         console.log('Action', event.action, event.data);
         // TODO: Implement view commission details
@@ -229,14 +278,27 @@ export class CommissionsComponent implements OnInit, AfterViewChecked {
         // TODO: Implement export functionality
     }
 
+    displayCurrentPage(): void {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.data = this.cachedData.slice(startIndex, endIndex).filter(p => p !== undefined);
+    }
+
+    getDisplayData(): any[] {
+        if (this.hasActiveFilters) {
+            return this.cachedData.filter(p => p !== undefined);
+        }
+        return this.data;
+    }
+
     onPageChange(page: number): void {
         this.currentPage = page;
-        this.loadCommissions();
+        this.displayCurrentPage();
     }
 
     onPageSizeChange(size: number): void {
         this.pageSize = size;
         this.currentPage = 1;
-        this.loadCommissions();
+        this.displayCurrentPage();
     }
 }

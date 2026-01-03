@@ -258,7 +258,6 @@
             "BACK_TO_POLICIES": "Back to Policies",
             "LOADING": "Loading policy details..."
         },
-
         "QUOTATION": {
             "BREADCRUMB": "Quotations",
             "EDIT_QUOTE": "Edit Quote",
@@ -747,6 +746,8 @@
             "STATS": {
                 "ACTIVE_POLICIES": "Active & Approved Policies",
                 "ACTIVE_POLICIES_TEXT": "policies active",
+                "PAID_POLICIES": "Paid Policies",
+                "NOT_PAID_POLICIES": "Not Paid Policies",
                 "CANCELED_POLICIES": "Canceled Policies",
                 "CANCELLATION_RATE": "cancellation rate",
                 "TOTAL_CLIENTS": "Total Clients",

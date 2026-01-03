@@ -20,11 +20,16 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
     isLoading: boolean = true;
     error: string | null = null;
 
-    // Pagination (server-side)
+    // Pagination
     currentPage: number = 1;
     pageSize: number = 25;
     totalRecords: number = 0;
     paymentStatus: 'paid' | 'outstanding' = 'paid';
+
+    // Caching mechanism
+    // Caching mechanism
+    private cachedData: any[] = [];
+    hasActiveFilters: boolean = false;
 
     constructor(
         private router: Router,
@@ -37,7 +42,16 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
     }
 
     ngOnInit(): void {
-        this.loadPayments();
+        this.loadFirstPage();
+    }
+
+    changePaymentStatus(status: 'paid' | 'outstanding'): void {
+        if (this.paymentStatus !== status) {
+            this.paymentStatus = status;
+            this.currentPage = 1;
+            this.clearCache();
+            this.loadFirstPage();
+        }
     }
 
     ngAfterViewChecked(): void {
@@ -90,7 +104,7 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
         return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${status}</span>`;
     }
 
-    loadPayments(): void {
+    loadFirstPage(): void {
         this.isLoading = true;
         this.error = null;
 
@@ -103,38 +117,88 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
         }
 
         const userId = currentUser.id;
-        const offset = (this.currentPage - 1) * this.pageSize;
 
-        // First, get total count without limit/offset
-        this.brokerService.getPremiums(userId, this.paymentStatus).subscribe({
+        // Load ONLY first page for fast display
+        this.brokerService.getPremiums(userId, this.paymentStatus, this.pageSize, 0).subscribe({
             next: (response) => {
                 if (response.result?.data) {
-                    this.totalRecords = response.result.data.length;
+                    const payments = response.result.data;
+                    const mappedPayments = this.mapPaymentData(payments);
 
-                    // Now get paginated data
-                    this.brokerService.getPremiums(userId, this.paymentStatus, this.pageSize, offset).subscribe({
-                        next: (paginatedResponse) => {
-                            if (paginatedResponse.result?.data) {
-                                this.data = this.mapPaymentData(paginatedResponse.result.data);
-                            } else {
-                                this.data = [];
-                            }
-                            this.isLoading = false;
-                        },
-                        error: (error) => {
-                            this.handleError(error);
-                        }
-                    });
+                    this.cachedData = [...mappedPayments];
+                    this.data = mappedPayments;
+
+                    console.log(`✓ Page 1 loaded. Starting background loading...`);
+                    this.loadAllInBackground();
                 } else {
                     this.data = [];
                     this.totalRecords = 0;
-                    this.isLoading = false;
                 }
+                this.isLoading = false;
             },
             error: (error) => {
                 this.handleError(error);
             }
         });
+    }
+
+    loadAllInBackground(): void {
+        const currentUser = this.authService.currentUserValue;
+        if (!currentUser || !currentUser.id) return;
+
+        const userId = currentUser.id;
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+
+        const fetchNextBatch = () => {
+            this.brokerService.getPremiums(userId, this.paymentStatus, batchSize, offset).subscribe({
+                next: (response) => {
+                    const payments = response.result?.data || [];
+                    const mappedPayments = this.mapPaymentData(payments);
+
+                    allData = [...allData, ...mappedPayments];
+
+                    // total records might be available in response result, or just infer from accumulation
+                    if (response.result?.total_count || response.result?.count) {
+                        this.totalRecords = response.result.total_count || response.result.count;
+                    }
+
+                    if (payments.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+
+                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
+                            this.displayCurrentPage();
+                        }
+                        console.log(`✓ Cached all ${allData.length} payments recursively.`);
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
+    }
+
+    clearCache(): void {
+        this.cachedData = [];
+    }
+
+    displayCurrentPage(): void {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.data = this.cachedData.slice(startIndex, endIndex).filter(p => p !== undefined);
+    }
+
+    getDisplayData(): any[] {
+        if (this.hasActiveFilters) {
+            return this.cachedData.filter(p => p !== undefined);
+        }
+        return this.data;
     }
 
     mapPaymentData(apiData: any[]): any[] {
@@ -175,6 +239,10 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
         this.filteredData = filteredData;
     }
 
+    onFilterChange(activeFilters: any): void {
+        this.hasActiveFilters = Object.keys(activeFilters).length > 0;
+    }
+
     handleTableAction(event: { action: string, data: any }): void {
         console.log('Action', event.action, event.data);
         // TODO: Implement view payment details
@@ -187,12 +255,12 @@ export class CustomerPaymentsComponent implements OnInit, AfterViewChecked {
 
     onPageChange(page: number): void {
         this.currentPage = page;
-        this.loadPayments();
+        this.displayCurrentPage();
     }
 
     onPageSizeChange(size: number): void {
         this.pageSize = size;
         this.currentPage = 1;
-        this.loadPayments();
+        this.displayCurrentPage();
     }
 }

@@ -27,6 +27,12 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
     pageSize: number = 25;
     totalRecords: number = 1000; // Initial estimate, will be updated after fetch
 
+    // Caching mechanism
+    // Caching mechanism
+    private cachedData: any[] = [];
+    private isBackgroundLoading: boolean = false;
+    hasActiveFilters: boolean = false;
+
     currentDomain: string | any[] = [];
     pageTitle: string = 'SIDEBAR.QUOTATIONS';
 
@@ -49,16 +55,15 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
             else if (filterType === 'lost') this.pageTitle = 'SIDEBAR.LOST_REQUESTS';
             else this.pageTitle = 'SIDEBAR.ALL_QUOTATIONS';
 
-            // Reset pagination and reload when route changes (if component is reused)
+            // Reset pagination and cache when route changes
             this.currentPage = 1;
-            this.fetchTotalCount();
-            this.loadQuotations();
+            this.clearCache();
+            this.loadFirstPage();
         });
     }
 
     ngOnInit(): void {
-        // Initial load handled in constructor subscription or here if preferred
-        // We leave it in constructor subscription to catch route changes if re-using component
+        // Initial load handled in constructor subscription
     }
 
     getDomainFromFilterType(type: string): string | any[] {
@@ -74,25 +79,91 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    fetchTotalCount(): void {
+    loadFirstPage(): void {
+        this.isLoading = true;
         const user = this.authService.currentUserValue;
         if (!user) return;
 
+        // Load ONLY first page for fast display
         this.crmService.listOpportunities({
             user_id: user.id,
             user_type: 'broker',
-            limit: 10000,
+            limit: this.pageSize,
             offset: 0,
             domain: this.currentDomain
         }).subscribe({
             next: (response) => {
                 const quotes = Array.isArray(response) ? response : (response.data || []);
-                this.totalRecords = quotes.length;
+
+                // Update totals if provided
+                if (response.total_count || response.count) {
+                    this.totalRecords = response.total_count || response.count;
+                } else {
+                    this.totalRecords = 1000; // Estimate
+                }
+                // Map and cache first page
+                const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
+                this.cachedData = [...mappedQuotes];
+                this.data = mappedQuotes;
+                this.isLoading = false;
+
+                console.log(`✓ Page 1 loaded. Starting background loading...`);
+
+                // Start background loading
+                this.loadAllInBackground();
             },
             error: (err) => {
-                console.error('Error fetching total quotations count', err);
+                console.error('Error loading quotations:', err);
+                this.error = 'BROKER.QUOTATIONS.ERROR_LOADING';
+                this.isLoading = false;
             }
         });
+    }
+
+    loadAllInBackground(): void {
+        const user = this.authService.currentUserValue;
+        if (!user) return;
+
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+
+        const fetchNextBatch = () => {
+            this.crmService.listOpportunities({
+                user_id: user.id,
+                user_type: 'broker',
+                limit: batchSize,
+                offset: offset,
+                domain: this.currentDomain
+            }).subscribe({
+                next: (response) => {
+                    const quotes = Array.isArray(response) ? response : (response.data || []);
+                    const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
+
+                    allData = [...allData, ...mappedQuotes];
+
+                    if (!Array.isArray(response) && (response.total_count || response.count)) {
+                        this.totalRecords = response.total_count || response.count;
+                    }
+
+                    if (quotes.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+
+                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
+                            this.displayCurrentPage();
+                        }
+                        console.log(`✓ Cached all ${allData.length} quotations recursively.`);
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
     }
 
     ngAfterViewChecked(): void {
@@ -227,64 +298,67 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
         return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.type}</span>`;
     }
 
-    loadQuotations(): void {
-        this.isLoading = true;
-        const user = this.authService.currentUserValue;
-        if (!user) return;
 
-        const offset = (this.currentPage - 1) * this.pageSize;
 
-        this.crmService.listOpportunities({
-            user_id: user.id,
-            user_type: 'broker',
-            limit: this.pageSize,
-            offset: offset,
-            domain: this.currentDomain
-        }).subscribe({
-            next: (response) => {
-                // Response is directly an array, not wrapped in data property
-                const quotes = Array.isArray(response) ? response : (response.data || []);
+    private mapQuotation(q: any): any {
+        // Pre-process Stage/Status
+        const rawStage = q.stage_name ? q.stage_name.replace(/^STATUS\./i, '').toLowerCase() : 'draft';
+        const stageDisplay = this.appTranslate.instant(`STATUS.${rawStage.toUpperCase()}`);
 
-                // Total count is fetched separately in fetchTotalCount()
-                // Don't override it here unless API provides total_count
-                if (response.total_count || response.count) {
-                    this.totalRecords = response.total_count || response.count;
-                }
+        // Pre-process Type
+        const rawType = q.opportunity_type ? q.opportunity_type.replace(/^TYPES\./i, '').toLowerCase() : 'new';
+        const typeDisplay = this.appTranslate.instant(`TYPES.${rawType.toUpperCase()}`);
 
-                // Map to match columns using actual API response fields
-                this.data = quotes.map((q: any) => {
-                    // Pre-process Stage/Status
-                    const rawStage = q.stage_name ? q.stage_name.replace(/^STATUS\./i, '').toLowerCase() : 'draft';
-                    const stageDisplay = this.appTranslate.instant(`STATUS.${rawStage.toUpperCase()}`);
+        return {
+            id: q.opportunity_id,
+            quoteNumber: q.opportunity_number || 'N/A',
+            title: q.name ? q.name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
+            date: q.opportunity_date || 'N/A',
+            customerName: q.contact_name ? q.contact_name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
+            stage: stageDisplay,
+            rawStage: rawStage,
+            type: typeDisplay,
+            rawType: rawType
+        };
+    }
 
-                    // Pre-process Type
-                    const rawType = q.opportunity_type ? q.opportunity_type.replace(/^TYPES\./i, '').toLowerCase() : 'new';
-                    const typeDisplay = this.appTranslate.instant(`TYPES.${rawType.toUpperCase()}`);
+    private displayPageFromCache(): void {
+        // Display from cache immediately
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
 
-                    return {
-                        id: q.opportunity_id,
-                        quoteNumber: q.opportunity_number || 'N/A',
-                        title: q.name ? q.name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
-                        date: q.opportunity_date || 'N/A',
-                        customerName: q.contact_name ? q.contact_name.split(' ').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : 'N/A',
-                        stage: stageDisplay,
-                        rawStage: rawStage,
-                        type: typeDisplay,
-                        rawType: rawType
-                    };
-                });
-                this.isLoading = false;
-            },
-            error: (err) => {
-                console.error('Error loading quotations:', err);
-                this.error = 'BROKER.QUOTATIONS.ERROR_LOADING';
-                this.isLoading = false;
-            }
-        });
+        // Filter cached data for current page
+        const pageData = this.cachedData.slice(startIndex, endIndex);
+        this.data = pageData;
+        this.isLoading = false;
+    }
+
+    private clearCache(): void {
+        this.cachedData = [];
+        this.cachedData = [];
+        this.isBackgroundLoading = false;
+        this.isBackgroundLoading = false;
+    }
+
+    displayCurrentPage(): void {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.data = this.cachedData.slice(startIndex, endIndex).filter(q => q !== undefined);
+    }
+
+    getDisplayData(): any[] {
+        if (this.hasActiveFilters) {
+            return this.cachedData.filter(q => q !== undefined);
+        }
+        return this.data;
     }
 
     onFilteredDataChange(filteredData: any[]): void {
         this.filteredData = filteredData;
+    }
+
+    onFilterChange(activeFilters: any): void {
+        this.hasActiveFilters = Object.keys(activeFilters).length > 0;
     }
 
     handleTableAction(event: { action: string, data: any }): void {
@@ -315,12 +389,12 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
 
     onPageChange(page: number): void {
         this.currentPage = page;
-        this.loadQuotations();
+        this.displayCurrentPage();
     }
 
     onPageSizeChange(size: number): void {
         this.pageSize = size;
         this.currentPage = 1;
-        this.loadQuotations();
+        this.displayCurrentPage();
     }
 }

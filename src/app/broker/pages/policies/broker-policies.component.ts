@@ -23,7 +23,12 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
     // Pagination
     currentPage: number = 1;
     pageSize: number = 25;
-    totalRecords: number = 1000; // Initial estimate, will be updated after fetch
+    totalRecords: number = 0;
+
+    // Caching mechanism
+    // Caching mechanism
+    private cachedData: any[] = [];
+    hasActiveFilters: boolean = false;
 
     constructor(
         private policyService: PolicyService,
@@ -35,46 +40,146 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
     }
 
     ngOnInit(): void {
-        this.fetchTotalCount();
-        this.loadPolicies();
+        this.loadFirstPage();
     }
 
-    fetchTotalCount(): void {
+    loadFirstPage(): void {
+        this.isLoading = true;
         const currentUser = this.authService.currentUserValue;
         if (!currentUser) return;
 
-        console.log('=== POLICIES PAGINATION DEBUG ===');
-        console.log('Fetching total count...');
-
+        // Load ONLY first page
         this.policyService.listPolicies({
             user_id: currentUser.id,
             user_type: 'broker',
-            limit: 10000,  // High limit to get all records
+            limit: this.pageSize,
             offset: 0
         }).subscribe({
             next: (response) => {
-                console.log('Full API response:', response);
-                console.log('response.data:', response.data);
-                console.log('response.data?.data:', response.data?.data);
-                console.log('response.data?.result?.data:', response.data?.result?.data);
-
                 const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
-                console.log('Extracted policiesData:', policiesData);
-                console.log('Is array?', Array.isArray(policiesData));
 
-                this.totalRecords = Array.isArray(policiesData) ? policiesData.length : 0;
-                console.log('Total policies fetched:', this.totalRecords);
-                console.log('totalRecords set to:', this.totalRecords);
-                console.log('isLoading:', this.isLoading);
-                console.log('error:', this.error);
-                console.log('Pagination should show:', !this.isLoading && !this.error && this.totalRecords > 0);
-                console.log('===============================');
+                // Update total count
+                if (response.data?.total_count || response.data?.count) {
+                    this.totalRecords = response.data.total_count || response.data.count;
+                } else {
+                    this.totalRecords = 1000;
+                }
+
+                const mappedPolicies = this.mapPolicies(policiesData);
+
+                this.cachedData = [...mappedPolicies];
+                this.data = mappedPolicies;
+                this.isLoading = false;
+
+                console.log(`✓ Page 1 loaded. Starting background loading...`);
+                this.loadAllInBackground();
             },
             error: (err) => {
-                console.error('Error fetching total policies count:', err);
-                console.error('Error details:', JSON.stringify(err, null, 2));
+                console.error('Error loading policies:', err);
+                this.error = 'BROKER.POLICIES.ERROR_LOADING';
+                this.isLoading = false;
             }
         });
+    }
+
+    loadAllInBackground(): void {
+        const currentUser = this.authService.currentUserValue;
+        if (!currentUser) return;
+
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+
+        const fetchNextBatch = () => {
+            this.policyService.listPolicies({
+                user_id: currentUser.id,
+                user_type: 'broker',
+                limit: batchSize,
+                offset: offset
+            }).subscribe({
+                next: (response) => {
+                    const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
+                    const mappedPolicies = this.mapPolicies(policiesData);
+
+                    allData = [...allData, ...mappedPolicies];
+
+                    if (response.data?.total_count || response.data?.count) {
+                        this.totalRecords = response.data.total_count || response.data.count;
+                    }
+
+                    // If full batch, assume more data
+                    if (policiesData.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        // Done
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+
+                        // Refresh if still on page 1 and something weird happened or just to ensure consistency
+                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
+                            this.displayCurrentPage();
+                        }
+
+                        console.log(`✓ Cached all ${allData.length} policies recursively.`);
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
+    }
+
+    mapPolicies(policiesData: any[]): any[] {
+        return policiesData.map((p: any) => {
+            // Pre-process Status
+            const rawStatus = (p.state || 'Draft').replace(/^STATUS\./i, '').toLowerCase();
+            const statusDisplay = this.appTranslate.instant(`STATUS.${rawStatus.toUpperCase()}`);
+
+            // Pre-process Transaction Type
+            const rawTransactionType = (p.transaction_type || 'New').replace(/^TYPES\./i, '').toLowerCase();
+            const typeDisplay = this.appTranslate.instant(`TYPES.${rawTransactionType.toUpperCase()}`);
+
+            return {
+                id: p.id || p.policy_number,
+                policyNumber: p.policy_number || 'Draft',
+                riskImage: p.risk_image,
+                transactionType: typeDisplay,
+                rawTransactionType: rawTransactionType,
+                productName: p.product_name || 'Motor Private Section',
+                customerName: p.customer_name || 'Customer',
+                status: statusDisplay,
+                rawStatus: rawStatus,
+                approveDate: p.approve_date || '-',
+                issueDate: p.issue_date || '-',
+                effectiveFrom: p.effective_from_date || '-',
+                effectiveTo: p.effective_to_date || '-',
+                grossPremium: p.gross_premium || 0,
+                netPremium: p.net_premium || 0,
+                currency: p.currency || 'EGP',
+                paymentStatus: p.payment_status || 'outstanding',
+                issuingBranch: p.issuing_branch || 'Head office'
+            };
+        });
+    }
+
+    private clearCache(): void {
+        this.cachedData = [];
+    }
+
+    displayCurrentPage(): void {
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.data = this.cachedData.slice(startIndex, endIndex).filter(p => p !== undefined);
+        this.isLoading = false;
+    }
+
+    getDisplayData(): any[] {
+        if (this.hasActiveFilters) {
+            return this.cachedData.filter(p => p !== undefined);
+        }
+        return this.data;
     }
 
     setupColumns(): void {
@@ -152,7 +257,6 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
     }
 
     renderStatus(row: any): string {
-        // Use rawStatus for logic, fallback to 'pending'
         const s = row.rawStatus || 'pending';
         let classes = '';
 
@@ -164,12 +268,10 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
             classes = 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
         }
 
-        // Use pre-translated status for display
         return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.status}</span>`;
     }
 
     renderTransactionType(row: any): string {
-        // Use rawTransactionType for logic
         const t = row.rawTransactionType || 'new';
         let classes = 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300';
 
@@ -183,7 +285,6 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
             classes = 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
         }
 
-        // Use pre-translated type for display
         return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${row.transactionType}</span>`;
     }
 
@@ -219,71 +320,12 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    loadPolicies(): void {
-        this.isLoading = true;
-        const currentUser = this.authService.currentUserValue;
-        if (!currentUser) return;
-
-        const offset = (this.currentPage - 1) * this.pageSize;
-
-        this.policyService.listPolicies({
-            user_id: currentUser.id,
-            user_type: 'broker',
-            limit: this.pageSize,
-            offset: offset
-        }).subscribe({
-            next: (response) => {
-                const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
-
-                // Total count is fetched separately in fetchTotalCount()
-                // Don't override it here unless API provides total_count
-                if (response.data?.total_count || response.data?.count) {
-                    this.totalRecords = response.data.total_count || response.data.count;
-                }
-
-                this.data = policiesData.map((p: any) => {
-                    // Pre-process Status
-                    const rawStatus = (p.state || 'Draft').replace(/^STATUS\./i, '').toLowerCase();
-                    const statusDisplay = this.appTranslate.instant(`STATUS.${rawStatus.toUpperCase()}`);
-
-                    // Pre-process Transaction Type
-                    const rawTransactionType = (p.transaction_type || 'New').replace(/^TYPES\./i, '').toLowerCase();
-                    const typeDisplay = this.appTranslate.instant(`TYPES.${rawTransactionType.toUpperCase()}`);
-
-                    return {
-                        id: p.id || p.policy_number,
-                        policyNumber: p.policy_number || 'Draft',
-                        riskImage: p.risk_image,
-                        transactionType: typeDisplay,
-                        rawTransactionType: rawTransactionType,
-                        productName: p.product_name || 'Motor Private Section',
-                        customerName: p.customer_name || 'Customer',
-                        status: statusDisplay,
-                        rawStatus: rawStatus,
-                        approveDate: p.approve_date || '-',
-                        issueDate: p.issue_date || '-',
-                        effectiveFrom: p.effective_from_date || '-',
-                        effectiveTo: p.effective_to_date || '-',
-                        grossPremium: p.gross_premium || 0,
-                        netPremium: p.net_premium || 0,
-                        currency: p.currency || 'EGP',
-                        paymentStatus: p.payment_status || 'outstanding',
-                        issuingBranch: p.issuing_branch || 'Head office'
-                    };
-                });
-
-                this.isLoading = false;
-            },
-            error: (err) => {
-                console.error('Error loading policies:', err);
-                this.error = 'BROKER.POLICIES.ERROR_LOADING';
-                this.isLoading = false;
-            }
-        });
-    }
-
     onFilteredDataChange(filteredData: any[]): void {
         this.filteredData = filteredData;
+    }
+
+    onFilterChange(activeFilters: any): void {
+        this.hasActiveFilters = Object.keys(activeFilters).length > 0;
     }
 
     handleTableAction(event: { action: string, data: any }): void {
@@ -308,12 +350,12 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
 
     onPageChange(page: number): void {
         this.currentPage = page;
-        this.loadPolicies();
+        this.displayCurrentPage();
     }
 
     onPageSizeChange(size: number): void {
         this.pageSize = size;
         this.currentPage = 1;
-        this.loadPolicies();
+        this.displayCurrentPage();
     }
 }

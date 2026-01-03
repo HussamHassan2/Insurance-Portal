@@ -30,6 +30,44 @@
                 </div>
             </app-card>
 
+            <!-- Paid Policies -->
+            <app-card [hover]="true" class="group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">{{ 'BROKER.DASHBOARD.STATS.PAID_POLICIES' |
+                            translate }}</p>
+                        <p class="text-3xl font-bold text-navy mt-2">{{ analytics.paidPolicies }}</p>
+                        <div class="flex items-center mt-2 text-sm font-medium text-teal-600">
+                            <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                            EGP {{ analytics.paidPoliciesAmount | number }}
+                        </div>
+                    </div>
+                    <div
+                        class="p-4 rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="credit-card" class="h-7 w-7 text-white"></i>
+                    </div>
+                </div>
+            </app-card>
+
+            <!-- Not Paid Policies -->
+            <app-card [hover]="true" class="group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">{{ 'BROKER.DASHBOARD.STATS.NOT_PAID_POLICIES' |
+                            translate }}</p>
+                        <p class="text-3xl font-bold text-navy mt-2">{{ analytics.notPaidPolicies }}</p>
+                        <div class="flex items-center mt-2 text-sm font-medium text-orange-600">
+                            <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
+                            EGP {{ analytics.notPaidPoliciesAmount | number }}
+                        </div>
+                    </div>
+                    <div
+                        class="p-4 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="clock" class="h-7 w-7 text-white"></i>
+                    </div>
+                </div>
+            </app-card>
+
             <!-- Canceled Policies -->
             <app-card [hover]="true" class="group">
                 <div class="flex items-center justify-between">

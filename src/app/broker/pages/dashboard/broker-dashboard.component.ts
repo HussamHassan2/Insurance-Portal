@@ -24,6 +24,10 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   analytics = {
     activePolicies: 0,
     activePoliciesAmount: 0,
+    paidPolicies: 0,
+    paidPoliciesAmount: 0,
+    notPaidPolicies: 0,
+    notPaidPoliciesAmount: 0,
     canceledPolicies: 0,
     canceledPoliciesAmount: 0,
     cancellationRate: 0,
@@ -136,6 +140,16 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     const active = activePolicies.length;
     const activePoliciesAmount = activePolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
+    // Paid Policies
+    const paidPolicies = this.policies.filter(p => ['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
+    const paid = paidPolicies.length;
+    const paidPoliciesAmount = paidPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
+
+    // Not Paid Policies
+    const notPaidPolicies = this.policies.filter(p => !['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
+    const notPaid = notPaidPolicies.length;
+    const notPaidPoliciesAmount = notPaidPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
+
     // Canceled Policies
     const canceledPolicies = this.policies.filter(p => ['Cancelled', 'Cancel', 'Canceled'].includes(p.state));
     const canceled = canceledPolicies.length;
@@ -170,6 +184,10 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     this.analytics = {
       activePolicies: active,
       activePoliciesAmount: Math.round(activePoliciesAmount),
+      paidPolicies: paid,
+      paidPoliciesAmount: Math.round(paidPoliciesAmount),
+      notPaidPolicies: notPaid,
+      notPaidPoliciesAmount: Math.round(notPaidPoliciesAmount),
       canceledPolicies: canceled,
       canceledPoliciesAmount: Math.round(canceledPoliciesAmount),
       cancellationRate: Number(rate),
