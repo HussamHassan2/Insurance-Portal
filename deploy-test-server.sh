@@ -23,7 +23,7 @@ npm install --legacy-peer-deps
 
 echo "🔨 Building project..."
 # Note: Adjust configuration and base-href based on server needs
-ng build --configuration=production --optimization=false --base-href http://165.227.174.138/
+npx ng build --configuration=production --optimization=false --base-href http://165.227.174.138/
 
 echo "📋 Copying .htaccess..."
 cp .htaccess dist/insurance-portal/ 2>/dev/null || echo "No .htaccess found, skipping..."

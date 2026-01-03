@@ -22,7 +22,7 @@ echo "📦 Installing dependencies..."
 npm install --legacy-peer-deps
 
 echo "🔨 Building project..."
-ng build --configuration=orient --optimization=false --base-href http://10.245.3.230:4002/portal/
+npx ng build --configuration=orient --optimization=false --base-href http://10.245.3.230:4002/portal/
 
 echo "📋 Copying .htaccess..."
 sudo cp .htaccess dist/insurance-portal/

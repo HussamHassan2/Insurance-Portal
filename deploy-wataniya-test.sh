@@ -22,7 +22,7 @@ echo "📦 Installing dependencies..."
 npm install --legacy-peer-deps
 
 echo "🔨 Building project..."
-ng build --configuration=wataniya --optimization=false --base-href http://192.168.4.18:4200/
+npx ng build --configuration=wataniya --optimization=false --base-href http://192.168.4.18:4200/
 
 echo "📋 Copying .htaccess..."
 sudo cp .htaccess dist/insurance-portal/ 2>/dev/null || echo "No .htaccess found, skipping..."
