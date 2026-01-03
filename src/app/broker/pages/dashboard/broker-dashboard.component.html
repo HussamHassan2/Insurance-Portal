@@ -7,6 +7,14 @@
                     }}</h1>
                 <p class="text-gray-600 dark:text-gray-300">{{ 'BROKER.DASHBOARD.SUBTITLE' | translate }}</p>
             </div>
+            <div class="flex gap-2">
+                <button *ngFor="let period of ['week', 'month', 'year']" (click)="setSelectedPeriod(period)"
+                    [class.bg-primary]="selectedPeriod === period" [class.text-white]="selectedPeriod === period"
+                    [class.bg-white]="selectedPeriod !== period" [class.text-gray-600]="selectedPeriod !== period"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize border border-gray-200 hover:bg-gray-50 shadow-sm">
+                    {{ 'BROKER.DASHBOARD.PERFORMANCE.' + period.toUpperCase() | translate }}
+                </button>
+            </div>
         </div>
 
         <!-- Stats Grid 1 -->
@@ -217,13 +225,7 @@
                         <p class="text-sm text-gray-500">{{ 'BROKER.DASHBOARD.PERFORMANCE.SUBTITLE' | translate }}</p>
                     </div>
                     <div class="flex gap-2">
-                        <button *ngFor="let period of ['week', 'month', 'year']" (click)="setSelectedPeriod(period)"
-                            [class.bg-primary]="selectedPeriod === period"
-                            [class.text-white]="selectedPeriod === period"
-                            [class.bg-gray-100]="selectedPeriod !== period"
-                            class="px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 capitalize">
-                            {{ 'BROKER.DASHBOARD.PERFORMANCE.' + period.toUpperCase() | translate }}
-                        </button>
+                        <!-- Filters moved to header -->
                     </div>
                 </div>
 

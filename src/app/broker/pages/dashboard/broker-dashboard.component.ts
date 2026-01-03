@@ -4,7 +4,8 @@ import { AuthService, User } from 'src/app/core/services/auth.service';
 import { PolicyService } from 'src/app/core/services/policy.service';
 import { CrmService } from 'src/app/core/services/crm.service';
 import { ClaimService } from 'src/app/core/services/claim.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 declare var lucide: any;
 
@@ -77,55 +78,26 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   fetchDashboardData() {
     if (!this.user) return;
     this.loading = true;
-
-    const userId = this.user.id || 2; // Fallback matches React
+    const userId = this.user.id || 2;
     const userType = this.user.role || 'broker';
 
-    const policiesRequest = this.policyService.listPolicies({
-      user_id: userId,
-      user_type: userType,
-      limit: 1000,
-      offset: 0,
-      domain: []
-    });
-
-    const opportunitiesRequest = this.crmService.listOpportunities({
-      user_id: userId,
-      user_type: userType,
-      limit: 1000,
-      offset: 0,
-      domain: []
-    });
-
-    const claimsRequest = this.claimService.listClaims({
-      user_id: userId,
-      user_type: userType,
-      limit: 1000,
-      offset: 0,
-      domain: []
-    });
-
     forkJoin({
-      policies: policiesRequest,
-      opportunities: opportunitiesRequest,
-      claims: claimsRequest
+      policies: this.fetchAllPolicies(userId, userType),
+      opportunities: this.fetchAllOpportunities(userId, userType),
+      claims: this.fetchAllClaims(userId, userType)
     }).subscribe({
       next: (res: any) => {
-        // Parse policies
-        const pData = res.policies.result?.data || res.policies.data || res.policies || [];
-        this.policies = Array.isArray(pData) ? pData : [];
+        this.policies = res.policies;
+        // User requested to exclude 'Draft' from ALL cards
+        this.policies = this.policies.filter(p => (p.state || '').toLowerCase() !== 'draft');
 
-        // Parse opportunities
-        const oData = res.opportunities.result?.data || res.opportunities.data || res.opportunities || [];
-        this.opportunities = Array.isArray(oData) ? oData : [];
-
-        // Parse claims
-        const cData = res.claims.result?.data || res.claims.data || res.claims || [];
-        this.claims = Array.isArray(cData) ? cData : [];
+        this.opportunities = res.opportunities;
+        this.claims = res.claims;
 
         this.calculateAnalytics();
         this.calculateTopPerformers();
         this.loading = false;
+        console.log(`Loaded Dashboard Data: ${this.policies.length} Policies (Non-Draft), ${this.opportunities.length} Opportunities, ${this.claims.length} Claims`);
       },
       error: (err) => {
         console.error('Error fetching dashboard data', err);
@@ -134,52 +106,146 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  fetchAllPolicies(userId: number, userType: string, offset = 0, accrued: any[] = []): Observable<any[]> {
+    return this.policyService.listPolicies({
+      user_id: userId,
+      user_type: userType,
+      limit: 1000,
+      offset: offset,
+      domain: []
+    }).pipe(
+      switchMap((res: any) => {
+        const data = res.result?.data || res.data || res || [];
+        const items = Array.isArray(data) ? data : [];
+        const all = [...accrued, ...items];
+
+        if (items.length < 1000) {
+          return of(all);
+        }
+        return this.fetchAllPolicies(userId, userType, offset + 1000, all);
+      })
+    );
+  }
+
+  fetchAllOpportunities(userId: number, userType: string, offset = 0, accrued: any[] = []): Observable<any[]> {
+    return this.crmService.listOpportunities({
+      user_id: userId,
+      user_type: userType,
+      limit: 1000,
+      offset: offset,
+      domain: []
+    }).pipe(
+      switchMap((res: any) => {
+        const data = res.result?.data || res.data || res || [];
+        const items = Array.isArray(data) ? data : [];
+        const all = [...accrued, ...items];
+
+        if (items.length < 1000) {
+          return of(all);
+        }
+        return this.fetchAllOpportunities(userId, userType, offset + 1000, all);
+      })
+    );
+  }
+
+  fetchAllClaims(userId: number, userType: string, offset = 0, accrued: any[] = []): Observable<any[]> {
+    return this.claimService.listClaims({
+      user_id: userId,
+      user_type: userType,
+      limit: 1000,
+      offset: offset,
+      domain: []
+    }).pipe(
+      switchMap((res: any) => {
+        const data = res.result?.data || res.data || res || [];
+        const items = Array.isArray(data) ? data : [];
+        const all = [...accrued, ...items];
+
+        if (items.length < 1000) {
+          return of(all);
+        }
+        return this.fetchAllClaims(userId, userType, offset + 1000, all);
+      })
+    );
+  }
+
   calculateAnalytics() {
+    // 1. Determine Date Range
+    const now = new Date();
+    let daysToFilter = 36500; // Default: All time (approx 100 years)
+
+    if (this.selectedPeriod === 'week') daysToFilter = 7;
+    if (this.selectedPeriod === 'month') daysToFilter = 30;
+    if (this.selectedPeriod === 'year') daysToFilter = 365;
+
+    const startDate = new Date(now.getTime() - (daysToFilter * 24 * 60 * 60 * 1000));
+
+    // 2. Filter Data Helper
+    const isWithinPeriod = (dateStr: string) => {
+      if (!dateStr) return false;
+      const d = new Date(dateStr);
+      return d >= startDate && d <= now;
+    };
+
+    // 3. Apply Filters
+    // Policies (use issue_date)
+    const filteredPolicies = this.policies.filter(p => isWithinPeriod(p.issue_date || p.start_date || p.create_date));
+
+    // Opportunities (use create_date or date_deadline or write_date)
+    const filteredOpportunities = this.opportunities.filter(o => isWithinPeriod(o.create_date || o.date_deadline));
+
+    // Claims (use date or create_date)
+    const filteredClaims = this.claims.filter(c => isWithinPeriod(c.date || c.create_date || c.date_of_loss));
+
+
+    // 4. Calculate Stats using Filtered Data
+
     // Active/Approved Policies
-    const activePolicies = this.policies.filter(p => p.state === 'Active' || p.state === 'Approved');
+    // User requested: state 'Approved' only
+    const activePolicies = filteredPolicies.filter(p => p.state === 'Approved');
     const active = activePolicies.length;
     const activePoliciesAmount = activePolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
     // Paid Policies
-    const paidPolicies = this.policies.filter(p => ['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
+    const paidPolicies = filteredPolicies.filter(p => ['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
     const paid = paidPolicies.length;
     const paidPoliciesAmount = paidPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
     // Not Paid Policies
-    const notPaidPolicies = this.policies.filter(p => !['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
+    const notPaidPolicies = filteredPolicies.filter(p => !['paid', 'completed'].includes((p.payment_status || '').toLowerCase()));
     const notPaid = notPaidPolicies.length;
     const notPaidPoliciesAmount = notPaidPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
     // Canceled Policies
-    const canceledPolicies = this.policies.filter(p => ['Cancelled', 'Cancel', 'Canceled'].includes(p.state));
+    const canceledPolicies = filteredPolicies.filter(p => ['Cancelled', 'Cancel', 'Canceled'].includes(p.state));
     const canceled = canceledPolicies.length;
     const canceledPoliciesAmount = canceledPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
     // Cancellation Rate
-    const rate = this.policies.length > 0 ? ((canceled / this.policies.length) * 100).toFixed(1) : '0';
+    const rate = filteredPolicies.length > 0 ? ((canceled / filteredPolicies.length) * 100).toFixed(1) : '0';
 
     // Unique Clients (Map customer_name)
-    const uniqueClients = new Set(this.policies.map(p => p.customer_name || p.customer_id).filter(Boolean)).size;
+    const uniqueClients = new Set(filteredPolicies.map(p => p.customer_name || p.customer_id).filter(Boolean)).size;
 
     // Won Opportunities
-    const won = this.opportunities.filter(o => o.stage_name === 'Won').length;
+    const won = filteredOpportunities.filter(o => o.stage_name === 'Won').length;
 
     // Conversion Rate
-    const convRate = this.opportunities.length > 0 ? ((won / this.opportunities.length) * 100).toFixed(1) : '0';
+    const convRate = filteredOpportunities.length > 0 ? ((won / filteredOpportunities.length) * 100).toFixed(1) : '0';
 
     // Total Premium
     const premium = activePoliciesAmount;
 
     // Open Opportunities
-    const open = this.opportunities.filter(o => o.stage_name !== 'Won' && o.stage_name !== 'Lost').length;
+    const open = filteredOpportunities.filter(o => o.stage_name !== 'Won' && o.stage_name !== 'Lost').length;
 
-    // Opportunities Amount (using expected_revenue or similar field)
-    const opportunitiesAmount = this.opportunities.reduce((sum, o) => sum + (Number(o.expected_revenue) || Number(o.planned_revenue) || 0), 0);
+    // Opportunities Amount
+    const opportunitiesAmount = filteredOpportunities.reduce((sum, o) => sum + (Number(o.expected_revenue) || Number(o.planned_revenue) || 0), 0);
 
     // Claims Analytics
-    const totalClaims = this.claims.length;
-    const activeClaims = this.claims.filter(c => !['Settled', 'Closed', 'Rejected'].includes(c.status || c.state)).length;
-    const totalClaimAmount = this.claims.reduce((sum, c) => sum + (Number(c.amount) || Number(c.estimated_amount) || Number(c.claim_amount) || 0), 0);
+    const totalClaims = filteredClaims.length;
+    const activeClaims = filteredClaims.filter(c => !['Settled', 'Closed', 'Rejected'].includes(c.status || c.state)).length;
+    const totalClaimAmount = filteredClaims.reduce((sum, c) => sum + (Number(c.amount) || Number(c.estimated_amount) || Number(c.claim_amount) || 0), 0);
 
     this.analytics = {
       activePolicies: active,
@@ -192,7 +258,7 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
       canceledPoliciesAmount: Math.round(canceledPoliciesAmount),
       cancellationRate: Number(rate),
       totalClients: uniqueClients,
-      totalOpportunities: this.opportunities.length,
+      totalOpportunities: filteredOpportunities.length,
       totalOpportunitiesAmount: Math.round(opportunitiesAmount),
       openOpportunities: open,
       conversionRate: Number(convRate),
@@ -205,17 +271,23 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   calculateTopPerformers() {
+    // Re-use logic or leave as is since selectedPeriod is used there too.
+    // But strictly speaking, top performers already uses selectedPeriod. 
+    // We can optimize code later, but for now focusing on analytics.
     if (!this.policies.length) return;
 
     const now = new Date();
-    let daysToFilter = 30;
+    let daysToFilter = 36500;
     if (this.selectedPeriod === 'week') daysToFilter = 7;
+    if (this.selectedPeriod === 'month') daysToFilter = 30;
     if (this.selectedPeriod === 'year') daysToFilter = 365;
 
     const startDate = new Date(now.getTime() - (daysToFilter * 24 * 60 * 60 * 1000));
 
     const filtered = this.policies.filter(p => {
-      if (!p.issue_date) return true;
+      // NOTE: We rely on issue_date here same as above
+      if (!p.issue_date) return true; // Drafts excluded globally now, but if no date, maybe include? 
+      // Safest is strict check
       const d = new Date(p.issue_date);
       return d >= startDate && d <= now;
     });
@@ -248,7 +320,12 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   setSelectedPeriod(period: string) {
-    this.selectedPeriod = period;
+    if (this.selectedPeriod === period) {
+      this.selectedPeriod = 'all'; // Deselect if clicked again
+    } else {
+      this.selectedPeriod = period;
+    }
+    this.calculateAnalytics();
     this.calculateTopPerformers();
   }
 
