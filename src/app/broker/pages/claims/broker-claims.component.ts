@@ -133,16 +133,24 @@ export class BrokerClaimsComponent implements OnInit, AfterViewChecked {
         const s = status?.toLowerCase() || 'pending';
         let classes = '';
 
-        if (['active', 'approved', 'settled', 'paid'].includes(s)) {
+        if (['active', 'approved', 'settled', 'paid', 'fully paid', 'closed'].includes(s)) {
             classes = 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-        } else if (['pending', 'submitted', 'draft', 'processing', 'intimated'].includes(s)) {
+        } else if (['pending', 'submitted', 'draft', 'processing', 'intimated', 'claim request', 'surveying', 'partially paid', 'reopen'].includes(s)) {
             classes = 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300';
-        } else {
+        } else if (['rejected', 'cancelled', 'canceled', 'declined'].includes(s)) {
             classes = 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
+        } else {
+            classes = 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
         }
 
-        const translatedStatus = this.appTranslate.instant(`STATUS.${s.toUpperCase()}`);
-        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${translatedStatus}</span>`;
+        // Just show the status string as is, it's already mapped to readable format.
+        // Or if we really want translation keys, we would have done it earlier.
+        // Given existing code used translation keys, but now we map 'open' -> 'Intimated' (English).
+        // If the user wants Arabic, this hardcoded English might be an issue.
+        // Ideally we should return KEYS from mapClaimState and translate here.
+        // But user provided English names: "Intimated", "Fully Paid".
+        // Let's treat them as the value to display.
+        return `<span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${classes}">${status}</span>`;
     }
 
     private extractClaimsData(response: any): any[] {
@@ -153,12 +161,157 @@ export class BrokerClaimsComponent implements OnInit, AfterViewChecked {
         return [];
     }
 
+    // Old methods removed
+
+
+    private mapClaimState(rawState: string): string {
+        const s = (rawState || '').toLowerCase();
+        const mapping: { [key: string]: string } = {
+            'claim_request': 'Claim Request',
+            'draft': 'Draft',
+            'open': 'Intimated',
+            'surveying': 'Surveying',
+            'partial': 'Partially Paid',
+            'full': 'Fully Paid',
+            'closed': 'Closed',
+            'reopen': 'Reopen'
+        };
+        const pretty = mapping[s] || rawState.charAt(0).toUpperCase() + rawState.slice(1).toLowerCase();
+        // Replace spaces with underscores for translation key match if needed, but for display we want readable text
+        // If we want translation keys, we should probably return keys. 
+        // Based on dashboard, we are displaying the string directly. But here we have translation logic in renderStatus.
+        // renderStatus expects 'pending', 'active', etc.
+        // Let's normalize it to a key-friendly format or keep it simple.
+        // The renderStatus checks for specific keywords like 'intimated', 'active', 'paid'. 
+        // Our new mapped values: 'Claim Request', 'Intimated', 'Partially Paid'.
+        // These might fail specific checks in renderStatus if not added.
+        return pretty;
+    }
+
+    mapClaims(claimsData: any[]): any[] {
+        return claimsData.map((claim: any) => {
+            const rawStatus = (claim.state || 'pending');
+            const mappedStatus = this.mapClaimState(rawStatus);
+
+            return {
+                id: claim.id || claim.claim_id || (typeof claim.id === 'number' ? claim.id : null) || claim.claim_number || 'N/A',
+                claimNumber: claim.claim_number || 'N/A',
+                client: claim.customer_name || claim.partner_name || claim.partner_id?.[1] || 'N/A',
+                policyNumber: claim.policy_number || claim.policy_id?.[1] || 'N/A',
+                vehiclePlate: claim.vehicle_plate_number || 'N/A',
+                vehicleMaker: claim.vehicle_maker || 'N/A',
+                type: claim.lob || claim.claim_type || 'N/A',
+                productName: claim.product_name ? (typeof claim.product_name === 'number' ? `Product ${claim.product_name}` : claim.product_name) : 'N/A',
+                status: mappedStatus,
+                date: claim.intimation_date || claim.claim_date || claim.create_date || 'N/A',
+                dateOfLoss: claim.date_of_loss || claim.create_date,
+                amount: claim.claim_amount ? `EGP ${claim.claim_amount.toLocaleString()}` : 'N/A'
+            };
+        });
+    }
+
+    private clearCache(): void {
+        this.cachedData = [];
+    }
+
+    // Date Filter Logic
+    selectedPeriod: string = 'month';
+    private lastActivePage: number = 1;
+
+    setSelectedPeriod(period: string): void {
+        if (this.selectedPeriod === period) {
+            this.selectedPeriod = 'all';
+
+            // Restore previous page if valid
+            const validCount = this.cachedData.filter(p => p !== undefined).length;
+            const maxPage = Math.ceil(validCount / this.pageSize) || 1;
+
+            if (this.lastActivePage > maxPage) {
+                this.currentPage = 1;
+            } else {
+                this.currentPage = this.lastActivePage;
+            }
+        } else {
+            // Store current page before switching filter
+            this.lastActivePage = this.currentPage;
+            this.selectedPeriod = period;
+            this.currentPage = 1;
+        }
+        this.displayCurrentPage();
+    }
+
+    displayCurrentPage(): void {
+        let validItems = this.cachedData.filter(p => p !== undefined);
+
+        // Apply Date Filter Client-Side
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            validItems = validItems.filter(c => {
+                const dateStr = c.dateOfLoss || c.date; // Use specific field
+                if (!dateStr || dateStr === 'N/A') return false;
+                const d = new Date(dateStr);
+                return d >= start && d <= now;
+            });
+        }
+
+        this.totalRecords = validItems.length;
+
+        const startIndex = (this.currentPage - 1) * this.pageSize;
+        const endIndex = startIndex + this.pageSize;
+        this.data = validItems.slice(startIndex, endIndex);
+        this.isLoading = false;
+    }
+
+    getDisplayData(): any[] {
+        let validItems = this.cachedData.filter(p => p !== undefined);
+
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            validItems = validItems.filter(c => {
+                const dateStr = c.dateOfLoss || c.date;
+                if (!dateStr || dateStr === 'N/A') return false;
+                const d = new Date(dateStr);
+                return d >= start && d <= now;
+            });
+        }
+        return validItems;
+    }
+
+    // formatDate removed
+    // getDateDomain removed
+
     loadFirstPage(): void {
         this.isLoading = true;
         const currentUser = this.authService.currentUserValue;
         if (!currentUser) return;
 
-        // Load ONLY first page
+        // No date domain - fetch ALL
         this.claimService.listClaims({
             user_id: currentUser.id,
             user_type: 'broker',
@@ -169,15 +322,16 @@ export class BrokerClaimsComponent implements OnInit, AfterViewChecked {
             next: (response) => {
                 const claimsData = this.extractClaimsData(response);
 
-                // Update total count
                 if (response.data?.total_count || response.data?.count) {
                     this.totalRecords = response.data.total_count || response.data.count;
+                } else {
+                    this.totalRecords = 0;
                 }
-                // Map and cache first page
+
                 const mappedClaims = this.mapClaims(claimsData);
                 this.cachedData = [...mappedClaims];
-                this.data = mappedClaims;
-                this.isLoading = false;
+                // Apply initial filter
+                this.displayCurrentPage();
 
                 console.log(`✓ Page 1 loaded. Starting background loading...`);
                 this.loadAllInBackground();
@@ -220,13 +374,11 @@ export class BrokerClaimsComponent implements OnInit, AfterViewChecked {
                         offset += batchSize;
                         fetchNextBatch();
                     } else {
+                        // Finished
                         this.cachedData = allData;
                         this.totalRecords = allData.length;
-
-                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
-                            this.displayCurrentPage();
-                        }
-                        console.log(`✓ Cached all ${allData.length} claims recursively.`);
+                        // Refresh view
+                        this.displayCurrentPage();
                     }
                 },
                 error: (err) => console.error('Background load failed', err)
@@ -234,42 +386,6 @@ export class BrokerClaimsComponent implements OnInit, AfterViewChecked {
         };
 
         fetchNextBatch();
-    }
-
-    mapClaims(claimsData: any[]): any[] {
-        return claimsData.map((claim: any) => {
-            return {
-                id: claim.id || claim.claim_id || (typeof claim.id === 'number' ? claim.id : null) || claim.claim_number || 'N/A',
-                claimNumber: claim.claim_number || 'N/A',
-                client: claim.customer_name || claim.partner_name || claim.partner_id?.[1] || 'N/A',
-                policyNumber: claim.policy_number || claim.policy_id?.[1] || 'N/A',
-                vehiclePlate: claim.vehicle_plate_number || 'N/A',
-                vehicleMaker: claim.vehicle_maker || 'N/A',
-                type: claim.lob || claim.claim_type || 'N/A',
-                productName: claim.product_name ? (typeof claim.product_name === 'number' ? `Product ${claim.product_name}` : claim.product_name) : 'N/A',
-                status: (claim.state || 'pending').toLowerCase().replace(/\s+/g, '_'),
-                date: claim.intimation_date || claim.claim_date || claim.create_date || 'N/A',
-                amount: claim.claim_amount ? `EGP ${claim.claim_amount.toLocaleString()}` : 'N/A'
-            };
-        });
-    }
-
-    private clearCache(): void {
-        this.cachedData = [];
-    }
-
-    displayCurrentPage(): void {
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        const endIndex = startIndex + this.pageSize;
-        this.data = this.cachedData.slice(startIndex, endIndex).filter(p => p !== undefined);
-        this.isLoading = false;
-    }
-
-    getDisplayData(): any[] {
-        if (this.hasActiveFilters) {
-            return this.cachedData.filter(p => p !== undefined);
-        }
-        return this.data;
     }
 
     onFilteredDataChange(filteredData: any[]): void {

@@ -94,7 +94,7 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700" (click)="onTableClick($event)">
-                    <tr *ngFor="let row of filteredData; trackBy: trackByIndex"
+                    <tr *ngFor="let row of displayedData; trackBy: trackByIndex"
                         class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                         <td *ngFor="let col of columns; trackBy: trackByKey" class="px-6 py-4">
                             <span *ngIf="!col.render" class="text-gray-900 dark:text-gray-100">

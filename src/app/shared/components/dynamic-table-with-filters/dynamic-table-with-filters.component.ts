@@ -14,6 +14,8 @@ export class DynamicTableWithFiltersComponent implements OnInit, OnChanges, Afte
     @Input() columns: TableColumn[] = [];
     @Input() showExport: boolean = false;
     @Input() maxSelectOptions: number = 10;
+    @Input() pageSize: number = 0; // 0 means show all
+    @Input() currentPage: number = 1;
 
     @Output() filteredDataChange = new EventEmitter<any[]>();
     constructor(private sanitizer: DomSanitizer) { }
@@ -25,6 +27,7 @@ export class DynamicTableWithFiltersComponent implements OnInit, OnChanges, Afte
     dateRangeFilters: { [key: string]: { from: string, to: string } } = {};
     columnFilterConfig: { [key: string]: { type: 'text' | 'select' | 'date', options?: any[] } } = {};
     filteredData: any[] = [];
+    displayedData: any[] = [];
 
     // Date picker state
     showDatePicker: { [key: string]: boolean } = {};
@@ -39,6 +42,10 @@ export class DynamicTableWithFiltersComponent implements OnInit, OnChanges, Afte
             this.initializeFilters();
             // Don't emit filter change event when data updates to avoid infinite loop
             this.applyFilters(false);
+        }
+
+        if (changes['pageSize'] || changes['currentPage']) {
+            this.updateDisplayedData();
         }
     }
 
@@ -150,6 +157,7 @@ export class DynamicTableWithFiltersComponent implements OnInit, OnChanges, Afte
         });
 
         this.filteredData = result;
+        this.updateDisplayedData(); // Update view slice
         this.filteredDataChange.emit(result);
 
         // Emit current filters for server-side processing
@@ -171,6 +179,16 @@ export class DynamicTableWithFiltersComponent implements OnInit, OnChanges, Afte
 
         if (emitEvent) {
             this.filterChange.emit(activeFilters);
+        }
+    }
+
+    updateDisplayedData(): void {
+        if (this.pageSize > 0) {
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = startIndex + this.pageSize;
+            this.displayedData = this.filteredData.slice(startIndex, endIndex);
+        } else {
+            this.displayedData = this.filteredData;
         }
     }
 

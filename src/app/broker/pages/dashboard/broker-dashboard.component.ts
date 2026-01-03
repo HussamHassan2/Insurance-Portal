@@ -45,6 +45,7 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   };
 
   topPerformers: any[] = [];
+  performanceRows: any[] = [];
 
   // Flag to ensure icons re-render only when needed or periodically
   iconsRendered = false;
@@ -157,8 +158,14 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
       domain: []
     }).pipe(
       switchMap((res: any) => {
-        const data = res.result?.data || res.data || res || [];
-        const items = Array.isArray(data) ? data : [];
+        // Robust extraction matching BrokerClaimsComponent
+        let items: any[] = [];
+        if (Array.isArray(res)) items = res;
+        else if (Array.isArray(res.data)) items = res.data;
+        else if (res.data?.result?.data) items = res.data.result.data;
+        else if (res.data?.data) items = res.data.data;
+        else if (res.result?.data) items = res.result.data; // Also check standard Odoo wrapper
+
         const all = [...accrued, ...items];
 
         if (items.length < 1000) {
@@ -194,8 +201,8 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     // Opportunities (use create_date or date_deadline or write_date)
     const filteredOpportunities = this.opportunities.filter(o => isWithinPeriod(o.create_date || o.date_deadline));
 
-    // Claims (use date or create_date)
-    const filteredClaims = this.claims.filter(c => isWithinPeriod(c.date || c.create_date || c.date_of_loss));
+    // Claims (use intimation_date, claim_date, etc - matching BrokerClaims)
+    const filteredClaims = this.claims.filter(c => isWithinPeriod(c.intimation_date || c.claim_date || c.create_date || c.date || c.date_of_loss));
 
 
     // 4. Calculate Stats using Filtered Data
@@ -271,11 +278,12 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   calculateTopPerformers() {
-    // Re-use logic or leave as is since selectedPeriod is used there too.
-    // But strictly speaking, top performers already uses selectedPeriod. 
-    // We can optimize code later, but for now focusing on analytics.
-    if (!this.policies.length) return;
+    if (!this.policies.length && !this.claims.length) {
+      this.performanceRows = [];
+      return;
+    }
 
+    console.log('Calculating Performance...');
     const now = new Date();
     let daysToFilter = 36500;
     if (this.selectedPeriod === 'week') daysToFilter = 7;
@@ -284,39 +292,107 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
 
     const startDate = new Date(now.getTime() - (daysToFilter * 24 * 60 * 60 * 1000));
 
-    const filtered = this.policies.filter(p => {
-      // NOTE: We rely on issue_date here same as above
-      if (!p.issue_date) return true; // Drafts excluded globally now, but if no date, maybe include? 
-      // Safest is strict check
+    const extractName = (field: any): string | null => {
+      if (Array.isArray(field) && field.length > 1) {
+        return field[1];
+      }
+      return field || null;
+    };
+
+    // 1. Production Performance (Top Products)
+    // Filter policies
+    const filteredPolicies = this.policies.filter(p => {
+      if (!p.issue_date) return true;
       const d = new Date(p.issue_date);
       return d >= startDate && d <= now;
     });
 
-    const groups: { [key: string]: any } = {};
-
-    filtered.forEach(p => {
-      const name = p.product_name || 'Unknown Product';
-      if (!groups[name]) {
-        groups[name] = { name, policies: 0, totalPremium: 0 };
+    const productGroups: { [key: string]: any } = {};
+    filteredPolicies.forEach(p => {
+      const name = extractName(p.product_id || p.product_name) || 'Unknown Product';
+      if (!productGroups[name]) {
+        productGroups[name] = { name, policies: 0, totalPremium: 0 };
       }
-      groups[name].policies++;
-      groups[name].totalPremium += Number(p.net_premium) || 0;
+      productGroups[name].policies++;
+      productGroups[name].totalPremium += Number(p.net_premium) || 0;
     });
 
-    this.topPerformers = Object.values(groups)
+    const topProducts = Object.values(productGroups)
       .map((g: any) => ({
         name: g.name,
         policies: g.policies,
         revenue: `EGP ${Math.round(g.totalPremium).toLocaleString()}`,
-        growth: g.policies > 0 ? `${g.policies} policies` : '0 policies'
+        rawRevenue: g.totalPremium
       }))
-      .sort((a: any, b: any) => {
-        // Sort by revenue num
-        const valA = parseInt(a.revenue.replace(/[^0-9]/g, ''));
-        const valB = parseInt(b.revenue.replace(/[^0-9]/g, ''));
-        return valB - valA;
-      })
+      .sort((a: any, b: any) => b.rawRevenue - a.rawRevenue)
       .slice(0, 5);
+
+
+    // 2. Claim Performance (Grouped by State)
+    const filteredClaims = this.claims.filter(c => {
+      const claimDate = c.intimation_date || c.claim_date || c.create_date || c.date || c.date_of_loss;
+      if (!claimDate) return false;
+      const d = new Date(claimDate);
+      return d >= startDate && d <= now;
+    });
+
+    // Helper for state icons/colors
+    const getStateConfig = (state: string) => {
+      const s = state.toLowerCase();
+      if (['new', 'draft', 'open', 'intimated', 'claim request'].includes(s)) return { icon: 'file-plus', color: 'text-blue-500', bg: 'bg-blue-50' };
+      if (['in progress', 'review', 'under review', 'processing', 'pending', 'surveying'].includes(s)) return { icon: 'clock', color: 'text-orange-500', bg: 'bg-orange-50' };
+      if (['paid', 'approved', 'settled', 'closed', 'active', 'fully paid', 'partially paid'].includes(s)) return { icon: 'check-circle', color: 'text-green-500', bg: 'bg-green-50' };
+      if (['rejected', 'cancelled', 'canceled', 'declined', 'reopen'].includes(s)) return { icon: 'x-circle', color: 'text-red-500', bg: 'bg-red-50' };
+      return { icon: 'help-circle', color: 'text-gray-400', bg: 'bg-gray-50' };
+    };
+
+    // Helper for state mapping
+    const mapClaimState = (rawState: string): string => {
+      const s = rawState.toLowerCase();
+      const mapping: { [key: string]: string } = {
+        'claim_request': 'Claim Request',
+        'draft': 'Draft',
+        'open': 'Intimated',
+        'surveying': 'Surveying',
+        'partial': 'Partially Paid',
+        'full': 'Fully Paid',
+        'closed': 'Closed',
+        'reopen': 'Reopen'
+      };
+      return mapping[s] || rawState.charAt(0).toUpperCase() + rawState.slice(1).toLowerCase();
+    };
+
+    const stateGroups: { [key: string]: any } = {};
+    filteredClaims.forEach(c => {
+      const rawState = extractName(c.stage_id) || c.state || c.status || 'Unknown';
+      const state = mapClaimState(rawState);
+
+      if (!stateGroups[state]) {
+        stateGroups[state] = { state, count: 0, amount: 0, config: getStateConfig(state) };
+      }
+      stateGroups[state].count++;
+      stateGroups[state].amount += Number(c.amount) || Number(c.estimated_amount) || Number(c.claim_amount) || 0;
+    });
+
+    const topStates = Object.values(stateGroups)
+      .sort((a: any, b: any) => b.count - a.count)
+      .slice(0, 5);
+
+    // 3. Merge for Table Rows
+    const maxRows = Math.max(topProducts.length, topStates.length);
+    this.performanceRows = [];
+
+    for (let i = 0; i < maxRows; i++) {
+      this.performanceRows.push({
+        product: topProducts[i] || null,
+        claimStat: topStates[i] || null
+      });
+    }
+
+    // For compliance with template (will update template to use performanceRows)
+    this.topPerformers = this.performanceRows;
+
+    console.log('Performance Rows:', this.performanceRows);
   }
 
   setSelectedPeriod(period: string) {
@@ -344,5 +420,10 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     this.router.navigate(['/dashboard/broker/quote/new'], {
       state: { customer: customer }
     });
+  }
+
+  // Helper to get keys of an object (for template)
+  objectKeys(obj: any) {
+    return Object.keys(obj);
   }
 }

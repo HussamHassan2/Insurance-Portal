@@ -743,6 +743,13 @@
         "DASHBOARD": {
             "WELCOME": "Welcome Back! 👋",
             "SUBTITLE": "Here's what's happening with your business today.",
+            "SECTION": {
+                "POLICIES": "Policies & Financials",
+                "QUOTATIONS": "Quotations",
+                "CLAIMS": "Claims",
+                "CLIENTS": "Clients",
+                "PREMIUM_TRACKING": "Premium Tracking"
+            },
             "STATS": {
                 "ACTIVE_POLICIES": "Active & Approved Policies",
                 "ACTIVE_POLICIES_TEXT": "policies active",
@@ -775,7 +782,10 @@
                 "POLICIES": "policies",
                 "WEEK": "week",
                 "MONTH": "month",
-                "YEAR": "year"
+                "YEAR": "year",
+                "PRODUCTION_PERFORMANCE": "Production Performance",
+                "CLAIM_PERFORMANCE": "Claim Performance",
+                "NO_CLAIMS": "No claims"
             },
             "QUICK_TOOLS": {
                 "TITLE": "Quick Tools",

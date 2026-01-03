@@ -43,93 +43,11 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
         this.loadFirstPage();
     }
 
-    loadFirstPage(): void {
-        this.isLoading = true;
-        const currentUser = this.authService.currentUserValue;
-        if (!currentUser) return;
+    // loadFirstPage removed
 
-        // Load ONLY first page
-        this.policyService.listPolicies({
-            user_id: currentUser.id,
-            user_type: 'broker',
-            limit: this.pageSize,
-            offset: 0
-        }).subscribe({
-            next: (response) => {
-                const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
 
-                // Update total count
-                if (response.data?.total_count || response.data?.count) {
-                    this.totalRecords = response.data.total_count || response.data.count;
-                } else {
-                    this.totalRecords = 1000;
-                }
+    // loadTotalCount removed
 
-                const mappedPolicies = this.mapPolicies(policiesData);
-
-                this.cachedData = [...mappedPolicies];
-                this.data = mappedPolicies;
-                this.isLoading = false;
-
-                console.log(`✓ Page 1 loaded. Starting background loading...`);
-                this.loadAllInBackground();
-            },
-            error: (err) => {
-                console.error('Error loading policies:', err);
-                this.error = 'BROKER.POLICIES.ERROR_LOADING';
-                this.isLoading = false;
-            }
-        });
-    }
-
-    loadAllInBackground(): void {
-        const currentUser = this.authService.currentUserValue;
-        if (!currentUser) return;
-
-        const batchSize = 1000;
-        let offset = 0;
-        let allData: any[] = [];
-
-        const fetchNextBatch = () => {
-            this.policyService.listPolicies({
-                user_id: currentUser.id,
-                user_type: 'broker',
-                limit: batchSize,
-                offset: offset
-            }).subscribe({
-                next: (response) => {
-                    const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
-                    const mappedPolicies = this.mapPolicies(policiesData);
-
-                    allData = [...allData, ...mappedPolicies];
-
-                    if (response.data?.total_count || response.data?.count) {
-                        this.totalRecords = response.data.total_count || response.data.count;
-                    }
-
-                    // If full batch, assume more data
-                    if (policiesData.length === batchSize) {
-                        offset += batchSize;
-                        fetchNextBatch();
-                    } else {
-                        // Done
-                        this.cachedData = allData;
-                        this.totalRecords = allData.length;
-
-                        // Refresh if still on page 1 and something weird happened or just to ensure consistency
-                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
-                            this.displayCurrentPage();
-                        }
-
-                        console.log(`✓ Cached all ${allData.length} policies recursively.`);
-                    }
-                },
-                error: (err) => console.error('Background load failed', err)
-            });
-        };
-
-        fetchNextBatch();
-    }
 
     mapPolicies(policiesData: any[]): any[] {
         return policiesData.map((p: any) => {
@@ -168,18 +86,192 @@ export class BrokerPoliciesComponent implements OnInit, AfterViewChecked {
         this.cachedData = [];
     }
 
+
+
+    // Date Filter Logic
+    selectedPeriod: string = 'month';
+    private lastActivePage: number = 1;
+
+    setSelectedPeriod(period: string): void {
+        if (this.selectedPeriod === period) {
+            this.selectedPeriod = 'all';
+
+            // Restore previous page if valid
+            const validCount = this.cachedData.filter(p => p !== undefined).length;
+            const maxPage = Math.ceil(validCount / this.pageSize) || 1;
+
+            if (this.lastActivePage > maxPage) {
+                this.currentPage = 1;
+            } else {
+                this.currentPage = this.lastActivePage;
+            }
+        } else {
+            // Store current page before switching filter
+            this.lastActivePage = this.currentPage;
+            this.selectedPeriod = period;
+            this.currentPage = 1;
+        }
+        this.displayCurrentPage();
+    }
+
+    private formatDate(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // getDateDomain helper removed as it was for server-side
+
     displayCurrentPage(): void {
+        let validItems = this.cachedData.filter(p => p !== undefined);
+
+        // Apply Date Filter Client-Side
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            let daysToFilter = 36500;
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+                // "Week" logic: Start of current week to now
+                daysToFilter = 7; // Approximation or use precise date comparison
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            // Precise comparison using the calculated 'start' date
+            validItems = validItems.filter(p => {
+                if (!p.approveDate || p.approveDate === '-') return false;
+                const d = new Date(p.approveDate);
+                return d >= start && d <= now;
+            });
+        }
+
+        this.totalRecords = validItems.length;
+
         const startIndex = (this.currentPage - 1) * this.pageSize;
         const endIndex = startIndex + this.pageSize;
-        this.data = this.cachedData.slice(startIndex, endIndex).filter(p => p !== undefined);
+        this.data = validItems.slice(startIndex, endIndex);
         this.isLoading = false;
     }
 
     getDisplayData(): any[] {
-        if (this.hasActiveFilters) {
-            return this.cachedData.filter(p => p !== undefined);
+        // Return full filtered list for table-level search if needed
+        let validItems = this.cachedData.filter(p => p !== undefined);
+
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            validItems = validItems.filter(p => {
+                if (!p.approveDate || p.approveDate === '-') return false;
+                const d = new Date(p.approveDate);
+                return d >= start && d <= now;
+            });
         }
-        return this.data;
+        return validItems;
+    }
+
+    loadFirstPage(): void {
+        this.isLoading = true;
+        const user = this.authService.currentUserValue;
+        if (!user) return;
+
+        // No date domain - fetch ALL
+        this.policyService.listPolicies({
+            user_id: user.id,
+            user_type: 'broker',
+            limit: this.pageSize,
+            offset: 0,
+            domain: []
+        }).subscribe({
+            next: (response) => {
+                const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
+
+                if (response.data?.total_count || response.data?.count) {
+                    this.totalRecords = response.data.total_count || response.data.count;
+                } else {
+                    this.totalRecords = 0;
+                }
+
+                const mappedPolicies = this.mapPolicies(policiesData);
+                this.cachedData = [...mappedPolicies];
+                // Apply initial filter (if default is month)
+                this.displayCurrentPage();
+
+                console.log(`✓ Page 1 loaded. Starting background loading...`);
+                this.loadAllInBackground();
+            },
+            error: (err) => {
+                console.error('Error loading policies:', err);
+                this.error = 'BROKER.POLICIES.ERROR_LOADING';
+                this.isLoading = false;
+            }
+        });
+    }
+
+    loadAllInBackground(): void {
+        const user = this.authService.currentUserValue;
+        if (!user) return;
+
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+        // No date domain
+
+        const fetchNextBatch = () => {
+            // No duplicate check needed for date filter changes since we don't abort
+
+            this.policyService.listPolicies({
+                user_id: user.id,
+                user_type: 'broker',
+                limit: batchSize,
+                offset: offset,
+                domain: []
+            }).subscribe({
+                next: (response) => {
+                    const policiesData = response.data?.data || response.data?.result?.data || response.data || [];
+                    const mappedPolicies = this.mapPolicies(policiesData);
+
+                    allData = [...allData, ...mappedPolicies];
+
+                    if (response.data?.total_count || response.data?.count) {
+                        this.totalRecords = response.data.total_count || response.data.count;
+                    }
+
+                    if (policiesData.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        // Finished loading
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+                        // Refresh view to apply filters to full dataset
+                        this.displayCurrentPage();
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
     }
 
     setupColumns(): void {

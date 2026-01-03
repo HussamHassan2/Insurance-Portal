@@ -69,102 +69,18 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
     getDomainFromFilterType(type: string): string | any[] {
         switch (type) {
             case 'renewal':
-                return `[('policy_services_type', '=', 'renewal')]`;
+                return [['policy_services_type', '=', 'renewal']];
             case 'endorsement':
-                return `[('policy_services_type', '=', 'end')]`;
+                return [['policy_services_type', '=', 'end']];
             case 'lost':
-                return `[('active', '=', False)]`;
+                return [['active', '=', false]];
             default:
                 return [];
         }
     }
 
-    loadFirstPage(): void {
-        this.isLoading = true;
-        const user = this.authService.currentUserValue;
-        if (!user) return;
+    // Old methods removed
 
-        // Load ONLY first page for fast display
-        this.crmService.listOpportunities({
-            user_id: user.id,
-            user_type: 'broker',
-            limit: this.pageSize,
-            offset: 0,
-            domain: this.currentDomain
-        }).subscribe({
-            next: (response) => {
-                const quotes = Array.isArray(response) ? response : (response.data || []);
-
-                // Update totals if provided
-                if (response.total_count || response.count) {
-                    this.totalRecords = response.total_count || response.count;
-                } else {
-                    this.totalRecords = 1000; // Estimate
-                }
-                // Map and cache first page
-                const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
-                this.cachedData = [...mappedQuotes];
-                this.data = mappedQuotes;
-                this.isLoading = false;
-
-                console.log(`✓ Page 1 loaded. Starting background loading...`);
-
-                // Start background loading
-                this.loadAllInBackground();
-            },
-            error: (err) => {
-                console.error('Error loading quotations:', err);
-                this.error = 'BROKER.QUOTATIONS.ERROR_LOADING';
-                this.isLoading = false;
-            }
-        });
-    }
-
-    loadAllInBackground(): void {
-        const user = this.authService.currentUserValue;
-        if (!user) return;
-
-        const batchSize = 1000;
-        let offset = 0;
-        let allData: any[] = [];
-
-        const fetchNextBatch = () => {
-            this.crmService.listOpportunities({
-                user_id: user.id,
-                user_type: 'broker',
-                limit: batchSize,
-                offset: offset,
-                domain: this.currentDomain
-            }).subscribe({
-                next: (response) => {
-                    const quotes = Array.isArray(response) ? response : (response.data || []);
-                    const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
-
-                    allData = [...allData, ...mappedQuotes];
-
-                    if (!Array.isArray(response) && (response.total_count || response.count)) {
-                        this.totalRecords = response.total_count || response.count;
-                    }
-
-                    if (quotes.length === batchSize) {
-                        offset += batchSize;
-                        fetchNextBatch();
-                    } else {
-                        this.cachedData = allData;
-                        this.totalRecords = allData.length;
-
-                        if (this.currentPage === 1 && this.data.length === 0 && allData.length > 0) {
-                            this.displayCurrentPage();
-                        }
-                        console.log(`✓ Cached all ${allData.length} quotations recursively.`);
-                    }
-                },
-                error: (err) => console.error('Background load failed', err)
-            });
-        };
-
-        fetchNextBatch();
-    }
 
     ngAfterViewChecked(): void {
         if (typeof lucide !== 'undefined') {
@@ -335,22 +251,200 @@ export class BrokerQuotationsComponent implements OnInit, AfterViewChecked {
 
     private clearCache(): void {
         this.cachedData = [];
-        this.cachedData = [];
         this.isBackgroundLoading = false;
-        this.isBackgroundLoading = false;
+    }
+
+    // Date Filter Logic
+    selectedPeriod: string = 'month';
+    private lastActivePage: number = 1;
+
+    setSelectedPeriod(period: string): void {
+        if (this.selectedPeriod === period) {
+            this.selectedPeriod = 'all';
+
+            // Restore previous page if valid
+            const validCount = this.cachedData.filter(q => q !== undefined).length;
+            const maxPage = Math.ceil(validCount / this.pageSize) || 1;
+
+            if (this.lastActivePage > maxPage) {
+                this.currentPage = 1;
+            } else {
+                this.currentPage = this.lastActivePage;
+            }
+        } else {
+            // Store current page before switching filter
+            this.lastActivePage = this.currentPage;
+            this.selectedPeriod = period;
+            this.currentPage = 1;
+        }
+        this.displayCurrentPage();
     }
 
     displayCurrentPage(): void {
+        let validItems = this.cachedData.filter(q => q !== undefined);
+
+        // Apply Date Filter Client-Side
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            validItems = validItems.filter(q => {
+                if (!q.date || q.date === 'N/A') return false;
+                const d = new Date(q.date);
+                return d >= start && d <= now;
+            });
+        }
+
+        this.totalRecords = validItems.length;
+
         const startIndex = (this.currentPage - 1) * this.pageSize;
         const endIndex = startIndex + this.pageSize;
-        this.data = this.cachedData.slice(startIndex, endIndex).filter(q => q !== undefined);
+        this.data = validItems.slice(startIndex, endIndex);
+        this.isLoading = false;
     }
 
     getDisplayData(): any[] {
-        if (this.hasActiveFilters) {
-            return this.cachedData.filter(q => q !== undefined);
+        let validItems = this.cachedData.filter(q => q !== undefined);
+
+        if (this.selectedPeriod !== 'all') {
+            const now = new Date();
+            const start = new Date(now);
+            start.setHours(0, 0, 0, 0);
+
+            if (this.selectedPeriod === 'week') {
+                const day = start.getDay();
+                const diff = (day + 1) % 7;
+                start.setDate(now.getDate() - diff);
+            } else if (this.selectedPeriod === 'month') {
+                start.setDate(1);
+            } else if (this.selectedPeriod === 'year') {
+                start.setMonth(0, 1);
+            }
+
+            validItems = validItems.filter(q => {
+                if (!q.date || q.date === 'N/A') return false;
+                const d = new Date(q.date);
+                return d >= start && d <= now;
+            });
         }
-        return this.data;
+        return validItems;
+    }
+
+    // formatDate removed
+
+    // getDateDomain removed
+
+    loadFirstPage(): void {
+        this.isLoading = true;
+        const user = this.authService.currentUserValue;
+        if (!user) return;
+
+        // Ensure currentDomain is array (Route Filters)
+        let domainArray: any[] = [];
+        if (Array.isArray(this.currentDomain)) {
+            domainArray = [...this.currentDomain];
+        } else if (typeof this.currentDomain === 'string' && this.currentDomain !== '[]') {
+            domainArray = [];
+        }
+
+        // NO date domain in API call
+        const finalDomain = [...domainArray];
+
+        this.crmService.listOpportunities({
+            user_id: user.id,
+            user_type: 'broker',
+            limit: this.pageSize,
+            offset: 0,
+            domain: finalDomain
+        }).subscribe({
+            next: (response) => {
+                const quotes = Array.isArray(response) ? response : (response.data || []);
+
+                if (response.total_count || response.count) {
+                    this.totalRecords = response.total_count || response.count;
+                } else {
+                    this.totalRecords = 0;
+                }
+
+                const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
+                this.cachedData = [...mappedQuotes];
+                // Apply initial filter
+                this.displayCurrentPage();
+
+                console.log(`✓ Page 1 loaded. Starting background loading...`);
+                // Start background loading
+                this.loadAllInBackground(finalDomain);
+            },
+            error: (err) => {
+                console.error('Error loading quotations:', err);
+                this.error = 'BROKER.QUOTATIONS.ERROR_LOADING';
+                this.isLoading = false;
+            }
+        });
+    }
+
+    loadAllInBackground(finalDomain: any[] = []): void {
+        const user = this.authService.currentUserValue;
+        if (!user) return;
+
+        const batchSize = 1000;
+        let offset = 0;
+        let allData: any[] = [];
+
+        // If domain argument missing, reconstruct
+        if (!finalDomain || finalDomain.length === 0) {
+            let domainArray: any[] = [];
+            if (Array.isArray(this.currentDomain)) {
+                domainArray = [...this.currentDomain];
+            }
+            finalDomain = [...domainArray];
+        }
+
+        const fetchNextBatch = () => {
+            this.crmService.listOpportunities({
+                user_id: user.id,
+                user_type: 'broker',
+                limit: batchSize,
+                offset: offset,
+                domain: finalDomain
+            }).subscribe({
+                next: (response) => {
+                    const quotes = Array.isArray(response) ? response : (response.data || []);
+                    const mappedQuotes = quotes.map((q: any) => this.mapQuotation(q));
+
+                    allData = [...allData, ...mappedQuotes];
+
+                    if (!Array.isArray(response) && (response.total_count || response.count)) {
+                        this.totalRecords = response.total_count || response.count;
+                    }
+
+                    if (quotes.length === batchSize) {
+                        offset += batchSize;
+                        fetchNextBatch();
+                    } else {
+                        // Finished loading
+                        this.cachedData = allData;
+                        this.totalRecords = allData.length;
+                        // Refresh view
+                        this.displayCurrentPage();
+                    }
+                },
+                error: (err) => console.error('Background load failed', err)
+            });
+        };
+
+        fetchNextBatch();
     }
 
     onFilteredDataChange(filteredData: any[]): void {
