@@ -758,7 +758,14 @@
                 "TOTAL_PREMIUM": "Total Premium",
                 "NET_PREMIUM": "Net premium from active policies",
                 "TOTAL_COMMISSIONS": "Total Commissions",
-                "COMMISSION_EARNINGS": "Commission earnings"
+                "COMMISSION_EARNINGS": "Commission earnings",
+                "ACTIVE_POLICIES_AMOUNT": "total premium value",
+                "CANCELED_POLICIES_AMOUNT": "canceled premium value",
+                "OPPORTUNITIES_AMOUNT": "total opportunity value",
+                "TOTAL_CLAIMS": "Total Claims",
+                "CLAIMS_COUNT": "claims submitted",
+                "TOTAL_CLAIM_AMOUNT": "Total Claim Amount",
+                "ACTIVE_CLAIMS": "active claims"
             },
             "PERFORMANCE": {
                 "TITLE": "Performance Overview",

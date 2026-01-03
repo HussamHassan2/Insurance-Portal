@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService, User } from 'src/app/core/services/auth.service';
 import { PolicyService } from 'src/app/core/services/policy.service';
 import { CrmService } from 'src/app/core/services/crm.service';
+import { ClaimService } from 'src/app/core/services/claim.service';
 import { forkJoin } from 'rxjs';
 
 declare var lucide: any;
@@ -17,18 +18,25 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   loading = false;
   selectedPeriod = 'month';
   policies: any[] = [];
+  claims: any[] = [];
   opportunities: any[] = [];
 
   analytics = {
     activePolicies: 0,
+    activePoliciesAmount: 0,
     canceledPolicies: 0,
+    canceledPoliciesAmount: 0,
     cancellationRate: 0,
     totalClients: 0,
     totalOpportunities: 0,
+    totalOpportunitiesAmount: 0,
     openOpportunities: 0,
     conversionRate: 0,
     totalPremium: 0,
-    totalCommissions: 0
+    totalCommissions: 0,
+    totalClaims: 0,
+    activeClaims: 0,
+    totalClaimAmount: 0
   };
 
   topPerformers: any[] = [];
@@ -42,6 +50,7 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     private authService: AuthService,
     private policyService: PolicyService,
     private crmService: CrmService,
+    private claimService: ClaimService,
     private router: Router
   ) { }
 
@@ -84,9 +93,18 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
       domain: []
     });
 
+    const claimsRequest = this.claimService.listClaims({
+      user_id: userId,
+      user_type: userType,
+      limit: 1000,
+      offset: 0,
+      domain: []
+    });
+
     forkJoin({
       policies: policiesRequest,
-      opportunities: opportunitiesRequest
+      opportunities: opportunitiesRequest,
+      claims: claimsRequest
     }).subscribe({
       next: (res: any) => {
         // Parse policies
@@ -96,6 +114,10 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
         // Parse opportunities
         const oData = res.opportunities.result?.data || res.opportunities.data || res.opportunities || [];
         this.opportunities = Array.isArray(oData) ? oData : [];
+
+        // Parse claims
+        const cData = res.claims.result?.data || res.claims.data || res.claims || [];
+        this.claims = Array.isArray(cData) ? cData : [];
 
         this.calculateAnalytics();
         this.calculateTopPerformers();
@@ -109,13 +131,17 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
   }
 
   calculateAnalytics() {
-    // Active/Approved
-    const active = this.policies.filter(p => p.state === 'Active' || p.state === 'Approved').length;
+    // Active/Approved Policies
+    const activePolicies = this.policies.filter(p => p.state === 'Active' || p.state === 'Approved');
+    const active = activePolicies.length;
+    const activePoliciesAmount = activePolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
-    // Canceled
-    const canceled = this.policies.filter(p => ['Cancelled', 'Cancel', 'Canceled'].includes(p.state)).length;
+    // Canceled Policies
+    const canceledPolicies = this.policies.filter(p => ['Cancelled', 'Cancel', 'Canceled'].includes(p.state));
+    const canceled = canceledPolicies.length;
+    const canceledPoliciesAmount = canceledPolicies.reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
 
-    // Rate
+    // Cancellation Rate
     const rate = this.policies.length > 0 ? ((canceled / this.policies.length) * 100).toFixed(1) : '0';
 
     // Unique Clients (Map customer_name)
@@ -128,23 +154,35 @@ export class BrokerDashboardComponent implements OnInit, AfterViewChecked {
     const convRate = this.opportunities.length > 0 ? ((won / this.opportunities.length) * 100).toFixed(1) : '0';
 
     // Total Premium
-    const premium = this.policies
-      .filter(p => p.state === 'Active' || p.state === 'Approved')
-      .reduce((sum, p) => sum + (Number(p.net_premium) || 0), 0);
+    const premium = activePoliciesAmount;
 
     // Open Opportunities
     const open = this.opportunities.filter(o => o.stage_name !== 'Won' && o.stage_name !== 'Lost').length;
 
+    // Opportunities Amount (using expected_revenue or similar field)
+    const opportunitiesAmount = this.opportunities.reduce((sum, o) => sum + (Number(o.expected_revenue) || Number(o.planned_revenue) || 0), 0);
+
+    // Claims Analytics
+    const totalClaims = this.claims.length;
+    const activeClaims = this.claims.filter(c => !['Settled', 'Closed', 'Rejected'].includes(c.status || c.state)).length;
+    const totalClaimAmount = this.claims.reduce((sum, c) => sum + (Number(c.amount) || Number(c.estimated_amount) || Number(c.claim_amount) || 0), 0);
+
     this.analytics = {
       activePolicies: active,
+      activePoliciesAmount: Math.round(activePoliciesAmount),
       canceledPolicies: canceled,
+      canceledPoliciesAmount: Math.round(canceledPoliciesAmount),
       cancellationRate: Number(rate),
       totalClients: uniqueClients,
       totalOpportunities: this.opportunities.length,
+      totalOpportunitiesAmount: Math.round(opportunitiesAmount),
       openOpportunities: open,
       conversionRate: Number(convRate),
       totalPremium: Math.round(premium),
-      totalCommissions: 0
+      totalCommissions: 0,
+      totalClaims: totalClaims,
+      activeClaims: activeClaims,
+      totalClaimAmount: Math.round(totalClaimAmount)
     };
   }
 
